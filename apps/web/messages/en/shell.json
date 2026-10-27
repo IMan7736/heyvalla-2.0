@@ -1,0 +1,30 @@
+{
+  "skipToContent": "Skip to main content",
+  "primaryNav": "Primary",
+  "footerNav": "Footer",
+  "nav": {
+    "plan": "Plan a trip",
+    "trips": "My trips",
+    "help": "Help"
+  },
+  "account": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "menu": "Account menu",
+    "myTrips": "My trips",
+    "myAccount": "Your account",
+    "signOut": "Sign out",
+    "signedInAs": "Signed in as {name}"
+  },
+  "footer": {
+    "tagline": "Every island, one journey.",
+    "product": "Product",
+    "company": "Good to know",
+    "terms": "Terms of use",
+    "privacy": "Privacy",
+    "help": "Help and questions",
+    "honesty": "Sea routes on maps are illustrative, never for navigation. Fares marked estimated may change.",
+    "timeNote": "All times are Maldives time (UTC+5).",
+    "copyright": "© {year} Dhathuru"
+  }
+}

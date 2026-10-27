@@ -1,0 +1,339 @@
+/*
+ * Dhathuru design tokens (Tailwind v4 @theme). Single source of truth for the visual language.
+ * Palette base values are fixed by the brand (docs/PLAN.md section 9); every tint/shade is derived
+ * and contrast-checked (see docs/design/DIRECTION.md). Light theme only.
+ */
+@theme {
+  /* ---- Brand palette ---- */
+  --color-lagoon: #087f8c;
+  --color-lagoon-50: #e7f4f5;
+  --color-lagoon-100: #cbe8eb;
+  --color-lagoon-200: #9dd3d8;
+  --color-lagoon-300: #5fb5be;
+  --color-lagoon-400: #2b98a4;
+  --color-lagoon-500: #087f8c;
+  --color-lagoon-600: #066b76;
+  --color-lagoon-700: #05575f;
+  --color-lagoon-800: #04434a;
+
+  --color-sand: #faf7f0;
+  --color-sand-50: #fdfcf9;
+  --color-sand-100: #faf7f0;
+  --color-sand-200: #f2ecdd;
+  --color-sand-300: #e7dfca;
+  --color-sand-400: #d5c9ab;
+
+  --color-coconut: #ffffff;
+
+  --color-ocean: #12343b;
+  --color-ocean-900: #12343b;
+  --color-ocean-800: #1d4750;
+  --color-ocean-700: #2d5a63;
+  --color-ocean-600: #4a6a71;
+  --color-ocean-500: #6e868b;
+  --color-ocean-950: #0b2328;
+
+  --color-coral: #f28c78;
+  --color-coral-50: #fef5f2;
+  --color-coral-100: #fde9e4;
+  --color-coral-300: #f7b8ab;
+  --color-coral-500: #f28c78;
+  --color-coral-700: #b5472f;
+
+  /* ---- Semantic status ---- */
+  --color-success: #1f7a4d;
+  --color-success-soft: #e3f3ea;
+  --color-caution: #8a5206;
+  --color-caution-soft: #fdf0d5;
+  --color-danger: #b3342b;
+  --color-danger-soft: #fbe4e1;
+
+  /* ---- Role tokens (use these in components) ---- */
+  --color-canvas: var(--color-sand);
+  --color-surface: var(--color-coconut);
+  --color-surface-sunken: var(--color-sand-200);
+  --color-ink: var(--color-ocean-900);
+  --color-ink-muted: var(--color-ocean-600);
+  --color-ink-inverse: #ffffff;
+  --color-action: var(--color-lagoon-500);
+  --color-action-hover: var(--color-lagoon-600);
+  --color-action-press: var(--color-lagoon-700);
+  --color-link: var(--color-lagoon-600);
+  --color-line: rgb(18 52 59 / 0.12);
+  --color-line-strong: rgb(18 52 59 / 0.28);
+  --color-focus: #087f8c;
+
+  /* ---- Typography ---- */
+  --font-display: var(--font-display-face, "Iowan Old Style", "Palatino Linotype", Georgia, serif);
+  --font-sans: var(--font-ui-face, ui-sans-serif, system-ui, sans-serif);
+  --font-thaana: var(--font-thaana-face, "Noto Sans Thaana", "MV Boli", sans-serif);
+
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.125rem;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.375rem;
+  --text-body: 1rem;
+  --text-body--line-height: 1.625rem;
+  --text-lead: 1.25rem;
+  --text-lead--line-height: 1.875rem;
+  --text-title: 1.5rem;
+  --text-title--line-height: 2rem;
+  --text-headline: 2rem;
+  --text-headline--line-height: 2.5rem;
+  --text-display: 3rem;
+  --text-display--line-height: 3.25rem;
+  --text-hero: 4.75rem;
+  --text-hero--line-height: 4.75rem;
+
+  /* ---- Radii ---- */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.625rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2.25rem;
+
+  /* ---- Elevation: layered, ocean-tinted, never grey ---- */
+  --shadow-hairline: 0 0 0 1px rgb(18 52 59 / 0.08);
+  --shadow-rest: 0 1px 2px rgb(18 52 59 / 0.06), 0 2px 8px rgb(18 52 59 / 0.04);
+  --shadow-raised: 0 2px 4px rgb(18 52 59 / 0.05), 0 8px 24px rgb(18 52 59 / 0.08);
+  --shadow-float: 0 4px 8px rgb(18 52 59 / 0.06), 0 16px 40px rgb(18 52 59 / 0.12);
+  --shadow-overlay: 0 8px 16px rgb(18 52 59 / 0.08), 0 32px 80px rgb(18 52 59 / 0.2);
+  --shadow-inset: inset 0 1px 2px rgb(18 52 59 / 0.08);
+
+  /* ---- Motion (TIDE refines; these are the shared timings) ---- */
+  --ease-calm: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-swell: cubic-bezier(0.34, 1.2, 0.5, 1);
+  --duration-quick: 120ms;
+  --duration-base: 220ms;
+  --duration-slow: 420ms;
+
+  /* ---- Layout ---- */
+  --breakpoint-desk: 80rem;
+  --breakpoint-wide: 90rem;
+  --container-page: 80rem;
+  --container-prose: 40rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-block-size: 100dvh;
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+}
+
+/* Thaana-ready: when the document language is Dhivehi, swap the face and open the leading. */
+:lang(dv) {
+  font-family: var(--font-thaana);
+  line-height: 1.9;
+}
+
+::selection {
+  background: var(--color-lagoon-200);
+  color: var(--color-ocean-900);
+}
+
+/* Focus: one ring for the whole product. Visible on sand, white and teal. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible,
+[data-focus-ring]:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+.on-dark :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: #ffffff;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Display type uses Fraunces optical sizing and its SOFT axis for a warm, rounded serif. */
+.font-display {
+  font-variation-settings:
+    "SOFT" 60,
+    "WONK" 0;
+  font-optical-sizing: auto;
+  letter-spacing: -0.012em;
+}
+
+@utility sheen {
+  background-image: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgb(255 255 255 / 0.55) 48%,
+    transparent 66%
+  );
+  background-size: 250% 100%;
+  background-position: 120% 0;
+}
+
+@utility hairline-b {
+  border-block-end: 1px solid var(--color-line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Keyframes shared by components. Transform/opacity only. */
+@keyframes dh-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dh-rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes dh-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes dh-slide-in-end {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes dh-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes dh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dh-drift {
+  from {
+    transform: translate3d(-4%, 0, 0);
+  }
+  to {
+    transform: translate3d(4%, 0, 0);
+  }
+}
+@keyframes dh-caustic {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-2%, 1.5%, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(2%, -1%, 0) scale(1);
+  }
+}
+@keyframes dh-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(0.6deg);
+  }
+}
+@keyframes dh-sheen {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -40% 0;
+  }
+}
+@keyframes dh-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---- Boarding pass: surface with semicircular notches where the stub is perforated ---- */
+.pass {
+  --stub: 15rem;
+  --notch: 0.75rem;
+  filter: drop-shadow(0 0 0.5px rgb(18 52 59 / 0.35)) drop-shadow(0 1px 1px rgb(18 52 59 / 0.05))
+    drop-shadow(0 8px 18px rgb(18 52 59 / 0.07));
+  transition:
+    filter var(--duration-base) var(--ease-calm),
+    transform var(--duration-base) var(--ease-calm);
+}
+.pass[data-interactive]:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 0.5px rgb(18 52 59 / 0.45)) drop-shadow(0 2px 2px rgb(18 52 59 / 0.06))
+    drop-shadow(0 14px 26px rgb(18 52 59 / 0.12));
+}
+.pass[data-selected] {
+  filter: drop-shadow(0 0 0 var(--color-lagoon-500)) drop-shadow(0 0 1.5px var(--color-lagoon-500))
+    drop-shadow(0 10px 22px rgb(8 127 140 / 0.18));
+}
+.pass-body {
+  --x: calc(100% - var(--stub));
+  -webkit-mask:
+    radial-gradient(circle var(--notch) at var(--x) 0, #0000 97%, #000) 0 0 / 100% 51% no-repeat,
+    radial-gradient(circle var(--notch) at var(--x) 100%, #0000 97%, #000) 0 100% / 100% 51%
+      no-repeat;
+  mask:
+    radial-gradient(circle var(--notch) at var(--x) 0, #0000 97%, #000) 0 0 / 100% 51% no-repeat,
+    radial-gradient(circle var(--notch) at var(--x) 100%, #0000 97%, #000) 0 100% / 100% 51%
+      no-repeat;
+}
+.pass-body:dir(rtl) {
+  --x: var(--stub);
+}
+.pass-perforation {
+  background-image: linear-gradient(to bottom, var(--color-line-strong) 50%, transparent 50%);
+  background-size: 1px 8px;
+}
+@keyframes dh-ripple {
+  0% {
+    opacity: 0.8;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "palette": {
+    "title": "Command palette",
+    "description": "Search islands, jump to a page or run an action.",
+    "placeholder": "Search islands, trips and actions",
+    "hint": "Type to search",
+    "loading": "Searching islands",
+    "error": "Could not search islands. Check your connection and try again.",
+    "empty": "No matches for this search.",
+    "groups": {
+      "recent": "Recent",
+      "places": "Islands and places",
+      "navigate": "Go to",
+      "actions": "Actions"
+    },
+    "nav": {
+      "home": "Home",
+      "search": "Plan a trip",
+      "trips": "My trips"
+    },
+    "actions": {
+      "help": "Show keyboard shortcuts"
+    },
+    "placeTypes": {
+      "island": "Island",
+      "atoll": "Atoll",
+      "airport": "Airport",
+      "jetty": "Jetty",
+      "taxi_stand": "Taxi stand",
+      "poi": "Place of interest",
+      "address": "Address"
+    },
+    "approximate": "Approximate location",
+    "footer": {
+      "select": "Select",
+      "navigate": "Move",
+      "close": "Close"
+    }
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "description": "Shortcuts work anywhere except while typing in a field.",
+    "back": "Back to search",
+    "groups": {
+      "global": "Everywhere",
+      "navigation": "Navigation",
+      "planner": "Planner"
+    },
+    "keys": {
+      "palette": "Open the command palette",
+      "help": "Show this list",
+      "goHome": "Go to Home",
+      "goTrips": "Go to My trips",
+      "goSearch": "Go to Plan a trip"
+    },
+    "then": "then"
+  },
+  "toast": {
+    "region": "Notifications",
+    "dismiss": "Dismiss notification",
+    "copied": "Copied to clipboard",
+    "copyFailed": "Could not copy. Select the text and copy it manually."
+  },
+  "hold": {
+    "remaining": "Hold expires in {time}",
+    "expired": "This hold has expired."
+  },
+  "atmosphere": {
+    "label": "Decorative water and light"
+  }
+}

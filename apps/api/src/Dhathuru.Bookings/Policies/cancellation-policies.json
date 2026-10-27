@@ -1,0 +1,13 @@
+{
+  "modes": {
+    "default": { "code": "STANDARD_1H", "tiers": [{ "minHoursBeforeDeparture": 1, "refundPercent": 100 }] },
+    "ferry": { "code": "FERRY_STANDARD", "tiers": [{ "minHoursBeforeDeparture": 24, "refundPercent": 100 }, { "minHoursBeforeDeparture": 2, "refundPercent": 50 }] },
+    "speedboat": { "code": "SPEEDBOAT_STANDARD", "tiers": [{ "minHoursBeforeDeparture": 24, "refundPercent": 100 }, { "minHoursBeforeDeparture": 2, "refundPercent": 50 }] },
+    "seaplane": { "code": "SEAPLANE_STANDARD", "tiers": [{ "minHoursBeforeDeparture": 48, "refundPercent": 100 }, { "minHoursBeforeDeparture": 24, "refundPercent": 50 }] },
+    "domestic_flight": { "code": "FLIGHT_STANDARD", "nonRefundableFeeMinor": 5000, "tiers": [{ "minHoursBeforeDeparture": 72, "refundPercent": 100 }, { "minHoursBeforeDeparture": 24, "refundPercent": 50 }] },
+    "taxi": { "code": "TAXI_FLEXIBLE", "tiers": [{ "minHoursBeforeDeparture": 1, "refundPercent": 100 }] },
+    "bus": { "code": "BUS_FLEXIBLE", "tiers": [{ "minHoursBeforeDeparture": 1, "refundPercent": 100 }] },
+    "resort_transfer": { "code": "RESORT_TRANSFER_STRICT", "tiers": [{ "minHoursBeforeDeparture": 48, "refundPercent": 100 }] }
+  },
+  "providers": {}
+}

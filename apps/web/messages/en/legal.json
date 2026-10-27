@@ -1,0 +1,37 @@
+{
+  "draftNotice": "Draft placeholder. This text has not yet been reviewed and is not the final legal document.",
+  "terms": {
+    "title": "Terms of use",
+    "sections": {
+      "service": {
+        "title": "What Dhathuru does",
+        "body": "Dhathuru plans and books multi-leg journeys across the Maldives with independent transport operators. Each operator remains responsible for its own service."
+      },
+      "bookings": {
+        "title": "Bookings and changes",
+        "body": "A booking is held briefly while you pay. Cancellation and refund rules follow each operator's policy and are shown before you pay."
+      },
+      "accuracy": {
+        "title": "Accuracy of information",
+        "body": "Timetables, fares and delay statistics come from operators and public sources and can change. Estimated figures are marked as estimates."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy",
+    "sections": {
+      "collect": {
+        "title": "What we collect",
+        "body": "Your account details, the travellers you save and the trips you book. We do not sell personal data."
+      },
+      "use": {
+        "title": "How we use it",
+        "body": "To plan and book journeys, send tickets and trip notifications, and keep the service secure."
+      },
+      "rights": {
+        "title": "Your choices",
+        "body": "You can edit your details, remove saved travellers and delete your account from your profile."
+      }
+    }
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to see your trips and book in one go.",
+    "submit": "Sign in",
+    "forgot": "Forgot your password?",
+    "noAccount": "New to Dhathuru?",
+    "register": "Create an account"
+  },
+  "register": {
+    "title": "Create your account",
+    "subtitle": "One account for every ferry, flight and taxi.",
+    "submit": "Create account",
+    "haveAccount": "Already have an account?",
+    "login": "Sign in",
+    "sentTitle": "Check your email",
+    "sentBody": "If this address can be used, we've sent you a message with the next step. It can take a minute to arrive."
+  },
+  "verify": {
+    "title": "Confirm your email",
+    "working": "Confirming your address…",
+    "done": "Your email is confirmed. Thank you.",
+    "failed": "This link has expired or was already used. Request a new one below.",
+    "missing": "This page needs the link from your email.",
+    "continue": "Continue",
+    "resendTitle": "Send a new link",
+    "resend": "Send me a new link",
+    "resent": "If that address needs confirming, a new link is on its way."
+  },
+  "forgot": {
+    "title": "Reset your password",
+    "subtitle": "Enter your email and we'll send a link to choose a new password.",
+    "submit": "Send reset link",
+    "sent": "If an account exists for that address, a reset link is on its way. It works once and expires in an hour.",
+    "back": "Back to sign in"
+  },
+  "reset": {
+    "title": "Choose a new password",
+    "submit": "Change password",
+    "done": "Your password was changed. Please sign in again.",
+    "missing": "This page needs the link from your email.",
+    "signIn": "Sign in"
+  },
+  "fields": {
+    "email": "Email",
+    "password": "Password",
+    "newPassword": "New password",
+    "displayName": "Your name",
+    "displayNameHint": "Optional. Shown on your account.",
+    "passwordHint": "At least 10 characters. A few random words make a strong one.",
+    "show": "Show password",
+    "hide": "Hide password",
+    "required": "Required"
+  },
+  "errors": {
+    "INVALID_CREDENTIALS": "That email and password don't match. Try again or reset your password.",
+    "RATE_LIMITED": "Too many attempts. Please wait a moment and try again.",
+    "PASSWORD_TOO_SHORT": "Use at least 10 characters.",
+    "PASSWORD_TOO_LONG": "Use 128 characters or fewer.",
+    "PASSWORD_TOO_COMMON": "That password is too easy to guess. Try a longer phrase.",
+    "PASSWORD_CONTAINS_EMAIL": "Don't use your email name inside your password.",
+    "PASSWORD_INCORRECT": "That password is not correct.",
+    "EMAIL_INVALID": "Enter a valid email address.",
+    "REQUIRED": "This field is required.",
+    "TOO_LONG": "That's too long.",
+    "TOKEN_INVALID": "This link has expired or was already used.",
+    "VALIDATION_FAILED": "Please check the highlighted fields.",
+    "NETWORK": "We couldn't reach Dhathuru. Check your connection and try again.",
+    "GENERIC": "Something went wrong on our side. Please try again."
+  },
+  "manage": {
+    "title": "Your account",
+    "loading": "Loading your account…",
+    "loadFailed": "We couldn't load your account.",
+    "retry": "Try again",
+    "signOut": "Sign out",
+    "unverified": "Your email isn't confirmed yet. Confirm it to book trips.",
+    "profile": {
+      "title": "Profile",
+      "save": "Save changes",
+      "saved": "Saved.",
+      "email": "Email"
+    },
+    "preferences": {
+      "title": "Travel preferences",
+      "risk": "How cautious should plans be?",
+      "cautious": "Cautious: longer buffers",
+      "balanced": "Balanced",
+      "relaxed": "Relaxed: shorter buffers",
+      "save": "Save preferences"
+    },
+    "travellers": {
+      "title": "Saved travellers",
+      "empty": "No saved travellers yet. Add the people you travel with to book faster.",
+      "name": "Full name",
+      "type": "Passenger type",
+      "adult": "Adult",
+      "child": "Child",
+      "infant": "Infant",
+      "add": "Add traveller",
+      "remove": "Remove",
+      "removeLabel": "Remove {name}",
+      "documentNote": "We never store ID or passport numbers."
+    },
+    "security": {
+      "title": "Security",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "changePassword": "Change password",
+      "passwordChanged": "Password changed. Other devices were signed out.",
+      "sessions": "Signed-in devices",
+      "current": "This device",
+      "revoke": "Sign out",
+      "revokeOthers": "Sign out everywhere else",
+      "noSessions": "No other devices."
+    },
+    "delete": {
+      "title": "Delete account",
+      "body": "This permanently deletes your account, saved travellers and preferences. Anonymised booking records may be kept for accounting.",
+      "confirm": "Enter your password to confirm",
+      "button": "Delete my account"
+    }
+  },
+  "meta": {
+    "login": "Sign in",
+    "register": "Create account",
+    "forgot": "Forgot password",
+    "reset": "Choose a new password",
+    "verify": "Confirm your email",
+    "account": "Your account"
+  }
+}

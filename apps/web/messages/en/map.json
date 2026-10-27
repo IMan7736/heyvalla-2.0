@@ -1,0 +1,81 @@
+{
+  "loading": "Loading map",
+  "unavailable": {
+    "title": "The map cannot be shown here",
+    "body": "Your browser could not start the map, so the journey is listed instead."
+  },
+  "approximate": {
+    "note": "Routes are illustrative, not for navigation.",
+    "legBadge": "Illustrative route"
+  },
+  "controls": {
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "fitRoute": "Show whole journey",
+    "fitNetwork": "Show all islands"
+  },
+  "modes": {
+    "ferry": "Ferry",
+    "speedboat": "Speedboat",
+    "seaplane": "Seaplane",
+    "domestic_flight": "Domestic flight",
+    "bus": "Bus",
+    "taxi": "Taxi",
+    "walk": "Walk",
+    "resort_transfer": "Resort transfer"
+  },
+  "placeTypes": {
+    "island": "Island",
+    "atoll": "Atoll",
+    "airport": "Airport",
+    "jetty": "Jetty",
+    "taxi_stand": "Taxi stand",
+    "poi": "Point of interest",
+    "address": "Address"
+  },
+  "trip": {
+    "label": "Journey map",
+    "summary": "{legs, plural, one {# leg} other {# legs}} from {from} to {to}, {depart} to {arrive}.",
+    "routeSteps": "Journey steps",
+    "legSummary": "{mode} from {from} to {to}, {depart} to {arrive}",
+    "hub": "Interchange",
+    "stopNumber": "Stop {number}",
+    "arrives": "Arrives {time}",
+    "departs": "Departs {time}",
+    "start": "Start",
+    "end": "Destination",
+    "focusLeg": "Show {mode} leg on the map"
+  },
+  "scrubber": {
+    "group": "Journey playback",
+    "play": "Play journey",
+    "pause": "Pause journey",
+    "label": "Journey time",
+    "moving": "{time}, {mode} towards {place}",
+    "waiting": "{time}, waiting at {place}, {minutes, plural, one {# minute} other {# minutes}} until the next departure",
+    "before": "{time}, journey not started, at {place}",
+    "after": "{time}, arrived at {place}"
+  },
+  "network": {
+    "label": "Network map",
+    "modes": "Show on map",
+    "search": "Find an island",
+    "searchPlaceholder": "Search islands, airports, jetties",
+    "noResults": "No place matches that search.",
+    "resultCount": "{count, plural, =0 {No places} one {# place} other {# places}} found",
+    "clusterLabel": "{count} places, zoom in to see them",
+    "density": "Busier places glow brighter",
+    "selected": "Selected: {name}",
+    "services": "{count, plural, one {# service} other {# services}}",
+    "clear": "Clear selection",
+    "listTitle": "Places",
+    "listHint": "Use the search to move around the map without a mouse."
+  },
+  "picker": {
+    "label": "Choose a place on the map",
+    "hint": "Click an island on the map, or search by name.",
+    "selected": "Selected: {name}",
+    "none": "No place selected",
+    "clear": "Clear"
+  }
+}

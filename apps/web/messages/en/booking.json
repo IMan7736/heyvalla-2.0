@@ -1,0 +1,422 @@
+{
+  "steps": {
+    "label": "Booking progress",
+    "travellers": "Travellers",
+    "review": "Review",
+    "payment": "Payment",
+    "tickets": "Tickets",
+    "complete": "completed",
+    "current": "current step"
+  },
+  "start": {
+    "pageTitle": "Book your trip",
+    "title": "Book your trip",
+    "subtitle": "Tell us who is travelling. We hold the seats first, then you pay.",
+    "loading": "Loading your trip",
+    "noOption": {
+      "title": "Pick a trip first",
+      "description": "Search for a journey, choose an option, and come back here to book it.",
+      "action": "Plan a trip"
+    },
+    "optionError": {
+      "title": "We couldn’t load this trip",
+      "description": "It may have expired or the connection dropped. Search again to get fresh prices.",
+      "retry": "Try again",
+      "search": "Search again"
+    },
+    "travellers": {
+      "title": "Who is travelling?",
+      "hint": "Names must match the ID each traveller will carry. At least one adult is needed; infants travel free on a lap.",
+      "passenger": "Traveller {number}",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "As on their ID",
+      "type": "Fare type",
+      "phone": "Phone (optional)",
+      "phoneHint": "Operators may call this number if a service changes.",
+      "saved": "Use a saved traveller",
+      "savedNone": "Enter details manually",
+      "savedLoading": "Loading saved travellers",
+      "savedError": "Saved travellers are not available right now. You can still type the details.",
+      "required": "required",
+      "partyNote": "Fares were quoted for {adults, plural, one {# adult} other {# adults}}{children, plural, =0 {} one {, # child} other {, # children}}{infants, plural, =0 {} one {, # infant} other {, # infants}}, so the group is fixed here.",
+      "changeParty": "Travelling with a different group? Search again."
+    },
+    "types": {
+      "adult": "Adult",
+      "child": "Child",
+      "infant": "Infant (under 2, no seat)"
+    },
+    "errors": {
+      "nameRequired": "Enter the traveller’s full name.",
+      "nameTooLong": "Names can be up to 120 characters.",
+      "phoneInvalid": "Enter a phone number with digits only, like +960 777 1234.",
+      "adultRequired": "At least one traveller must be an adult.",
+      "tooManyInfants": "Each infant needs an adult to travel with, one infant per adult.",
+      "fixHighlighted": "Check the highlighted fields."
+    },
+    "summary": {
+      "title": "Your journey",
+      "perPerson": "per person",
+      "payOnBoard": "Pay on board",
+      "payOnBoardHint": "Not sold here. You pay the operator directly.",
+      "estimate": "Fares for your group",
+      "estimateNote": "Any fees are added when we hold the seats, and you see the exact total before you pay.",
+      "holdNote": "Continuing holds your seats for {minutes} minutes. Nothing is charged until you pay.",
+      "legCount": "{count, plural, one {# leg} other {# legs}}"
+    },
+    "submit": "Hold seats and continue",
+    "submitting": "Holding your seats",
+    "back": "Back to the trip",
+    "problems": {
+      "LEG_UNAVAILABLE": "Leg {leg} just sold out, so we held nothing. Search again to see what is left.",
+      "OPTION_EXPIRED": "These prices have expired. Search again to get a fresh quote.",
+      "OPTION_NOT_FOUND": "We can’t find this trip any more. Search again.",
+      "NOTHING_TO_BOOK": "None of the legs on this trip can be booked here. Pay the operators directly.",
+      "VALIDATION_FAILED": "Some details need fixing. Check the highlighted fields.",
+      "EMAIL_NOT_VERIFIED": "Verify your email address before booking. We sent a link when you signed up.",
+      "FORBIDDEN": "Verify your email address before booking. We sent a link when you signed up.",
+      "AUTH_REQUIRED": "Your session ended. Sign in again to continue.",
+      "NETWORK": "We couldn’t reach Dhathuru. Check your connection and try again. Retrying is safe: you won’t be booked twice.",
+      "UNKNOWN": "Something went wrong and nothing was booked. Try again."
+    }
+  },
+  "checkout": {
+    "pageTitle": "Pay for your trip",
+    "title": "Pay securely",
+    "loading": "Loading your booking",
+    "loadError": {
+      "title": "We couldn’t load this booking",
+      "description": "Your seats are still held while the timer runs. Try again.",
+      "retry": "Try again"
+    },
+    "notFound": {
+      "title": "Booking not found",
+      "description": "It may belong to another account, or the link is wrong.",
+      "action": "My trips"
+    },
+    "summaryTitle": "Order summary",
+    "total": "Total to pay",
+    "subtotalNote": "All amounts are in Maldivian rufiyaa (MVR).",
+    "countdown": {
+      "label": "Seats held for",
+      "urgent": "Hurry: your seats are released when this reaches zero.",
+      "normal": "Your seats are held for you. Pay before the timer ends.",
+      "announce": "{minutes} minutes {seconds} seconds left to pay"
+    },
+    "testMode": {
+      "title": "Test checkout: no real money moves",
+      "description": "Dhathuru is not connected to a payment company yet. Use a test card below.",
+      "show": "Show test cards",
+      "hide": "Hide test cards",
+      "use": "Use this card",
+      "cards": {
+        "success": "Always succeeds",
+        "declined": "Card declined",
+        "insufficientFunds": "Insufficient funds",
+        "verification": "Asks for a verification code",
+        "legFailure": "Charged, then a leg can’t be confirmed: full refund",
+        "timeout": "Bank doesn’t answer in time"
+      }
+    },
+    "card": {
+      "title": "Card details",
+      "name": "Name on card",
+      "number": "Card number",
+      "expiry": "Expiry (MM/YY)",
+      "cvc": "Security code",
+      "secureNote": "Card details stay in your browser. We only ever send a one-time token.",
+      "errors": {
+        "nameRequired": "Enter the name on the card.",
+        "numberRequired": "Enter the card number.",
+        "numberInvalid": "That card number doesn’t look right. Check the digits.",
+        "numberNotTestCard": "In this test checkout only the listed test cards work.",
+        "expiryRequired": "Enter the expiry date.",
+        "expiryInvalid": "Enter a future date as MM/YY.",
+        "cvcRequired": "Enter the security code.",
+        "cvcInvalid": "The security code is 3 or 4 digits."
+      }
+    },
+    "pay": "Pay {amount}",
+    "processing": {
+      "title": "Processing your payment",
+      "description": "Please keep this page open. We’re confirming every leg of your trip. This can take a few seconds.",
+      "status": "Processing payment"
+    },
+    "checking": {
+      "title": "Checking your payment",
+      "description": "We didn’t get a clear answer from the bank yet. We’re checking, and you will not be charged twice. Keep this page open.",
+      "status": "Checking payment status"
+    },
+    "verify": {
+      "title": "Verify this payment",
+      "description": "Your bank wants to check it’s you. Enter the verification code to finish paying.",
+      "testHint": "Test checkout: the code is {code}.",
+      "code": "Verification code",
+      "submit": "Verify and pay",
+      "errors": {
+        "required": "Enter the verification code.",
+        "wrong": "That code didn’t work. Check it and try again."
+      }
+    },
+    "failure": {
+      "title": "Payment didn’t go through",
+      "keepTrying": "Your seats are still held. Try another card before the timer ends.",
+      "tryAgain": "Try a different card"
+    },
+    "failed": {
+      "title": "We couldn’t complete this booking",
+      "refund": "If your card was charged, the full amount is being refunded. This usually shows within a few days, depending on your bank.",
+      "noCharge": "You have not been charged.",
+      "seatsReleased": "Any seats we held have been released.",
+      "action": "Search again"
+    },
+    "expired": {
+      "title": "Your hold ran out",
+      "description": "The seats went back on sale and you were not charged. Search again to hold new ones.",
+      "action": "Search again"
+    },
+    "cancelled": {
+      "title": "This booking was cancelled",
+      "action": "My trips"
+    },
+    "expiredNotice": "The timer reached zero. Checking with the operators…",
+    "problems": {
+      "HOLD_EXPIRED": "Your hold ran out before payment finished. You were not charged.",
+      "PAYMENT_IN_PROGRESS": "A payment for this booking is already being processed. Hold on while we check.",
+      "NO_VERIFICATION_PENDING": "There is no verification waiting for this booking.",
+      "BOOKING_NOT_PAYABLE": "This booking can’t be paid for any more.",
+      "INVALID_PAYMENT_TOKEN": "That card isn’t accepted here.",
+      "EMAIL_NOT_VERIFIED": "Verify your email address before paying.",
+      "FORBIDDEN": "Verify your email address before paying.",
+      "AUTH_REQUIRED": "Your session ended. Sign in again, your seats are still held.",
+      "NETWORK": "We couldn’t reach Dhathuru. Retrying is safe: you won’t be charged twice.",
+      "UNKNOWN": "Something went wrong. You haven’t been charged. Try again."
+    }
+  },
+  "failure": {
+    "CARD_DECLINED": "The card was declined. Try another card.",
+    "INSUFFICIENT_FUNDS": "The card has insufficient funds. Try another card.",
+    "VERIFICATION_FAILED": "The verification step failed. Try again or use another card.",
+    "PAYMENT_TIMEOUT": "The bank didn’t answer in time. You were not charged.",
+    "GATEWAY_ERROR": "The payment service had a problem. You were not charged.",
+    "INVALID_PAYMENT_TOKEN": "That card isn’t accepted here.",
+    "LEG_UNAVAILABLE": "A seat on one of the legs was no longer available.",
+    "LEG_CONFIRM_FAILED": "One of the operators couldn’t confirm a leg, so we cancelled the whole trip and refunded you.",
+    "HOLD_EXPIRED": "The hold ran out before payment finished.",
+    "UNKNOWN": "Something went wrong."
+  },
+  "done": {
+    "pageTitle": "Booking confirmed",
+    "title": "You’re booked",
+    "description": "Every leg is confirmed and your tickets are ready.",
+    "reference": "Booking",
+    "emailNote": "We’ve emailed your confirmation and itinerary.",
+    "tickets": "View tickets",
+    "pdf": "Download itinerary (PDF)",
+    "trips": "My trips",
+    "payOnBoardTitle": "Pay on board",
+    "payOnBoardBody": "These legs aren’t sold through Dhathuru. Pay the operator directly: {legs}.",
+    "notConfirmed": {
+      "title": "This booking isn’t confirmed yet",
+      "description": "Finish paying to confirm it.",
+      "action": "Continue to payment"
+    }
+  },
+  "trips": {
+    "pageTitle": "My trips",
+    "title": "My trips",
+    "subtitle": "Every journey you’ve booked, with live updates if anything changes.",
+    "tabs": {
+      "label": "Trips",
+      "upcoming": "Upcoming",
+      "past": "Past"
+    },
+    "loading": "Loading your trips",
+    "loadMore": "Show more",
+    "loadingMore": "Loading",
+    "error": {
+      "title": "We couldn’t load your trips",
+      "description": "Your bookings are safe. Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "empty": {
+      "upcomingTitle": "No upcoming trips",
+      "upcomingDescription": "When you book a journey it appears here, with its tickets.",
+      "pastTitle": "No past trips yet",
+      "pastDescription": "Trips you’ve taken or that ended show up here.",
+      "action": "Plan a trip"
+    },
+    "card": {
+      "open": "Open trip {route}",
+      "passengers": "{count, plural, one {# traveller} other {# travellers}}",
+      "legs": "{count, plural, one {# leg} other {# legs}}",
+      "holdLeft": "Seats held until {time}",
+      "reference": "Ref {id}",
+      "disruptions": "{count, plural, one {# update needs your attention} other {# updates need your attention}}"
+    },
+    "unknownRoute": "Trip"
+  },
+  "status": {
+    "draft": "Draft",
+    "held": "Awaiting payment",
+    "payment_pending": "Processing payment",
+    "confirmed": "Confirmed",
+    "failed": "Not completed",
+    "expired": "Expired",
+    "partially_cancelled": "Partly cancelled",
+    "cancelled": "Cancelled",
+    "refunded": "Refunded"
+  },
+  "legStatus": {
+    "pending": "Pending",
+    "held": "Held",
+    "confirmed": "Confirmed",
+    "failed": "Failed",
+    "cancelled": "Cancelled",
+    "released": "Released"
+  },
+  "detail": {
+    "pageTitle": "Trip details",
+    "loading": "Loading your trip",
+    "back": "My trips",
+    "reference": "Booking {id}",
+    "error": {
+      "title": "We couldn’t load this trip",
+      "description": "Try again. Your booking is safe.",
+      "retry": "Try again"
+    },
+    "notFound": {
+      "title": "Trip not found",
+      "description": "It may belong to another account, or the link is wrong.",
+      "action": "My trips"
+    },
+    "legs": "Your journey",
+    "legTo": "to",
+    "travellers": "Travellers",
+    "price": "Price",
+    "payment": "Payment",
+    "paymentStatus": {
+      "pending": "Pending",
+      "requires_action": "Needs verification",
+      "succeeded": "Paid",
+      "failed": "Failed",
+      "refunded": "Refunded",
+      "partially_refunded": "Partly refunded"
+    },
+    "refunded": "Refunded: {amount}",
+    "failureReason": "Reason: {reason}",
+    "actions": {
+      "tickets": "Tickets",
+      "pdf": "Itinerary (PDF)",
+      "cancel": "Cancel booking",
+      "pay": "Continue to payment",
+      "search": "Plan another trip"
+    },
+    "ticketsHint": "Tickets appear once the booking is confirmed.",
+    "providerRef": "Operator ref {ref}"
+  },
+  "price": {
+    "FARE": "Fare",
+    "SERVICE_FEE": "Service fee",
+    "PAY_ON_BOARD": "Pay on board (not charged here)",
+    "FERRY_FARE": "Ferry fare",
+    "SPEEDBOAT_FARE": "Speedboat fare",
+    "SEAPLANE_FARE": "Seaplane fare",
+    "FLIGHT_FARE": "Flight fare",
+    "BUS_FARE": "Bus fare",
+    "TAXI_FARE": "Taxi fare",
+    "RESORT_TRANSFER_FARE": "Resort transfer fare",
+    "other": "Charge",
+    "legSuffix": "leg {number}",
+    "total": "Total charged",
+    "payOnBoardTotal": "Pay on board: {amount}",
+    "title": "Price breakdown"
+  },
+  "disruption": {
+    "delayed": "Leg {leg} is delayed by {minutes} min",
+    "cancelled": "Leg {leg} was cancelled by the operator",
+    "delayedBody": "The operator reported a delay. Nothing on your booking has changed and you decide what to do.",
+    "cancelledBody": "Your booking is unchanged until you choose. See the alternatives below, or contact the operator.",
+    "acknowledge": "Got it",
+    "acknowledging": "Saving",
+    "acknowledged": "Seen",
+    "ackError": "We couldn’t save that. Try again.",
+    "suggestions": "Alternatives we found",
+    "suggestionsNone": "We couldn’t find an alternative that keeps your connections safe. Search for a new trip.",
+    "viewOption": "View option",
+    "optionLine": "{depart} → {arrive} · {total}",
+    "consent": "We never rebook without your say-so.",
+    "region": "Updates about your trip"
+  },
+  "cancel": {
+    "button": "Cancel booking",
+    "title": "Cancel this booking?",
+    "close": "Close",
+    "loadingQuote": "Working out your refund",
+    "quoteError": "We couldn’t work out the refund. Nothing has been cancelled. Try again.",
+    "quoteRetry": "Try again",
+    "perLeg": "Leg {leg}: {route}",
+    "refundPercent": "{percent}% back",
+    "notCancellable": "Can’t be cancelled",
+    "totalRefund": "You get back",
+    "nonRefundable": "Not refundable",
+    "consequences": "Cancelling can’t be undone. The tickets for the cancelled legs stop working straight away.",
+    "refundTiming": "Refunds go back to the card you paid with. Banks usually show it within a few days.",
+    "nothing": "Nothing on this booking can be cancelled any more.",
+    "keep": "Keep my booking",
+    "confirm": "Cancel and refund {amount}",
+    "confirmNoRefund": "Cancel with no refund",
+    "cancelling": "Cancelling",
+    "done": {
+      "title": "Booking cancelled",
+      "refund": "{amount} is on its way back to your card.",
+      "noRefund": "This cancellation had no refund due.",
+      "close": "Done"
+    },
+    "problems": {
+      "CANCEL_FAILED": "An operator didn’t confirm the cancellation yet. Nothing is lost: try again in a moment.",
+      "CANCEL_IN_PROGRESS": "A cancellation is already under way. Check back in a moment.",
+      "BOOKING_NOT_CANCELLABLE": "This booking can’t be cancelled any more.",
+      "NOTHING_CANCELLABLE": "Nothing on this booking can be cancelled any more.",
+      "NETWORK": "We couldn’t reach Dhathuru. Try again: retrying is safe.",
+      "UNKNOWN": "Something went wrong. Try again."
+    }
+  },
+  "wallet": {
+    "pageTitle": "Your tickets",
+    "title": "Your tickets",
+    "summary": "{route} · {count, plural, one {# ticket} other {# tickets}}",
+    "loading": "Loading your tickets",
+    "error": {
+      "title": "We couldn’t load your tickets",
+      "description": "Try again. Your booking is safe.",
+      "retry": "Try again"
+    },
+    "empty": {
+      "title": "No tickets yet",
+      "description": "Tickets are issued the moment your booking is confirmed.",
+      "action": "Back to the trip"
+    },
+    "ticketStatus": {
+      "valid": "Valid",
+      "used": "Used",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "passenger": "Traveller",
+    "ticketNumber": "Ticket",
+    "operator": "Operator",
+    "qrAlt": "QR code for the ticket from {from} to {to}, traveller {name}",
+    "qrCaption": "Show this at boarding",
+    "qrLoadError": "QR couldn’t load",
+    "legHeading": "Leg {number}",
+    "scanHint": "Brightness up. The operator scans this code at boarding.",
+    "pdf": "Download itinerary (PDF)",
+    "back": "Back to the trip"
+  },
+  "common": {
+    "dismiss": "Dismiss",
+    "signIn": "Sign in",
+    "none": "None"
+  }
+}

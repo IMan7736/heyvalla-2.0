@@ -1,0 +1,52 @@
+/* Import once from the app's global CSS: @import "@dhathuru/motion/styles.css"; */
+.dhathuru-skeleton {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: color-mix(in srgb, currentColor 8%, transparent);
+  min-block-size: 1rem;
+}
+.dhathuru-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, #fff 55%, transparent),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: dhathuru-shimmer 1.6s linear infinite;
+  animation-delay: var(--shimmer-delay, 0ms);
+}
+.dhathuru-skeleton[data-reduced="true"]::after {
+  animation: none;
+  display: none;
+}
+@keyframes dhathuru-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dhathuru-skeleton::after {
+    animation: none;
+    display: none;
+  }
+}
+/* Pulse used by CountdownPulse when a hold is about to expire (opacity only). */
+@keyframes dhathuru-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+.dhathuru-pulse {
+  animation: dhathuru-pulse 1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dhathuru-pulse {
+    animation: none;
+  }
+}

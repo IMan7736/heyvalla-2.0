@@ -1,0 +1,505 @@
+# Shared schemas for every module. Changes here go through a handoff to ATOLL.
+
+# ---------- Identifiers (prefixed ULIDs) ----------
+PlaceId:
+  type: string
+  description: Prefixed ULID of a place (island, atoll, airport, jetty, taxi stand, poi or address).
+  pattern: "^(isl|atl|apt|jty|txs|poi|adr)_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2"]
+OperatorId:
+  type: string
+  pattern: "^opr_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["opr_01K8Z3M5Q7R9T2V4W6X8Y0C1D2"]
+ServiceId:
+  type: string
+  pattern: "^svc_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2"]
+TripOptionId:
+  type: string
+  description: Id of a ranked trip option produced by a search.
+  pattern: "^trp_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2"]
+SearchId:
+  type: string
+  pattern: "^srch_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["srch_01K8Z3M5Q7R9T2V4W6X8Y0F1G2"]
+LegId:
+  type: string
+  pattern: "^leg_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2"]
+BookingId:
+  type: string
+  pattern: "^bkg_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2"]
+BookingLegId:
+  type: string
+  pattern: "^bkl_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2"]
+TicketId:
+  type: string
+  pattern: "^tkt_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2"]
+PaymentId:
+  type: string
+  pattern: "^pay_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["pay_01K8Z3M5Q7R9T2V4W6X8Y0M1N2"]
+UserId:
+  type: string
+  pattern: "^usr_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["usr_01K8Z3M5Q7R9T2V4W6X8Y0N1P2"]
+TravellerId:
+  type: string
+  pattern: "^trv_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2"]
+PassengerId:
+  type: string
+  pattern: "^pax_[0-9A-HJKMNP-TV-Z]{26}$"
+  examples: ["pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2"]
+
+# ---------- Primitives ----------
+Money:
+  type: object
+  description: Integer minor units (MVR laari, 100 laari = 1 MVR). Never a float.
+  required: [amountMinor, currency]
+  additionalProperties: false
+  properties:
+    amountMinor: { type: integer, minimum: 0, examples: [15000] }
+    currency: { type: string, enum: [MVR], examples: [MVR] }
+Instant:
+  type: string
+  format: date-time
+  description: ISO 8601 timestamp with explicit offset. Stored and transported in UTC; shown in Indian/Maldives (UTC+5).
+  examples: ["2026-10-27T02:30:00Z"]
+GeoPoint:
+  type: object
+  required: [lat, lng]
+  additionalProperties: false
+  properties:
+    lat: { type: number, minimum: -90, maximum: 90, examples: [3.9417] }
+    lng: { type: number, minimum: -180, maximum: 180, examples: [73.4896] }
+LocalisedText:
+  type: object
+  description: Map of locale tag to text. `en` is always present.
+  required: [en]
+  properties:
+    en: { type: string }
+  additionalProperties: { type: string }
+  examples: [{ en: "Maafushi", dv: "މާފުށި" }]
+PageInfo:
+  type: object
+  required: [limit]
+  properties:
+    nextCursor:
+      { type: [string, "null"], description: Opaque cursor; null or absent on the last page. }
+    limit: { type: integer, minimum: 1, maximum: 200, examples: [50] }
+
+# ---------- Errors (RFC 9457) ----------
+Problem:
+  type: object
+  description: RFC 9457 problem details. `code` is stable and machine readable; `params` fill the client-side translated message. No English prose is required by clients.
+  required: [type, title, status, code]
+  properties:
+    type:
+      { type: string, format: uri-reference, examples: ["https://dhathuru.mv/problems/validation"] }
+    title: { type: string, examples: ["Validation failed"] }
+    status: { type: integer, examples: [422] }
+    detail: { type: string }
+    instance: { type: string }
+    code:
+      {
+        type: string,
+        description: Stable machine code (UPPER_SNAKE).,
+        examples: [VALIDATION_FAILED],
+      }
+    params:
+      type: object
+      additionalProperties: true
+      examples: [{ field: "email" }]
+    traceId: { type: string }
+    errors:
+      type: array
+      description: Field level errors for validation problems.
+      items:
+        type: object
+        required: [field, code]
+        properties:
+          field: { type: string }
+          code: { type: string }
+          params: { type: object, additionalProperties: true }
+
+# ---------- Places and catalog ----------
+PlaceType:
+  type: string
+  enum: [island, atoll, airport, jetty, taxi_stand, poi, address]
+PlaceRef:
+  type: object
+  description: Lightweight reference embedded in legs.
+  required: [id, type, name, geo]
+  properties:
+    id: { $ref: "#/PlaceId" }
+    type: { $ref: "#/PlaceType" }
+    name: { $ref: "#/LocalisedText" }
+    geo: { $ref: "#/GeoPoint" }
+    code: { type: string, description: IATA code for airports., examples: [MLE] }
+Place:
+  type: object
+  required: [id, type, name, geo, isHub]
+  properties:
+    id: { $ref: "#/PlaceId" }
+    type: { $ref: "#/PlaceType" }
+    name: { $ref: "#/LocalisedText" }
+    geo: { $ref: "#/GeoPoint" }
+    atollId: { $ref: "#/PlaceId" }
+    parentId: { $ref: "#/PlaceId" }
+    code: { type: string, description: IATA code for airports. }
+    isHub:
+      type: boolean
+      description: True where modes interchange (for example a jetty on the airport island).
+    approximate:
+      type: boolean
+      description: True when the coordinates are estimated rather than surveyed.
+ProviderKind:
+  type: string
+  enum: [static, mock, live]
+Operator:
+  type: object
+  required: [id, name, modes, providerKind]
+  properties:
+    id: { $ref: "#/OperatorId" }
+    name: { $ref: "#/LocalisedText" }
+    modes:
+      type: array
+      items: { $ref: "#/TransportMode" }
+    providerId: { type: string, examples: [static-mtcc] }
+    providerKind: { $ref: "#/ProviderKind" }
+    website: { type: string, format: uri }
+TransportMode:
+  type: string
+  enum: [ferry, speedboat, seaplane, domestic_flight, bus, taxi, walk, resort_transfer]
+Pricing:
+  type: string
+  enum: [fixed, estimate]
+Service:
+  type: object
+  description: A scheduled or on-demand run pattern with calendar validity and fare rules.
+  required: [id, operatorId, mode, from, to, kind, validity]
+  properties:
+    id: { $ref: "#/ServiceId" }
+    operatorId: { $ref: "#/OperatorId" }
+    mode: { $ref: "#/TransportMode" }
+    kind: { type: string, enum: [scheduled, on_demand] }
+    from: { $ref: "#/PlaceRef" }
+    to: { $ref: "#/PlaceRef" }
+    departures:
+      type: array
+      description: Departures for the queried date.
+      items: { $ref: "#/ServiceDeparture" }
+    validity:
+      type: object
+      required: [from]
+      properties:
+        from: { type: string, format: date }
+        to: { type: string, format: date }
+        daysOfWeek:
+          type: array
+          items: { type: integer, minimum: 1, maximum: 7, description: "ISO weekday, 1 = Monday." }
+    fare:
+      type: object
+      required: [base]
+      properties:
+        base: { $ref: "#/Money" }
+        pricing: { $ref: "#/Pricing" }
+        childDiscountPercent: { type: integer, minimum: 0, maximum: 100 }
+    checkInCutoffMin:
+      {
+        type: integer,
+        minimum: 0,
+        description: Minutes before departure that boarding or check-in closes.,
+        examples: [45],
+      }
+    synthetic:
+      type: boolean
+      description: True when the schedule is estimated or synthetic, not published by the operator.
+ServiceDeparture:
+  type: object
+  required: [serviceRunId, departAt, arriveAt]
+  properties:
+    serviceRunId: { type: string, examples: ["svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2:2026-10-27T02:30Z"] }
+    departAt: { $ref: "#/Instant" }
+    arriveAt: { $ref: "#/Instant" }
+    seatsLeft: { type: integer, minimum: 0 }
+ServiceState:
+  type: string
+  enum: [on_time, delayed, cancelled, unknown]
+ServiceStatus:
+  type: object
+  required: [serviceId, state, updatedAt]
+  properties:
+    serviceId: { $ref: "#/ServiceId" }
+    serviceRunId: { type: string }
+    state: { $ref: "#/ServiceState" }
+    delayMinutes: { type: integer, minimum: 0 }
+    updatedAt: { $ref: "#/Instant" }
+    source: { type: string, enum: [static, mock, live, simulated] }
+
+# ---------- Trips ----------
+Leg:
+  type: object
+  required:
+    [
+      id,
+      mode,
+      providerId,
+      from,
+      to,
+      departAt,
+      arriveAt,
+      durationMin,
+      price,
+      bookable,
+      pricing,
+      noteCodes,
+    ]
+  properties:
+    id: { $ref: "#/LegId" }
+    mode: { $ref: "#/TransportMode" }
+    providerId: { type: string, examples: [static-mtcc] }
+    serviceId: { $ref: "#/ServiceId" }
+    serviceRunId: { type: string }
+    from: { $ref: "#/PlaceRef" }
+    to: { $ref: "#/PlaceRef" }
+    departAt: { $ref: "#/Instant" }
+    arriveAt: { $ref: "#/Instant" }
+    durationMin: { type: integer, minimum: 0 }
+    price: { $ref: "#/Money" }
+    bookable: { type: boolean }
+    pricing: { $ref: "#/Pricing" }
+    geometryRef:
+      {
+        type: string,
+        description: Reference resolvable via GET /geo/legs.,
+        examples: ["leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2"],
+      }
+    noteCodes:
+      type: array
+      items: { type: string }
+Buffer:
+  type: object
+  required: [afterLegIndex, minutes, requiredMinutes, comfortMinutes]
+  properties:
+    afterLegIndex: { type: integer, minimum: 0 }
+    minutes:
+      {
+        type: integer,
+        minimum: 0,
+        description: Planned slack between arrival and the next departure.,
+      }
+    requiredMinutes:
+      { type: integer, minimum: 0, description: Hard minimum; options below it are never produced. }
+    comfortMinutes: { type: integer, minimum: 0 }
+RiskLevel:
+  type: string
+  enum: [low, medium, high]
+Risk:
+  type: object
+  required: [missProbability, level]
+  properties:
+    missProbability: { type: number, minimum: 0, maximum: 1 }
+    level: { $ref: "#/RiskLevel" }
+    weakestConnectionIndex: { type: integer, minimum: 0 }
+TripLabel:
+  type: string
+  enum: [fastest, cheapest, safest, best_overall]
+Severity:
+  type: string
+  enum: [info, good, caution]
+Explanation:
+  type: object
+  description: Structured reason. The web owns the English text for each code.
+  required: [code, params, severity]
+  properties:
+    code: { type: string, examples: [BUFFER_COMFORTABLE] }
+    params: { type: object, additionalProperties: true, examples: [{ minutes: 45 }] }
+    severity: { $ref: "#/Severity" }
+Warning:
+  type: object
+  required: [code, params]
+  properties:
+    code: { type: string, examples: [ESTIMATED_TAXI_FARE] }
+    params: { type: object, additionalProperties: true }
+PriceBreakdownItem:
+  type: object
+  required: [code, amount]
+  properties:
+    code: { type: string, examples: [FERRY_FARE] }
+    amount: { $ref: "#/Money" }
+    legId: { $ref: "#/LegId" }
+TripPrice:
+  type: object
+  required: [total, breakdown]
+  properties:
+    total: { $ref: "#/Money" }
+    breakdown:
+      type: array
+      items: { $ref: "#/PriceBreakdownItem" }
+TripOption:
+  type: object
+  required:
+    [
+      id,
+      departAt,
+      arriveAt,
+      durationMin,
+      transfers,
+      legs,
+      price,
+      buffers,
+      risk,
+      labels,
+      score,
+      explanations,
+      warnings,
+    ]
+  properties:
+    id: { $ref: "#/TripOptionId" }
+    departAt: { $ref: "#/Instant" }
+    arriveAt: { $ref: "#/Instant" }
+    durationMin: { type: integer, minimum: 0 }
+    transfers: { type: integer, minimum: 0 }
+    legs:
+      type: array
+      minItems: 1
+      items: { $ref: "#/Leg" }
+    price: { $ref: "#/TripPrice" }
+    buffers:
+      type: array
+      items: { $ref: "#/Buffer" }
+    risk: { $ref: "#/Risk" }
+    labels:
+      type: array
+      items: { $ref: "#/TripLabel" }
+    score: { type: number }
+    explanations:
+      type: array
+      items: { $ref: "#/Explanation" }
+    warnings:
+      type: array
+      items: { $ref: "#/Warning" }
+
+# ---------- Users and travellers ----------
+User:
+  type: object
+  required: [id, email, emailVerified, createdAt]
+  properties:
+    id: { $ref: "#/UserId" }
+    email: { type: string, format: email }
+    emailVerified: { type: boolean }
+    displayName: { type: string }
+    locale: { type: string, examples: [en] }
+    createdAt: { $ref: "#/Instant" }
+Traveller:
+  type: object
+  description: A saved person the user books for.
+  required: [id, fullName]
+  properties:
+    id: { $ref: "#/TravellerId" }
+    fullName: { type: string, examples: ["Aishath Naseem"] }
+    dateOfBirth: { type: string, format: date }
+    phone: { type: string, examples: ["+9607771234"] }
+    documentType:
+      {
+        type: string,
+        enum: [none, national_id, passport],
+        default: none,
+        description: "Kind of document the traveller holds. The number itself is never stored in v1.",
+      }
+    passengerType: { $ref: "#/PassengerType" }
+PassengerType:
+  type: string
+  enum: [adult, child, infant]
+Passenger:
+  type: object
+  description: A person on one booking (snapshot; may originate from a Traveller).
+  required: [id, fullName, passengerType]
+  properties:
+    id: { $ref: "#/PassengerId" }
+    travellerId: { $ref: "#/TravellerId" }
+    fullName: { type: string }
+    passengerType: { $ref: "#/PassengerType" }
+    phone: { type: string }
+
+# ---------- Bookings ----------
+BookingStatus:
+  type: string
+  enum:
+    [
+      draft,
+      held,
+      payment_pending,
+      confirmed,
+      failed,
+      expired,
+      partially_cancelled,
+      cancelled,
+      refunded,
+    ]
+BookingLegStatus:
+  type: string
+  enum: [pending, held, confirmed, failed, cancelled, released]
+BookingLeg:
+  type: object
+  required: [id, legIndex, leg, status]
+  properties:
+    id: { $ref: "#/BookingLegId" }
+    legIndex: { type: integer, minimum: 0 }
+    leg: { $ref: "#/Leg" }
+    status: { $ref: "#/BookingLegStatus" }
+    providerReference:
+      { type: string, description: Reference returned by the provider on hold or confirm. }
+PaymentStatus:
+  type: string
+  enum: [pending, succeeded, failed, refunded, partially_refunded]
+Payment:
+  type: object
+  required: [id, bookingId, amount, status, createdAt]
+  properties:
+    id: { $ref: "#/PaymentId" }
+    bookingId: { $ref: "#/BookingId" }
+    amount: { $ref: "#/Money" }
+    status: { $ref: "#/PaymentStatus" }
+    gateway: { type: string, enum: [fake, bml, mib, mfaisaa] }
+    failureCode: { type: string, examples: [CARD_DECLINED] }
+    createdAt: { $ref: "#/Instant" }
+Booking:
+  type: object
+  required: [id, status, optionId, legs, passengers, total, createdAt]
+  properties:
+    id: { $ref: "#/BookingId" }
+    status: { $ref: "#/BookingStatus" }
+    optionId: { $ref: "#/TripOptionId" }
+    legs:
+      type: array
+      items: { $ref: "#/BookingLeg" }
+    passengers:
+      type: array
+      items: { $ref: "#/Passenger" }
+    total: { $ref: "#/Money" }
+    holdExpiresAt: { $ref: "#/Instant" }
+    payment: { $ref: "#/Payment" }
+    createdAt: { $ref: "#/Instant" }
+    updatedAt: { $ref: "#/Instant" }
+TicketStatus:
+  type: string
+  enum: [valid, used, cancelled, expired]
+Ticket:
+  type: object
+  required: [id, bookingId, bookingLegId, passengerId, status, issuedAt]
+  properties:
+    id: { $ref: "#/TicketId" }
+    bookingId: { $ref: "#/BookingId" }
+    bookingLegId: { $ref: "#/BookingLegId" }
+    passengerId: { $ref: "#/PassengerId" }
+    status: { $ref: "#/TicketStatus" }
+    leg: { $ref: "#/Leg" }
+    issuedAt: { $ref: "#/Instant" }
+    seat: { type: string, examples: [14B] }

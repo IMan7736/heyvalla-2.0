@@ -1,0 +1,113 @@
+{
+  "metaTitle": "Dhathuru: island to island, door to door",
+  "metaDescription": "Plan and book ferries, speedboats, seaplanes, flights, buses and taxis across the Maldives in one search, with honest connection buffers.",
+  "title": "Island to island, door to door.",
+  "lead": "Ferry, taxi, flight and taxi again, planned and booked together. Never a connection you can't make.",
+  "eyebrow": "Every island, one journey",
+  "searchTitle": "Where are you headed?",
+  "how": {
+    "title": "One search. The whole journey.",
+    "lead": "No more stitching together ferry timetables, flight schedules and taxi calls.",
+    "steps": {
+      "search": {
+        "title": "Tell us where and when",
+        "body": "Pick your island, your destination and either when you want to leave or when you must arrive."
+      },
+      "check": {
+        "title": "We check every connection",
+        "body": "Each hand-over gets a hard minimum buffer and a calculated chance of being missed. Fragile trips are flagged, not hidden."
+      },
+      "book": {
+        "title": "Book it all at once",
+        "body": "One checkout for every leg. A QR ticket for each ride, and a plan B ready if something runs late."
+      }
+    }
+  },
+  "safe": {
+    "eyebrow": "Never miss a ride",
+    "title": "We'd rather you arrive safely than quickly.",
+    "body": "A fast trip with a ten-minute scramble at the jetty isn't a good trip. Every option shows its buffers and its risk in plain numbers, with the reason it was ranked where it was.",
+    "points": {
+      "buffers": "Hard minimum buffers per connection, by mode and place",
+      "risk": "Miss-risk from real delay history, shown on every option",
+      "why": "A plain-language reason for every ranking"
+    },
+    "example": {
+      "badge": "Example journey",
+      "caption": "Illustrative data, not a live timetable",
+      "ribbon": "Journey: ferry, taxi, domestic flight, taxi",
+      "from": "Maafushi",
+      "to": "Kooddoo",
+      "bufferLabel": "Buffer at Malé",
+      "bufferValue": "55 min, comfortable",
+      "required": "min",
+      "comfort": "comfortable",
+      "riskLabel": "Risk of missing a connection",
+      "riskLevel": "Low risk",
+      "riskValue": "2%",
+      "legs": {
+        "ferry": {
+          "duration": "50 min",
+          "description": "Ferry, 50 minutes"
+        },
+        "taxiToAirport": {
+          "duration": "10 min",
+          "description": "Taxi, 10 minutes"
+        },
+        "flight": {
+          "duration": "1 h 5 min",
+          "description": "Domestic flight, 1 hour 5 minutes"
+        },
+        "taxiToDestination": {
+          "duration": "15 min",
+          "description": "Taxi, 15 minutes"
+        }
+      },
+      "buffers": {
+        "first": "25 min",
+        "second": "55 min",
+        "third": "20 min"
+      },
+      "levels": {
+        "comfortable": "comfortable",
+        "ok": "adequate"
+      },
+      "requiredMark": "30",
+      "comfortMark": "45"
+    }
+  },
+  "modes": {
+    "title": "Every way to get around the atolls",
+    "lead": "Public ferries, speedboats, seaplanes, domestic flights, buses and taxis, in one plan.",
+    "ferry": "Ferries",
+    "speedboat": "Speedboats",
+    "seaplane": "Seaplanes",
+    "domestic_flight": "Domestic flights",
+    "bus": "Buses",
+    "taxi": "Taxis",
+    "walk": "Walking links"
+  },
+  "honest": {
+    "title": "Honest about what we know",
+    "lead": "Anything estimated or approximate says so, in the product and in the data.",
+    "items": {
+      "fares": {
+        "title": "Taxi fares are estimates",
+        "body": "Where an operator has no published fare, we show an estimate and mark it as one."
+      },
+      "routes": {
+        "title": "Sea routes are illustrative",
+        "body": "Lines on the map show the idea of a crossing. They are never a navigational chart."
+      },
+      "times": {
+        "title": "Maldives time, always",
+        "body": "Every time you see is Maldives time (UTC+5), so there is no mental arithmetic at the jetty."
+      }
+    }
+  },
+  "cta": {
+    "title": "Where to next?",
+    "body": "Plan your first journey in under a minute.",
+    "action": "Plan a trip"
+  }
+}

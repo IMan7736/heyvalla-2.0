@@ -1,0 +1,186 @@
+# Owner: KANDU (Catalog). Additive edits are free; breaking changes need a handoff to ATOLL.
+openapi: 3.1.0
+info: { title: Dhathuru catalog, version: 1.0.0 }
+paths:
+  /places:
+    get:
+      operationId: searchPlaces
+      tags: [Catalog]
+      summary: Search places
+      security: []
+      parameters:
+        - name: query
+          in: query
+          description: Free text matched against localised names and codes.
+          schema: { type: string, maxLength: 80 }
+          example: maaf
+        - name: type
+          in: query
+          schema: { $ref: "./components/schemas.yaml#/PlaceType" }
+        - name: near
+          in: query
+          description: "lat,lng; results are ordered by distance."
+          schema: { type: string, pattern: "^-?\\d+(\\.\\d+)?,-?\\d+(\\.\\d+)?$" }
+          example: "3.94,73.49"
+        - $ref: "./components/parameters.yaml#/Cursor"
+        - $ref: "./components/parameters.yaml#/Limit"
+      responses:
+        "200":
+          description: Matching places.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, page]
+                properties:
+                  items: { type: array, items: { $ref: "./components/schemas.yaml#/Place" } }
+                  page: { $ref: "./components/schemas.yaml#/PageInfo" }
+              example:
+                items:
+                  - id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                    type: island
+                    name: { en: Maafushi, dv: "މާފުށި" }
+                    geo: { lat: 3.9417, lng: 73.4896 }
+                    atollId: atl_01K8Z3M5Q7R9T2V4W6X8Y0A1C2
+                    isHub: false
+                page: { nextCursor: null, limit: 50 }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /places/{placeId}:
+    get:
+      operationId: getPlace
+      tags: [Catalog]
+      summary: One place
+      security: []
+      parameters:
+        - name: placeId
+          in: path
+          required: true
+          schema: { $ref: "./components/schemas.yaml#/PlaceId" }
+      responses:
+        "200":
+          description: The place.
+          content:
+            application/json:
+              schema: { $ref: "./components/schemas.yaml#/Place" }
+              example:
+                id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1D2
+                type: airport
+                name: { en: Velana International Airport }
+                geo: { lat: 4.1918, lng: 73.5291 }
+                code: MLE
+                isHub: true
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /operators:
+    get:
+      operationId: listOperators
+      tags: [Catalog]
+      summary: Transport operators
+      security: []
+      responses:
+        "200":
+          description: Operators.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: { type: array, items: { $ref: "./components/schemas.yaml#/Operator" } }
+              example:
+                items:
+                  - id: opr_01K8Z3M5Q7R9T2V4W6X8Y0C1D2
+                    name: { en: Example Ferry Operator }
+                    modes: [ferry]
+                    providerId: static-example-ferry
+                    providerKind: static
+  /services:
+    get:
+      operationId: listServices
+      tags: [Catalog]
+      summary: Services between two places on a date
+      security: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema: { $ref: "./components/schemas.yaml#/PlaceId" }
+        - name: to
+          in: query
+          required: true
+          schema: { $ref: "./components/schemas.yaml#/PlaceId" }
+        - name: date
+          in: query
+          required: true
+          description: Service date in Indian/Maldives local time.
+          schema: { type: string, format: date }
+          example: "2026-10-27"
+      responses:
+        "200":
+          description: Services with their departures for the date.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: { type: array, items: { $ref: "./components/schemas.yaml#/Service" } }
+              example:
+                items:
+                  - id: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2
+                    operatorId: opr_01K8Z3M5Q7R9T2V4W6X8Y0C1D2
+                    mode: ferry
+                    kind: scheduled
+                    from:
+                      {
+                        id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2,
+                        type: island,
+                        name: { en: Maafushi },
+                        geo: { lat: 3.9417, lng: 73.4896 },
+                      }
+                    to:
+                      {
+                        id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2,
+                        type: jetty,
+                        name: { en: Hulhumalé Ferry Terminal },
+                        geo: { lat: 4.2185, lng: 73.5408 },
+                      }
+                    departures:
+                      - {
+                          serviceRunId: "svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2:2026-10-27T02:30Z",
+                          departAt: "2026-10-27T02:30:00Z",
+                          arriveAt: "2026-10-27T04:00:00Z",
+                        }
+                    validity: { from: "2026-01-01", daysOfWeek: [1, 2, 3, 4, 5, 6, 7] }
+                    fare: { base: { amountMinor: 9000, currency: MVR }, pricing: fixed }
+                    checkInCutoffMin: 15
+                    synthetic: true
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /status/services/{serviceId}:
+    get:
+      operationId: getServiceStatus
+      tags: [Catalog]
+      summary: Live or simulated status of a service
+      security: []
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema: { $ref: "./components/schemas.yaml#/ServiceId" }
+        - name: serviceRunId
+          in: query
+          schema: { type: string }
+      responses:
+        "200":
+          description: Current status.
+          content:
+            application/json:
+              schema: { $ref: "./components/schemas.yaml#/ServiceStatus" }
+              example:
+                {
+                  serviceId: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2,
+                  state: delayed,
+                  delayMinutes: 25,
+                  updatedAt: "2026-10-27T02:40:00Z",
+                  source: simulated,
+                }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }

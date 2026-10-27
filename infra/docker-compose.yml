@@ -1,0 +1,37 @@
+# Local infrastructure: Postgres + PostGIS and Mailpit.
+# Usage: `pnpm infra:up` / `pnpm infra:down`. Secrets come from infra/.env (git-ignored; create it with scripts/dev-setup.sh).
+name: dhathuru
+
+services:
+  postgres:
+    image: postgis/postgis:17-3.5
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-dhathuru}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run scripts/dev-setup.sh to create infra/.env}
+      POSTGRES_DB: dhathuru_main
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d dhathuru_main"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  mailpit:
+    image: axllent/mailpit:v1.27
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:8025:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:

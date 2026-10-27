@@ -1,0 +1,674 @@
+# Owner: THILA (Bookings). Additive edits are free; breaking changes need a handoff to ATOLL.
+openapi: 3.1.0
+info: { title: Dhathuru bookings, version: 1.0.0 }
+paths:
+  /bookings:
+    post:
+      operationId: createBooking
+      tags: [Bookings]
+      summary: Hold a trip option
+      description: Creates a booking in `held` state with an expiry (default 12 minutes). Every leg is held or the whole hold is rolled back.
+      parameters:
+        - $ref: "./components/parameters.yaml#/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateBookingRequest" }
+            example:
+              optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+              passengers:
+                - {
+                    travellerId: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2,
+                    fullName: Aishath Naseem,
+                    passengerType: adult,
+                  }
+                - { fullName: Ibrahim Naseem, passengerType: adult, phone: "+9607779876" }
+      responses:
+        "201":
+          description: Held.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDetail" }
+              examples: { held: { $ref: "#/components/examples/HeldBooking" } }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "409":
+          description: A leg is no longer available, or the idempotency key was reused with a different body.
+          content:
+            application/problem+json:
+              schema: { $ref: "./components/schemas.yaml#/Problem" }
+              example:
+                {
+                  type: "https://dhathuru.mv/problems/leg-unavailable",
+                  title: Leg unavailable,
+                  status: 409,
+                  code: LEG_UNAVAILABLE,
+                  params: { legIndex: 2 },
+                }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+    get:
+      operationId: listBookings
+      tags: [Bookings]
+      summary: My bookings
+      parameters:
+        - $ref: "./components/parameters.yaml#/Cursor"
+        - $ref: "./components/parameters.yaml#/Limit"
+        - name: status
+          in: query
+          schema: { $ref: "./components/schemas.yaml#/BookingStatus" }
+      responses:
+        "200":
+          description: Bookings, newest first.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, page]
+                properties:
+                  items: { type: array, items: { $ref: "#/components/schemas/BookingDetail" } }
+                  page: { $ref: "./components/schemas.yaml#/PageInfo" }
+              examples:
+                page: { $ref: "#/components/examples/BookingPage" }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+  /bookings/{bookingId}:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    get:
+      operationId: getBooking
+      tags: [Bookings]
+      summary: One booking
+      responses:
+        "200":
+          description: The booking.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDetail" }
+              examples: { held: { $ref: "#/components/examples/HeldBooking" } }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /bookings/{bookingId}/pay:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    post:
+      operationId: payBooking
+      tags: [Bookings]
+      summary: Pay for a held booking
+      description: Charges the booking and confirms all legs as a saga. A declined card leaves the booking `held` (payment `failed`, with `failureCode`) so another card can be tried before the hold expires. A card that needs extra verification returns payment `requires_action` with a `challenge`; finish it with `/pay/verify`. If any leg fails to confirm, the others are released and the payment is refunded; the booking ends `failed`. Retrying with the same Idempotency-Key replays the stored result.
+      parameters:
+        - $ref: "./components/parameters.yaml#/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/PayRequest" }
+            example: { method: card, paymentToken: tok_fake_success }
+      responses:
+        "200":
+          description: Payment processed; read `status` for the outcome.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDetail" }
+              examples: { confirmed: { $ref: "#/components/examples/ConfirmedBooking" } }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "409": { $ref: "./components/responses.yaml#/Conflict" }
+        "410":
+          description: The hold expired.
+          content:
+            application/problem+json:
+              schema: { $ref: "./components/schemas.yaml#/Problem" }
+              example:
+                {
+                  type: "https://dhathuru.mv/problems/hold-expired",
+                  title: Hold expired,
+                  status: 410,
+                  code: HOLD_EXPIRED,
+                }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /bookings/{bookingId}/pay/verify:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    post:
+      operationId: verifyBookingPayment
+      tags: [Bookings]
+      summary: Complete an extra-verification step
+      description: Submits the code for a payment in `requires_action`. The fake gateway accepts `123456`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VerifyPaymentRequest" }
+            example: { code: "123456" }
+      responses:
+        "200":
+          description: The booking after verification; read `status` and `payment.status`.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDetail" }
+              examples: { confirmed: { $ref: "#/components/examples/ConfirmedBooking" } }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "409":
+          description: No verification is pending (`NO_VERIFICATION_PENDING`).
+          content:
+            application/problem+json:
+              schema: { $ref: "./components/schemas.yaml#/Problem" }
+        "410":
+          description: The hold expired (`HOLD_EXPIRED`).
+          content:
+            application/problem+json:
+              schema: { $ref: "./components/schemas.yaml#/Problem" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /bookings/{bookingId}/cancellation-quote:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    get:
+      operationId: getCancellationQuote
+      tags: [Bookings]
+      summary: What cancelling would refund
+      description: Per-leg refund according to each provider's policy and the time left before departure. Nothing is changed.
+      responses:
+        "200":
+          description: The quote.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CancellationQuote" }
+              example:
+                bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+                cancellable: true
+                legs:
+                  - {
+                      legIndex: 0,
+                      cancellable: true,
+                      policyCode: ferry-standard,
+                      refundPercent: 100,
+                      refund: { amountMinor: 9000, currency: MVR },
+                    }
+                totalRefund: { amountMinor: 9000, currency: MVR }
+                nonRefundable: { amountMinor: 0, currency: MVR }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /bookings/{bookingId}/itinerary.pdf:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    get:
+      operationId: getBookingItinerary
+      tags: [Bookings]
+      summary: PDF itinerary with a QR code per ticket
+      responses:
+        "200":
+          description: The itinerary.
+          content:
+            application/pdf:
+              schema: { type: string, format: binary }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "409":
+          description: The booking has no issued tickets yet.
+          content:
+            application/problem+json:
+              schema: { $ref: "./components/schemas.yaml#/Problem" }
+  /bookings/{bookingId}/disruptions/{disruptionId}/acknowledge:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+      - name: disruptionId
+        in: path
+        required: true
+        schema: { type: string }
+    post:
+      operationId: acknowledgeDisruption
+      tags: [Bookings]
+      summary: Mark a delay or cancellation as seen
+      description: The booking is never rebooked automatically; this only records that the traveller has seen the notice.
+      responses:
+        "200":
+          description: The booking with the disruption acknowledged.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDetail" }
+              examples: { confirmed: { $ref: "#/components/examples/ConfirmedBooking" } }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /bookings/{bookingId}/cancel:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    post:
+      operationId: cancelBooking
+      tags: [Bookings]
+      summary: Cancel a booking
+      responses:
+        "200":
+          description: Cancelled (fully or partially, per operator rules).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BookingDetail" }
+              examples: { confirmed: { $ref: "#/components/examples/ConfirmedBooking" } }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "409": { $ref: "./components/responses.yaml#/Conflict" }
+  /bookings/{bookingId}/tickets:
+    parameters:
+      - $ref: "#/components/parameters/BookingId"
+    get:
+      operationId: listBookingTickets
+      tags: [Bookings]
+      summary: Per-leg tickets
+      responses:
+        "200":
+          description: One ticket per bookable leg per passenger.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: { type: array, items: { $ref: "#/components/schemas/TicketDetail" } }
+              example:
+                items:
+                  - {
+                      id: tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2,
+                      bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2,
+                      bookingLegId: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2,
+                      passengerId: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2,
+                      status: valid,
+                      issuedAt: "2026-10-26T20:10:00Z",
+                    }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /tickets/{ticketId}/qr:
+    get:
+      operationId: getTicketQr
+      tags: [Bookings]
+      summary: QR code for a ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema: { $ref: "./components/schemas.yaml#/TicketId" }
+      responses:
+        "200":
+          description: SVG QR code encoding a signed ticket payload.
+          content:
+            image/svg+xml:
+              schema: { type: string }
+              example: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"></svg>'
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /tickets/verify:
+    post:
+      operationId: verifyTicket
+      tags: [Bookings]
+      summary: Verify a scanned ticket payload
+      description: >-
+        Used by operators or a scanner app. Reasons: `TICKET_FORGED`, `TICKET_MALFORMED`, `TICKET_UNKNOWN`, `TICKET_ALREADY_USED`, `TICKET_CANCELLED`, `TICKET_EXPIRED`. Consuming (`consume: true`) needs the operator key in the `X-Operator-Key` header.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/VerifyTicketRequest" }
+            example:
+              { payload: "dhathuru:tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2.signature", consume: false }
+      responses:
+        "200":
+          description: Verification result.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/VerifyTicketResponse" }
+              example:
+                {
+                  valid: true,
+                  ticket:
+                    {
+                      id: tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2,
+                      bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2,
+                      bookingLegId: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2,
+                      passengerId: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2,
+                      status: valid,
+                      issuedAt: "2026-10-26T20:10:00Z",
+                    },
+                }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /dev/provider-events:
+    post:
+      operationId: simulateProviderEvent
+      tags: [Bookings]
+      summary: Script a provider delay or cancellation (development only)
+      description: Answers 404 unless `Bookings:EnableSimulation` is on. Affected bookings get a disruption, an email and a replan suggestion.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProviderEventRequest" }
+            example:
+              { providerId: fake-ferry, serviceRunId: run-1, state: delayed, delayMinutes: 45 }
+      responses:
+        "200":
+          description: How many booking legs were touched.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [affected]
+                properties: { affected: { type: integer, minimum: 0 } }
+              example: { affected: 1 }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+components:
+  parameters:
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      schema: { $ref: "./components/schemas.yaml#/BookingId" }
+  schemas:
+    BookingPassengerInput:
+      type: object
+      required: [fullName, passengerType]
+      properties:
+        travellerId: { $ref: "./components/schemas.yaml#/TravellerId" }
+        fullName: { type: string, maxLength: 120 }
+        passengerType: { $ref: "./components/schemas.yaml#/PassengerType" }
+        phone: { type: string }
+    CreateBookingRequest:
+      type: object
+      required: [optionId, passengers]
+      properties:
+        optionId: { $ref: "./components/schemas.yaml#/TripOptionId" }
+        passengers:
+          type: array
+          minItems: 1
+          maxItems: 9
+          items: { $ref: "#/components/schemas/BookingPassengerInput" }
+    PayRequest:
+      type: object
+      required: [method, paymentToken]
+      properties:
+        method: { type: string, enum: [card] }
+        paymentToken:
+          type: string
+          description: Opaque token from the payment gateway. Card numbers never reach this API. See docs/payments/GATEWAY-READINESS.md for the fake gateway tokens (`tok_fake_success`, `tok_fake_declined`, `tok_fake_insufficient_funds`, `tok_fake_verification`, `tok_fake_slow`, `tok_fake_timeout`, `tok_fake_timeout_charged`, `tok_fake_leg_failure`).
+    VerifyPaymentRequest:
+      type: object
+      required: [code]
+      properties:
+        code: { type: string, maxLength: 12 }
+    ProviderEventRequest:
+      type: object
+      required: [providerId, serviceRunId, state]
+      properties:
+        providerId: { type: string }
+        serviceRunId: { type: string }
+        state: { type: string, enum: [on_time, delayed, cancelled] }
+        delayMinutes: { type: integer, minimum: 0, default: 0 }
+    PaymentStatusDetail:
+      type: string
+      enum: [pending, requires_action, succeeded, failed, refunded, partially_refunded]
+    PaymentChallenge:
+      type: object
+      required: [id, kind]
+      properties:
+        id: { type: string }
+        kind: { type: string, enum: [verification_code] }
+    PaymentDetail:
+      type: object
+      required: [id, bookingId, amount, status, gateway, createdAt]
+      properties:
+        id: { $ref: "./components/schemas.yaml#/PaymentId" }
+        bookingId: { $ref: "./components/schemas.yaml#/BookingId" }
+        amount: { $ref: "./components/schemas.yaml#/Money" }
+        status: { $ref: "#/components/schemas/PaymentStatusDetail" }
+        gateway: { type: string, examples: [fake] }
+        failureCode: { type: [string, "null"], examples: [CARD_DECLINED] }
+        createdAt: { $ref: "./components/schemas.yaml#/Instant" }
+        challenge: { oneOf: [{ $ref: "#/components/schemas/PaymentChallenge" }, { type: "null" }] }
+        refunded: { oneOf: [{ $ref: "./components/schemas.yaml#/Money" }, { type: "null" }] }
+    BookingLegDetail:
+      type: object
+      required: [id, legIndex, leg, status, amount]
+      properties:
+        id: { $ref: "./components/schemas.yaml#/BookingLegId" }
+        legIndex: { type: integer, minimum: 0 }
+        leg: { $ref: "./components/schemas.yaml#/Leg" }
+        status: { $ref: "./components/schemas.yaml#/BookingLegStatus" }
+        providerReference: { type: [string, "null"] }
+        failureCode: { type: [string, "null"], examples: [LEG_UNAVAILABLE] }
+        amount: { $ref: "./components/schemas.yaml#/Money" }
+    PriceLine:
+      type: object
+      description: One line of the honest price breakdown. Pay-on-board legs are listed but not charged.
+      required: [code, amount, payOnBoard]
+      properties:
+        code: { type: string, examples: [FARE, SERVICE_FEE, PAY_ON_BOARD] }
+        amount: { $ref: "./components/schemas.yaml#/Money" }
+        legIndex: { type: [integer, "null"] }
+        payOnBoard: { type: boolean }
+    BookingDisruption:
+      type: object
+      required: [id, bookingLegId, legIndex, kind, delayMinutes, state, detectedAt]
+      properties:
+        id: { type: string }
+        bookingLegId: { $ref: "./components/schemas.yaml#/BookingLegId" }
+        legIndex: { type: integer }
+        kind: { type: string, enum: [delayed, cancelled] }
+        delayMinutes: { type: integer, minimum: 0 }
+        state: { type: string, enum: [open, acknowledged, resolved] }
+        detectedAt: { $ref: "./components/schemas.yaml#/Instant" }
+        suggestion:
+          description: A replan suggestion from the trip planner, if one was found. Never applied automatically.
+          oneOf: [{ type: object, additionalProperties: true }, { type: "null" }]
+    BookingDetail:
+      type: object
+      required:
+        [
+          id,
+          status,
+          optionId,
+          legs,
+          passengers,
+          total,
+          createdAt,
+          updatedAt,
+          priceBreakdown,
+          disruptions,
+        ]
+      properties:
+        id: { $ref: "./components/schemas.yaml#/BookingId" }
+        status: { $ref: "./components/schemas.yaml#/BookingStatus" }
+        optionId: { $ref: "./components/schemas.yaml#/TripOptionId" }
+        legs: { type: array, items: { $ref: "#/components/schemas/BookingLegDetail" } }
+        passengers: { type: array, items: { $ref: "./components/schemas.yaml#/Passenger" } }
+        total: { $ref: "./components/schemas.yaml#/Money" }
+        holdExpiresAt: { oneOf: [{ $ref: "./components/schemas.yaml#/Instant" }, { type: "null" }] }
+        payment: { oneOf: [{ $ref: "#/components/schemas/PaymentDetail" }, { type: "null" }] }
+        createdAt: { $ref: "./components/schemas.yaml#/Instant" }
+        updatedAt: { $ref: "./components/schemas.yaml#/Instant" }
+        failureCode:
+          type: [string, "null"]
+          description: Why a `failed` booking failed, for example LEG_UNAVAILABLE or CARD_DECLINED.
+        priceBreakdown: { type: array, items: { $ref: "#/components/schemas/PriceLine" } }
+        disruptions: { type: array, items: { $ref: "#/components/schemas/BookingDisruption" } }
+    TicketDetail:
+      type: object
+      required: [id, bookingId, bookingLegId, passengerId, status, issuedAt]
+      properties:
+        id: { $ref: "./components/schemas.yaml#/TicketId" }
+        bookingId: { $ref: "./components/schemas.yaml#/BookingId" }
+        bookingLegId: { $ref: "./components/schemas.yaml#/BookingLegId" }
+        passengerId: { $ref: "./components/schemas.yaml#/PassengerId" }
+        status: { $ref: "./components/schemas.yaml#/TicketStatus" }
+        issuedAt: { $ref: "./components/schemas.yaml#/Instant" }
+        usedAt: { oneOf: [{ $ref: "./components/schemas.yaml#/Instant" }, { type: "null" }] }
+        leg: { oneOf: [{ $ref: "./components/schemas.yaml#/Leg" }, { type: "null" }] }
+    CancellationLegQuote:
+      type: object
+      required: [legIndex, cancellable, policyCode, refundPercent, refund]
+      properties:
+        legIndex: { type: integer }
+        cancellable: { type: boolean }
+        policyCode: { type: string }
+        refundPercent: { type: integer, minimum: 0, maximum: 100 }
+        refund: { $ref: "./components/schemas.yaml#/Money" }
+        reasonCode: { type: [string, "null"] }
+    CancellationQuote:
+      type: object
+      required: [bookingId, cancellable, legs, totalRefund, nonRefundable]
+      properties:
+        bookingId: { $ref: "./components/schemas.yaml#/BookingId" }
+        cancellable: { type: boolean }
+        legs: { type: array, items: { $ref: "#/components/schemas/CancellationLegQuote" } }
+        totalRefund: { $ref: "./components/schemas.yaml#/Money" }
+        nonRefundable: { $ref: "./components/schemas.yaml#/Money" }
+        reasonCode: { type: [string, "null"] }
+    VerifyTicketRequest:
+      type: object
+      required: [payload]
+      properties:
+        payload: { type: string }
+        consume: { type: boolean, default: false }
+    VerifyTicketResponse:
+      type: object
+      required: [valid]
+      properties:
+        valid: { type: boolean }
+        reasonCode: { type: string, examples: [TICKET_ALREADY_USED] }
+        ticket: { $ref: "#/components/schemas/TicketDetail" }
+  examples:
+    HeldBooking:
+      value:
+        id: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+        status: held
+        optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+        legs:
+          - id: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+            legIndex: 0
+            status: held
+            amount: { amountMinor: 9000, currency: MVR }
+            leg:
+              id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+              mode: ferry
+              providerId: static-example-ferry
+              from:
+                {
+                  id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2,
+                  type: island,
+                  name: { en: Maafushi },
+                  geo: { lat: 3.9417, lng: 73.4896 },
+                }
+              to:
+                {
+                  id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2,
+                  type: jetty,
+                  name: { en: Hulhumalé Ferry Terminal },
+                  geo: { lat: 4.2185, lng: 73.5408 },
+                }
+              departAt: "2026-10-27T02:30:00Z"
+              arriveAt: "2026-10-27T04:00:00Z"
+              durationMin: 90
+              price: { amountMinor: 9000, currency: MVR }
+              bookable: true
+              pricing: fixed
+              noteCodes: []
+        passengers:
+          - {
+              id: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2,
+              travellerId: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2,
+              fullName: Aishath Naseem,
+              passengerType: adult,
+            }
+        total: { amountMinor: 9000, currency: MVR }
+        holdExpiresAt: "2026-10-26T20:12:00Z"
+        createdAt: "2026-10-26T20:00:00Z"
+        updatedAt: "2026-10-26T20:00:00Z"
+        priceBreakdown:
+          - {
+              code: FARE,
+              amount: { amountMinor: 9000, currency: MVR },
+              legIndex: 0,
+              payOnBoard: false,
+            }
+        disruptions: []
+    ConfirmedBooking:
+      value:
+        id: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+        status: confirmed
+        optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+        legs:
+          - id: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+            legIndex: 0
+            status: confirmed
+            providerReference: SB-482913
+            amount: { amountMinor: 9000, currency: MVR }
+            leg:
+              id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+              mode: ferry
+              providerId: static-example-ferry
+              from:
+                {
+                  id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2,
+                  type: island,
+                  name: { en: Maafushi },
+                  geo: { lat: 3.9417, lng: 73.4896 },
+                }
+              to:
+                {
+                  id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2,
+                  type: jetty,
+                  name: { en: Hulhumalé Ferry Terminal },
+                  geo: { lat: 4.2185, lng: 73.5408 },
+                }
+              departAt: "2026-10-27T02:30:00Z"
+              arriveAt: "2026-10-27T04:00:00Z"
+              durationMin: 90
+              price: { amountMinor: 9000, currency: MVR }
+              bookable: true
+              pricing: fixed
+              noteCodes: []
+        passengers:
+          - {
+              id: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2,
+              travellerId: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2,
+              fullName: Aishath Naseem,
+              passengerType: adult,
+            }
+        total: { amountMinor: 9000, currency: MVR }
+        payment:
+          {
+            id: pay_01K8Z3M5Q7R9T2V4W6X8Y0M1N2,
+            bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2,
+            amount: { amountMinor: 9000, currency: MVR },
+            status: succeeded,
+            gateway: fake,
+            createdAt: "2026-10-26T20:03:00Z",
+          }
+        createdAt: "2026-10-26T20:00:00Z"
+        updatedAt: "2026-10-26T20:03:00Z"
+        priceBreakdown:
+          - {
+              code: FARE,
+              amount: { amountMinor: 9000, currency: MVR },
+              legIndex: 0,
+              payOnBoard: false,
+            }
+        disruptions: []
+    BookingPage:
+      value:
+        items:
+          - id: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+            status: confirmed
+            optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+            legs: []
+            passengers:
+              - {
+                  id: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2,
+                  fullName: Aishath Naseem,
+                  passengerType: adult,
+                }
+            total: { amountMinor: 9000, currency: MVR }
+            createdAt: "2026-10-26T20:00:00Z"
+            updatedAt: "2026-10-26T20:03:00Z"
+            priceBreakdown: []
+            disruptions: []
+        page: { nextCursor: null, limit: 50 }

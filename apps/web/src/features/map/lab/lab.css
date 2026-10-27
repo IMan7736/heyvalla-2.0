@@ -1,0 +1,21 @@
+:root {
+  --color-lagoon: #087f8c;
+  --color-sand: #faf7f0;
+  --color-coconut: #fff;
+  --color-ocean: #12343b;
+  --color-coral: #f28c78;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  color: var(--color-ocean);
+}
+body {
+  margin: 0;
+  background: var(--color-sand);
+}
+.stage {
+  box-sizing: border-box;
+  block-size: 100vh;
+  padding: 1rem;
+}
+.stage > * {
+  border-radius: 1.25rem;
+}

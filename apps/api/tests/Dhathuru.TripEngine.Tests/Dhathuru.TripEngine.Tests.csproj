@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="FsCheck.Xunit.v3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Dhathuru.TripEngine\Dhathuru.TripEngine.csproj" />
+    <ProjectReference Include="..\..\src\Dhathuru.Domain\Dhathuru.Domain.csproj" />
+    <ProjectReference Include="..\Dhathuru.TripEngine.Fixtures\Dhathuru.TripEngine.Fixtures.csproj" />
+  </ItemGroup>
+</Project>

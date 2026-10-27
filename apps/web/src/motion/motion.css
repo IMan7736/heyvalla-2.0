@@ -1,0 +1,101 @@
+/* TIDE: global motion styles. Imported by MotionProvider. Durations mirror @dhathuru/motion tokens. */
+:root {
+  --motion-ease-tide: cubic-bezier(0.22, 0.8, 0.28, 1);
+  --motion-ease-ebb: cubic-bezier(0.5, 0, 0.75, 0.3);
+  --motion-exit: 150ms;
+  --motion-enter: 350ms;
+  --motion-travel: 24px;
+}
+
+/* Let clicks reach the live page while a transition runs. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The shell header stays put so people see the content move, not the whole window.
+   LAGOON: give the header style={{ viewTransitionName: "site-header" }}. */
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+::view-transition-old(.tide-fade) {
+  animation: var(--motion-exit) var(--motion-ease-ebb) both motion-fade reverse;
+}
+::view-transition-new(.tide-fade) {
+  animation:
+    var(--motion-enter) var(--motion-ease-tide) var(--motion-exit) both motion-fade,
+    var(--motion-enter) var(--motion-ease-tide) var(--motion-exit) both motion-rise;
+}
+
+::view-transition-old(.tide-forward) {
+  --motion-offset: calc(var(--motion-travel) * -1);
+  animation:
+    var(--motion-exit) var(--motion-ease-ebb) both motion-fade reverse,
+    var(--motion-exit) var(--motion-ease-ebb) both motion-slide reverse;
+}
+::view-transition-new(.tide-forward) {
+  --motion-offset: var(--motion-travel);
+  animation:
+    var(--motion-enter) var(--motion-ease-tide) var(--motion-exit) both motion-fade,
+    var(--motion-enter) var(--motion-ease-tide) var(--motion-exit) both motion-slide;
+}
+::view-transition-old(.tide-back) {
+  --motion-offset: var(--motion-travel);
+  animation:
+    var(--motion-exit) var(--motion-ease-ebb) both motion-fade reverse,
+    var(--motion-exit) var(--motion-ease-ebb) both motion-slide reverse;
+}
+::view-transition-new(.tide-back) {
+  --motion-offset: calc(var(--motion-travel) * -1);
+  animation:
+    var(--motion-enter) var(--motion-ease-tide) var(--motion-exit) both motion-fade,
+    var(--motion-enter) var(--motion-ease-tide) var(--motion-exit) both motion-slide;
+}
+
+@keyframes motion-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes motion-rise {
+  from {
+    transform: translateY(8px);
+  }
+}
+@keyframes motion-slide {
+  from {
+    transform: translateX(var(--motion-offset));
+  }
+}
+
+/* Reduced motion: keep a short crossfade (it carries no travel), drop every transform. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-exit: 0ms;
+    --motion-enter: 120ms;
+    --motion-travel: 0px;
+  }
+  ::view-transition-new(.tide-fade),
+  ::view-transition-new(.tide-forward),
+  ::view-transition-new(.tide-back) {
+    animation: var(--motion-enter) linear both motion-fade;
+  }
+  ::view-transition-old(.tide-fade),
+  ::view-transition-old(.tide-forward),
+  ::view-transition-old(.tide-back) {
+    animation: none;
+  }
+}
+
+/* Focus ring used by every interactive element TIDE touches; matches the brand teal. */
+:where(a, button, [role="button"], input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-lagoon, #087f8c);
+  outline-offset: 2px;
+}

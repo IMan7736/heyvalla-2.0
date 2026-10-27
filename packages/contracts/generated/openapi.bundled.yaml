@@ -1,0 +1,3540 @@
+openapi: 3.1.0
+info:
+  title: Dhathuru API
+  version: 1.0.0
+  description: Door-to-door trip planning and booking for the Maldives. Errors are RFC 9457 problem+json. Money is integer minor units. Time is ISO 8601 with offset.
+servers:
+  - url: http://localhost:5100/v1
+    description: Local API (Prism mock serves the same path on :4010)
+security:
+  - bearerAuth: []
+tags:
+  - name: Meta
+    description: Platform endpoints
+  - name: Auth
+    description: Registration, login and token rotation
+  - name: Account
+    description: Profile and saved travellers
+  - name: Catalog
+    description: Places, operators, services and status
+  - name: Trips
+    description: Door-to-door trip planning
+  - name: Geo
+    description: Route geometry (approximate)
+  - name: Bookings
+    description: Holds, payment, tickets
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      tags:
+        - Meta
+      summary: Liveness and readiness
+      security: []
+      responses:
+        '200':
+          description: Service is healthy.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: ok
+                version: 0.1.0
+                time: '2026-10-26T20:00:00Z'
+        '503':
+          description: Service is up but a dependency is down.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Health'
+              example:
+                status: degraded
+                version: 0.1.0
+                time: '2026-10-26T20:00:00Z'
+                checks:
+                  database: down
+  /health/live:
+    get:
+      operationId: getHealthLive
+      tags:
+        - Meta
+      summary: Liveness probe (process is running; no dependencies checked)
+      security: []
+      responses:
+        '200':
+          description: Alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Probe'
+              example:
+                status: ok
+  /health/ready:
+    get:
+      operationId: getHealthReady
+      tags:
+        - Meta
+      summary: Readiness probe (dependencies reachable)
+      security: []
+      responses:
+        '200':
+          description: Ready.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Probe'
+              example:
+                status: ok
+  /auth/register:
+    post:
+      operationId: register
+      tags:
+        - Auth
+      summary: Create an account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              email: aishath@example.com
+              password: correct horse battery staple
+              displayName: Aishath
+              locale: en
+      responses:
+        '202':
+          description: Always returned, whether or not the address is already registered (no account enumeration). A verification email, or an "already registered" email, is sent.
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth/login:
+    post:
+      operationId: login
+      tags:
+        - Auth
+      summary: Exchange credentials for tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: aishath@example.com
+              password: correct horse battery staple
+      responses:
+        '200':
+          description: Authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+              example:
+                accessToken: eyJhbGciOiJFUzI1NiJ9.example.signature
+                refreshToken: rt_example_not_a_real_token
+                tokenType: Bearer
+                expiresIn: 900
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth/refresh:
+    post:
+      operationId: refreshTokens
+      tags:
+        - Auth
+      summary: Rotate the refresh token and get a new access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+            example:
+              refreshToken: rt_example_not_a_real_token
+      responses:
+        '200':
+          description: New token pair; the old refresh token is now invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenPair'
+              example:
+                accessToken: eyJhbGciOiJFUzI1NiJ9.example2.signature
+                refreshToken: rt_example_rotated
+                tokenType: Bearer
+                expiresIn: 900
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /auth/logout:
+    post:
+      operationId: logout
+      tags:
+        - Auth
+      summary: Revoke the refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshRequest'
+            example:
+              refreshToken: rt_example_rotated
+      responses:
+        '204':
+          description: Logged out.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /auth/verify-email:
+    post:
+      operationId: verifyEmail
+      tags:
+        - Auth
+      summary: Confirm an email address with the emailed token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+            example:
+              token: verify_example_token
+      responses:
+        '204':
+          description: Email verified.
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /auth/resend-verification:
+    post:
+      operationId: resendVerification
+      tags:
+        - Auth
+      summary: Send the verification email again
+      description: Always answers 202 so account existence is not revealed.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+            example:
+              email: aishath@example.com
+      responses:
+        '202':
+          description: If the account exists and is unverified an email was sent.
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth/forgot-password:
+    post:
+      operationId: forgotPassword
+      tags:
+        - Auth
+      summary: Request a password reset email
+      description: Always answers 202 so account existence is not revealed.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+            example:
+              email: aishath@example.com
+      responses:
+        '202':
+          description: If the account exists an email was sent.
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /auth/reset-password:
+    post:
+      operationId: resetPassword
+      tags:
+        - Auth
+      summary: Set a new password with a reset token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+            example:
+              token: reset_example_token
+              newPassword: a brand new long passphrase
+      responses:
+        '204':
+          description: Password changed; all refresh tokens revoked.
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /me:
+    get:
+      operationId: getMe
+      tags:
+        - Account
+      summary: Current user
+      responses:
+        '200':
+          description: The signed-in user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: usr_01K8Z3M5Q7R9T2V4W6X8Y0N1P2
+                email: aishath@example.com
+                emailVerified: true
+                displayName: Aishath
+                locale: en
+                createdAt: '2026-10-26T20:00:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updateMe
+      tags:
+        - Account
+      summary: Update profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMeRequest'
+            example:
+              displayName: Aishath N.
+              locale: en
+      responses:
+        '200':
+          description: Updated user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: usr_01K8Z3M5Q7R9T2V4W6X8Y0N1P2
+                email: aishath@example.com
+                emailVerified: true
+                displayName: Aishath N.
+                locale: en
+                createdAt: '2026-10-26T20:00:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    delete:
+      operationId: deleteMe
+      tags:
+        - Account
+      summary: Delete the account and personal data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteAccountRequest'
+            example:
+              password: correct horse battery staple
+      responses:
+        '204':
+          description: Account and personal data deleted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Wrong password (code PASSWORD_INCORRECT).
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /me/password:
+    post:
+      operationId: changePassword
+      tags:
+        - Account
+      summary: Change password
+      description: Revokes all other sessions. Wrong current password answers 403 PASSWORD_INCORRECT (not 401).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+            example:
+              currentPassword: correct horse battery staple
+              newPassword: a brand new long passphrase
+      responses:
+        '204':
+          description: Password changed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Wrong current password.
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /me/email:
+    post:
+      operationId: changeEmail
+      tags:
+        - Account
+      summary: Start an email change
+      description: A confirmation link goes to the NEW address; confirm it with POST /auth/verify-email. Always 202.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeEmailRequest'
+            example:
+              newEmail: new@example.com
+              password: correct horse battery staple
+      responses:
+        '202':
+          description: Accepted.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          description: Wrong password.
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /me/preferences:
+    get:
+      operationId: getPreferences
+      tags:
+        - Account
+      summary: Preferences
+      responses:
+        '200':
+          description: Preferences.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+              example:
+                language: en
+                riskTolerance: balanced
+                preferredModes:
+                  - ferry
+                  - seaplane
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      operationId: updatePreferences
+      tags:
+        - Account
+      summary: Update preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePreferencesRequest'
+            example:
+              riskTolerance: cautious
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Preferences'
+              example:
+                language: en
+                riskTolerance: cautious
+                preferredModes:
+                  - ferry
+                  - seaplane
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /me/sessions:
+    get:
+      operationId: listSessions
+      tags:
+        - Account
+      summary: Signed-in devices
+      responses:
+        '200':
+          description: Active sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+              example:
+                items:
+                  - id: ses_01K8Z3M5Q7R9T2V4W6X8Y0N1P2
+                    createdAt: '2026-10-26T20:00:00Z'
+                    lastUsedAt: '2026-10-26T20:05:00Z'
+                    userAgent: Firefox
+                    networkHint: 203.0.113.0/24
+                    current: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /me/sessions/revoke-others:
+    post:
+      operationId: revokeOtherSessions
+      tags:
+        - Account
+      summary: Sign out everywhere else
+      responses:
+        '204':
+          description: Other sessions revoked.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /me/sessions/{sessionId}:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+    delete:
+      operationId: revokeSession
+      tags:
+        - Account
+      summary: Sign out one device
+      responses:
+        '204':
+          description: Revoked.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /me/travellers:
+    get:
+      operationId: listTravellers
+      tags:
+        - Account
+      summary: Saved travellers
+      responses:
+        '200':
+          description: Saved travellers.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SavedTraveller'
+              example:
+                items:
+                  - id: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+                    fullName: Aishath Naseem
+                    passengerType: adult
+                    phone: '+9607771234'
+                    documentType: none
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createTraveller
+      tags:
+        - Account
+      summary: Save a traveller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravellerInput'
+            example:
+              fullName: Aishath Naseem
+              passengerType: adult
+              phone: '+9607771234'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedTraveller'
+              example:
+                id: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+                fullName: Aishath Naseem
+                passengerType: adult
+                phone: '+9607771234'
+                documentType: none
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /me/travellers/{travellerId}:
+    parameters:
+      - name: travellerId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/TravellerId'
+    patch:
+      operationId: updateTraveller
+      tags:
+        - Account
+      summary: Update a saved traveller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravellerInput'
+            example:
+              fullName: Aishath Naseem
+              passengerType: adult
+      responses:
+        '200':
+          description: Updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedTraveller'
+              example:
+                id: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+                fullName: Aishath Naseem
+                passengerType: adult
+                documentType: none
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    delete:
+      operationId: deleteTraveller
+      tags:
+        - Account
+      summary: Remove a saved traveller
+      responses:
+        '204':
+          description: Removed.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /places:
+    get:
+      operationId: searchPlaces
+      tags:
+        - Catalog
+      summary: Search places
+      security: []
+      parameters:
+        - name: query
+          in: query
+          description: Free text matched against localised names and codes.
+          schema:
+            type: string
+            maxLength: 80
+          example: maaf
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/PlaceType'
+        - name: near
+          in: query
+          description: lat,lng; results are ordered by distance.
+          schema:
+            type: string
+            pattern: ^-?\d+(\.\d+)?,-?\d+(\.\d+)?$
+          example: 3.94,73.49
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Matching places.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                  - page
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Place'
+                  page:
+                    $ref: '#/components/schemas/PageInfo'
+              example:
+                items:
+                  - id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                    type: island
+                    name:
+                      en: Maafushi
+                      dv: މާފުށި
+                    geo:
+                      lat: 3.9417
+                      lng: 73.4896
+                    atollId: atl_01K8Z3M5Q7R9T2V4W6X8Y0A1C2
+                    isHub: false
+                page:
+                  nextCursor: null
+                  limit: 50
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /places/{placeId}:
+    get:
+      operationId: getPlace
+      tags:
+        - Catalog
+      summary: One place
+      security: []
+      parameters:
+        - name: placeId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/PlaceId'
+      responses:
+        '200':
+          description: The place.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Place'
+              example:
+                id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1D2
+                type: airport
+                name:
+                  en: Velana International Airport
+                geo:
+                  lat: 4.1918
+                  lng: 73.5291
+                code: MLE
+                isHub: true
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /operators:
+    get:
+      operationId: listOperators
+      tags:
+        - Catalog
+      summary: Transport operators
+      security: []
+      responses:
+        '200':
+          description: Operators.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Operator'
+              example:
+                items:
+                  - id: opr_01K8Z3M5Q7R9T2V4W6X8Y0C1D2
+                    name:
+                      en: Example Ferry Operator
+                    modes:
+                      - ferry
+                    providerId: static-example-ferry
+                    providerKind: static
+  /services:
+    get:
+      operationId: listServices
+      tags:
+        - Catalog
+      summary: Services between two places on a date
+      security: []
+      parameters:
+        - name: from
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/PlaceId'
+        - name: to
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/PlaceId'
+        - name: date
+          in: query
+          required: true
+          description: Service date in Indian/Maldives local time.
+          schema:
+            type: string
+            format: date
+          example: '2026-10-27'
+      responses:
+        '200':
+          description: Services with their departures for the date.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Service'
+              example:
+                items:
+                  - id: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2
+                    operatorId: opr_01K8Z3M5Q7R9T2V4W6X8Y0C1D2
+                    mode: ferry
+                    kind: scheduled
+                    from:
+                      id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                      type: island
+                      name:
+                        en: Maafushi
+                      geo:
+                        lat: 3.9417
+                        lng: 73.4896
+                    to:
+                      id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2
+                      type: jetty
+                      name:
+                        en: Hulhumalé Ferry Terminal
+                      geo:
+                        lat: 4.2185
+                        lng: 73.5408
+                    departures:
+                      - serviceRunId: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2:2026-10-27T02:30Z
+                        departAt: '2026-10-27T02:30:00Z'
+                        arriveAt: '2026-10-27T04:00:00Z'
+                    validity:
+                      from: '2026-01-01'
+                      daysOfWeek:
+                        - 1
+                        - 2
+                        - 3
+                        - 4
+                        - 5
+                        - 6
+                        - 7
+                    fare:
+                      base:
+                        amountMinor: 9000
+                        currency: MVR
+                      pricing: fixed
+                    checkInCutoffMin: 15
+                    synthetic: true
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /status/services/{serviceId}:
+    get:
+      operationId: getServiceStatus
+      tags:
+        - Catalog
+      summary: Live or simulated status of a service
+      security: []
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ServiceId'
+        - name: serviceRunId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceStatus'
+              example:
+                serviceId: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2
+                state: delayed
+                delayMinutes: 25
+                updatedAt: '2026-10-27T02:40:00Z'
+                source: simulated
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /trips/search:
+    post:
+      operationId: searchTrips
+      tags:
+        - Trips
+      summary: Plan door-to-door trips
+      description: |
+        Returns ranked options. Every connection respects a hard minimum buffer; options that cannot be made safely are never returned.
+        `date` and `time` are Indian/Maldives local time.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripSearchRequest'
+            example:
+              from: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+              to: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1F2
+              date: '2026-10-27'
+              time: '17:00'
+              timeMode: arriveBy
+              passengers:
+                adults: 2
+                children: 0
+                infants: 0
+              preferences:
+                riskTolerance: balanced
+      responses:
+        '200':
+          description: Ranked options (possibly empty).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripSearchResponse'
+              example:
+                searchId: srch_01K8Z3M5Q7R9T2V4W6X8Y0F1G2
+                options:
+                  - id: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+                    departAt: '2026-10-27T02:30:00Z'
+                    arriveAt: '2026-10-27T11:35:00Z'
+                    durationMin: 545
+                    transfers: 3
+                    legs:
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                        mode: ferry
+                        providerId: static-example-ferry
+                        serviceId: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2
+                        from:
+                          id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                          type: island
+                          name:
+                            en: Maafushi
+                          geo:
+                            lat: 3.9417
+                            lng: 73.4896
+                        to:
+                          id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2
+                          type: jetty
+                          name:
+                            en: Hulhumalé Ferry Terminal
+                          geo:
+                            lat: 4.2185
+                            lng: 73.5408
+                        departAt: '2026-10-27T02:30:00Z'
+                        arriveAt: '2026-10-27T04:00:00Z'
+                        durationMin: 90
+                        price:
+                          amountMinor: 9000
+                          currency: MVR
+                        bookable: true
+                        pricing: fixed
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                        noteCodes: []
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+                        mode: taxi
+                        providerId: mock-taxi
+                        from:
+                          id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2
+                          type: jetty
+                          name:
+                            en: Hulhumalé Ferry Terminal
+                          geo:
+                            lat: 4.2185
+                            lng: 73.5408
+                        to:
+                          id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1D2
+                          type: airport
+                          name:
+                            en: Velana International Airport
+                          geo:
+                            lat: 4.1918
+                            lng: 73.5291
+                          code: MLE
+                        departAt: '2026-10-27T04:30:00Z'
+                        arriveAt: '2026-10-27T04:45:00Z'
+                        durationMin: 15
+                        price:
+                          amountMinor: 8000
+                          currency: MVR
+                        bookable: true
+                        pricing: estimate
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+                        noteCodes:
+                          - ESTIMATED_TAXI_FARE
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H4
+                        mode: domestic_flight
+                        providerId: static-example-air
+                        from:
+                          id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1D2
+                          type: airport
+                          name:
+                            en: Velana International Airport
+                          geo:
+                            lat: 4.1918
+                            lng: 73.5291
+                          code: MLE
+                        to:
+                          id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1G2
+                          type: airport
+                          name:
+                            en: Kooddoo Airport
+                          geo:
+                            lat: 0.7324
+                            lng: 73.4336
+                          code: GKK
+                        departAt: '2026-10-27T06:30:00Z'
+                        arriveAt: '2026-10-27T07:35:00Z'
+                        durationMin: 65
+                        price:
+                          amountMinor: 185000
+                          currency: MVR
+                        bookable: true
+                        pricing: fixed
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H4
+                        noteCodes: []
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H5
+                        mode: taxi
+                        providerId: mock-taxi
+                        from:
+                          id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1G2
+                          type: airport
+                          name:
+                            en: Kooddoo Airport
+                          geo:
+                            lat: 0.7324
+                            lng: 73.4336
+                          code: GKK
+                        to:
+                          id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1F2
+                          type: island
+                          name:
+                            en: Kooddoo
+                          geo:
+                            lat: 0.7324
+                            lng: 73.4336
+                        departAt: '2026-10-27T07:50:00Z'
+                        arriveAt: '2026-10-27T08:00:00Z'
+                        durationMin: 10
+                        price:
+                          amountMinor: 5000
+                          currency: MVR
+                        bookable: false
+                        pricing: estimate
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H5
+                        noteCodes:
+                          - ESTIMATED_TAXI_FARE
+                    price:
+                      total:
+                        amountMinor: 207000
+                        currency: MVR
+                      breakdown:
+                        - code: FERRY_FARE
+                          amount:
+                            amountMinor: 9000
+                            currency: MVR
+                          legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                        - code: TAXI_FARE
+                          amount:
+                            amountMinor: 8000
+                            currency: MVR
+                          legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+                        - code: FLIGHT_FARE
+                          amount:
+                            amountMinor: 185000
+                            currency: MVR
+                          legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H4
+                        - code: TAXI_FARE
+                          amount:
+                            amountMinor: 5000
+                            currency: MVR
+                          legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H5
+                    buffers:
+                      - afterLegIndex: 0
+                        minutes: 30
+                        requiredMinutes: 20
+                        comfortMinutes: 30
+                      - afterLegIndex: 1
+                        minutes: 105
+                        requiredMinutes: 90
+                        comfortMinutes: 120
+                      - afterLegIndex: 2
+                        minutes: 15
+                        requiredMinutes: 10
+                        comfortMinutes: 20
+                    risk:
+                      missProbability: 0.03
+                      level: low
+                      weakestConnectionIndex: 2
+                    labels:
+                      - safest
+                      - best_overall
+                    score: 87.4
+                    explanations:
+                      - code: SAFEST_BUFFER
+                        params: {}
+                        severity: good
+                      - code: BUFFER_COMFORTABLE
+                        params:
+                          minutes: 105
+                        severity: good
+                      - code: ESTIMATED_TAXI_FARE
+                        params: {}
+                        severity: info
+                    warnings:
+                      - code: ESTIMATED_TAXI_FARE
+                        params:
+                          legIndex: 3
+        '422':
+          description: Validation failed. Field error codes include `INFANTS_EXCEED_ADULTS`, `PARTY_TOO_LARGE`, `DATE_IN_PAST`, `INVALID_PLACE_ID`.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /trips/options/{optionId}:
+    get:
+      operationId: getTripOption
+      tags:
+        - Trips
+      summary: Re-read a previously returned option
+      security: []
+      parameters:
+        - name: optionId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/TripOptionId'
+      responses:
+        '200':
+          description: The option as it was returned by search.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripOption'
+              example:
+                id: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+                departAt: '2026-10-27T02:30:00Z'
+                arriveAt: '2026-10-27T04:00:00Z'
+                durationMin: 90
+                transfers: 0
+                legs:
+                  - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                    mode: ferry
+                    providerId: static-example-ferry
+                    from:
+                      id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                      type: island
+                      name:
+                        en: Maafushi
+                      geo:
+                        lat: 3.9417
+                        lng: 73.4896
+                    to:
+                      id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2
+                      type: jetty
+                      name:
+                        en: Hulhumalé Ferry Terminal
+                      geo:
+                        lat: 4.2185
+                        lng: 73.5408
+                    departAt: '2026-10-27T02:30:00Z'
+                    arriveAt: '2026-10-27T04:00:00Z'
+                    durationMin: 90
+                    price:
+                      amountMinor: 9000
+                      currency: MVR
+                    bookable: true
+                    pricing: fixed
+                    noteCodes: []
+                price:
+                  total:
+                    amountMinor: 9000
+                    currency: MVR
+                  breakdown:
+                    - code: FERRY_FARE
+                      amount:
+                        amountMinor: 9000
+                        currency: MVR
+                buffers: []
+                risk:
+                  missProbability: 0.01
+                  level: low
+                labels:
+                  - fastest
+                  - cheapest
+                score: 91.2
+                explanations:
+                  - code: FASTEST_OVERALL
+                    params: {}
+                    severity: good
+                warnings: []
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /trips/replan:
+    post:
+      operationId: replanTrip
+      tags:
+        - Trips
+      summary: Suggest a safe re-plan after a disruption
+      description: Preserves every connection that is still safe and only changes what the disruption forces.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReplanRequest'
+            example:
+              bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+              now: '2026-10-27T03:00:00Z'
+              disruption:
+                legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                kind: delayed
+                delayMinutes: 40
+      responses:
+        '200':
+          description: Alternative options, ranked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripSearchResponse'
+              example:
+                searchId: srch_01K8Z3M5Q7R9T2V4W6X8Y0F1G3
+                options: []
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /geo/legs:
+    get:
+      operationId: getLegGeometries
+      tags:
+        - Geo
+      summary: Route geometry for legs
+      description: Sea routes are illustrative, never navigational; every feature is flagged `approximate`.
+      security: []
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          description: Comma separated leg ids or geometry refs.
+          schema:
+            type: string
+          example: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2,leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+      responses:
+        '200':
+          description: One GeoJSON LineString feature per requested leg.
+          content:
+            application/geo+json:
+              schema:
+                $ref: '#/components/schemas/LegFeatureCollection'
+              example:
+                type: FeatureCollection
+                features:
+                  - type: Feature
+                    properties:
+                      legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                      mode: ferry
+                      approximate: true
+                    geometry:
+                      type: LineString
+                      coordinates:
+                        - - 73.4896
+                          - 3.9417
+                        - - 73.51
+                          - 4.08
+                        - - 73.5408
+                          - 4.2185
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /bookings:
+    post:
+      operationId: createBooking
+      tags:
+        - Bookings
+      summary: Hold a trip option
+      description: Creates a booking in `held` state with an expiry (default 12 minutes). Every leg is held or the whole hold is rolled back.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookingRequest'
+            example:
+              optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+              passengers:
+                - travellerId: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+                  fullName: Aishath Naseem
+                  passengerType: adult
+                - fullName: Ibrahim Naseem
+                  passengerType: adult
+                  phone: '+9607779876'
+      responses:
+        '201':
+          description: Held.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+              examples:
+                held:
+                  $ref: '#/components/examples/HeldBooking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: A leg is no longer available, or the idempotency key was reused with a different body.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://dhathuru.mv/problems/leg-unavailable
+                title: Leg unavailable
+                status: 409
+                code: LEG_UNAVAILABLE
+                params:
+                  legIndex: 2
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+    get:
+      operationId: listBookings
+      tags:
+        - Bookings
+      summary: My bookings
+      parameters:
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/BookingStatus'
+      responses:
+        '200':
+          description: Bookings, newest first.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                  - page
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BookingDetail'
+                  page:
+                    $ref: '#/components/schemas/PageInfo'
+              examples:
+                page:
+                  $ref: '#/components/examples/BookingPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /bookings/{bookingId}:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    get:
+      operationId: getBooking
+      tags:
+        - Bookings
+      summary: One booking
+      responses:
+        '200':
+          description: The booking.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+              examples:
+                held:
+                  $ref: '#/components/examples/HeldBooking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /bookings/{bookingId}/pay:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    post:
+      operationId: payBooking
+      tags:
+        - Bookings
+      summary: Pay for a held booking
+      description: Charges the booking and confirms all legs as a saga. A declined card leaves the booking `held` (payment `failed`, with `failureCode`) so another card can be tried before the hold expires. A card that needs extra verification returns payment `requires_action` with a `challenge`; finish it with `/pay/verify`. If any leg fails to confirm, the others are released and the payment is refunded; the booking ends `failed`. Retrying with the same Idempotency-Key replays the stored result.
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayRequest'
+            example:
+              method: card
+              paymentToken: tok_fake_success
+      responses:
+        '200':
+          description: Payment processed; read `status` for the outcome.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+              examples:
+                confirmed:
+                  $ref: '#/components/examples/ConfirmedBooking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '410':
+          description: The hold expired.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: https://dhathuru.mv/problems/hold-expired
+                title: Hold expired
+                status: 410
+                code: HOLD_EXPIRED
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /bookings/{bookingId}/pay/verify:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    post:
+      operationId: verifyBookingPayment
+      tags:
+        - Bookings
+      summary: Complete an extra-verification step
+      description: Submits the code for a payment in `requires_action`. The fake gateway accepts `123456`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyPaymentRequest'
+            example:
+              code: '123456'
+      responses:
+        '200':
+          description: The booking after verification; read `status` and `payment.status`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+              examples:
+                confirmed:
+                  $ref: '#/components/examples/ConfirmedBooking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: No verification is pending (`NO_VERIFICATION_PENDING`).
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '410':
+          description: The hold expired (`HOLD_EXPIRED`).
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /bookings/{bookingId}/cancellation-quote:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    get:
+      operationId: getCancellationQuote
+      tags:
+        - Bookings
+      summary: What cancelling would refund
+      description: Per-leg refund according to each provider's policy and the time left before departure. Nothing is changed.
+      responses:
+        '200':
+          description: The quote.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancellationQuote'
+              example:
+                bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+                cancellable: true
+                legs:
+                  - legIndex: 0
+                    cancellable: true
+                    policyCode: ferry-standard
+                    refundPercent: 100
+                    refund:
+                      amountMinor: 9000
+                      currency: MVR
+                totalRefund:
+                  amountMinor: 9000
+                  currency: MVR
+                nonRefundable:
+                  amountMinor: 0
+                  currency: MVR
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /bookings/{bookingId}/itinerary.pdf:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    get:
+      operationId: getBookingItinerary
+      tags:
+        - Bookings
+      summary: PDF itinerary with a QR code per ticket
+      responses:
+        '200':
+          description: The itinerary.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: The booking has no issued tickets yet.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /bookings/{bookingId}/disruptions/{disruptionId}/acknowledge:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+      - name: disruptionId
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      operationId: acknowledgeDisruption
+      tags:
+        - Bookings
+      summary: Mark a delay or cancellation as seen
+      description: The booking is never rebooked automatically; this only records that the traveller has seen the notice.
+      responses:
+        '200':
+          description: The booking with the disruption acknowledged.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+              examples:
+                confirmed:
+                  $ref: '#/components/examples/ConfirmedBooking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /bookings/{bookingId}/cancel:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    post:
+      operationId: cancelBooking
+      tags:
+        - Bookings
+      summary: Cancel a booking
+      responses:
+        '200':
+          description: Cancelled (fully or partially, per operator rules).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingDetail'
+              examples:
+                confirmed:
+                  $ref: '#/components/examples/ConfirmedBooking'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /bookings/{bookingId}/tickets:
+    parameters:
+      - $ref: '#/components/parameters/BookingId'
+    get:
+      operationId: listBookingTickets
+      tags:
+        - Bookings
+      summary: Per-leg tickets
+      responses:
+        '200':
+          description: One ticket per bookable leg per passenger.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TicketDetail'
+              example:
+                items:
+                  - id: tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2
+                    bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+                    bookingLegId: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+                    passengerId: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2
+                    status: valid
+                    issuedAt: '2026-10-26T20:10:00Z'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /tickets/{ticketId}/qr:
+    get:
+      operationId: getTicketQr
+      tags:
+        - Bookings
+      summary: QR code for a ticket
+      parameters:
+        - name: ticketId
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/TicketId'
+      responses:
+        '200':
+          description: SVG QR code encoding a signed ticket payload.
+          content:
+            image/svg+xml:
+              schema:
+                type: string
+              example: <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"></svg>
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /tickets/verify:
+    post:
+      operationId: verifyTicket
+      tags:
+        - Bookings
+      summary: Verify a scanned ticket payload
+      description: 'Used by operators or a scanner app. Reasons: `TICKET_FORGED`, `TICKET_MALFORMED`, `TICKET_UNKNOWN`, `TICKET_ALREADY_USED`, `TICKET_CANCELLED`, `TICKET_EXPIRED`. Consuming (`consume: true`) needs the operator key in the `X-Operator-Key` header.'
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyTicketRequest'
+            example:
+              payload: dhathuru:tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2.signature
+              consume: false
+      responses:
+        '200':
+          description: Verification result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyTicketResponse'
+              example:
+                valid: true
+                ticket:
+                  id: tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2
+                  bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+                  bookingLegId: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+                  passengerId: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2
+                  status: valid
+                  issuedAt: '2026-10-26T20:10:00Z'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+  /dev/provider-events:
+    post:
+      operationId: simulateProviderEvent
+      tags:
+        - Bookings
+      summary: Script a provider delay or cancellation (development only)
+      description: Answers 404 unless `Bookings:EnableSimulation` is on. Affected bookings get a disruption, an email and a replan suggestion.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProviderEventRequest'
+            example:
+              providerId: fake-ferry
+              serviceRunId: run-1
+              state: delayed
+              delayMinutes: 45
+      responses:
+        '200':
+          description: How many booking legs were touched.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - affected
+                properties:
+                  affected:
+                    type: integer
+                    minimum: 0
+              example:
+                affected: 1
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationFailed'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Instant:
+      type: string
+      format: date-time
+      description: ISO 8601 timestamp with explicit offset. Stored and transported in UTC; shown in Indian/Maldives (UTC+5).
+      examples:
+        - '2026-10-27T02:30:00Z'
+    Health:
+      type: object
+      required:
+        - status
+        - version
+        - time
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+            - degraded
+        version:
+          type: string
+        time:
+          $ref: '#/components/schemas/Instant'
+        checks:
+          type: object
+          additionalProperties:
+            type: string
+            enum:
+              - up
+              - down
+    Probe:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+    RegisterRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 10
+          maxLength: 128
+        displayName:
+          type: string
+          maxLength: 80
+        locale:
+          type: string
+    Problem:
+      type: object
+      description: RFC 9457 problem details. `code` is stable and machine readable; `params` fill the client-side translated message. No English prose is required by clients.
+      required:
+        - type
+        - title
+        - status
+        - code
+      properties:
+        type:
+          type: string
+          format: uri-reference
+          examples:
+            - https://dhathuru.mv/problems/validation
+        title:
+          type: string
+          examples:
+            - Validation failed
+        status:
+          type: integer
+          examples:
+            - 422
+        detail:
+          type: string
+        instance:
+          type: string
+        code:
+          type: string
+          description: Stable machine code (UPPER_SNAKE).
+          examples:
+            - VALIDATION_FAILED
+        params:
+          type: object
+          additionalProperties: true
+          examples:
+            - field: email
+        traceId:
+          type: string
+        errors:
+          type: array
+          description: Field level errors for validation problems.
+          items:
+            type: object
+            required:
+              - field
+              - code
+            properties:
+              field:
+                type: string
+              code:
+                type: string
+              params:
+                type: object
+                additionalProperties: true
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    TokenPair:
+      type: object
+      required:
+        - accessToken
+        - refreshToken
+        - tokenType
+        - expiresIn
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+          enum:
+            - Bearer
+        expiresIn:
+          type: integer
+          description: Access token lifetime in seconds.
+    RefreshRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+    TokenRequest:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+    ForgotPasswordRequest:
+      type: object
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          format: email
+    ResetPasswordRequest:
+      type: object
+      required:
+        - token
+        - newPassword
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
+          minLength: 10
+          maxLength: 128
+    UserId:
+      type: string
+      pattern: ^usr_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - usr_01K8Z3M5Q7R9T2V4W6X8Y0N1P2
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - emailVerified
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/UserId'
+        email:
+          type: string
+          format: email
+        emailVerified:
+          type: boolean
+        displayName:
+          type: string
+        locale:
+          type: string
+          examples:
+            - en
+        createdAt:
+          $ref: '#/components/schemas/Instant'
+    DeleteAccountRequest:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+    UpdateMeRequest:
+      type: object
+      properties:
+        displayName:
+          type: string
+          maxLength: 80
+        locale:
+          type: string
+    ChangePasswordRequest:
+      type: object
+      required:
+        - currentPassword
+        - newPassword
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+          minLength: 10
+          maxLength: 128
+    ChangeEmailRequest:
+      type: object
+      required:
+        - newEmail
+        - password
+      properties:
+        newEmail:
+          type: string
+          format: email
+        password:
+          type: string
+    Preferences:
+      type: object
+      required:
+        - language
+        - riskTolerance
+        - preferredModes
+      properties:
+        language:
+          type: string
+        riskTolerance:
+          type: string
+          enum:
+            - cautious
+            - balanced
+            - relaxed
+        preferredModes:
+          type: array
+          items:
+            type: string
+    UpdatePreferencesRequest:
+      type: object
+      properties:
+        language:
+          type: string
+        riskTolerance:
+          type: string
+          enum:
+            - cautious
+            - balanced
+            - relaxed
+        preferredModes:
+          type: array
+          maxItems: 8
+          items:
+            type: string
+    Session:
+      type: object
+      required:
+        - id
+        - createdAt
+        - lastUsedAt
+        - current
+      properties:
+        id:
+          type: string
+        createdAt:
+          $ref: '#/components/schemas/Instant'
+        lastUsedAt:
+          $ref: '#/components/schemas/Instant'
+        userAgent:
+          type: string
+        networkHint:
+          type: string
+        current:
+          type: boolean
+    TravellerId:
+      type: string
+      pattern: ^trv_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+    PassengerType:
+      type: string
+      enum:
+        - adult
+        - child
+        - infant
+    SavedTraveller:
+      type: object
+      required:
+        - id
+        - fullName
+        - passengerType
+        - documentType
+      properties:
+        id:
+          $ref: '#/components/schemas/TravellerId'
+        fullName:
+          type: string
+        passengerType:
+          $ref: '#/components/schemas/PassengerType'
+        dateOfBirth:
+          type: string
+          format: date
+        phone:
+          type: string
+        documentType:
+          type: string
+          enum:
+            - none
+            - national_id
+            - passport
+    TravellerInput:
+      type: object
+      required:
+        - fullName
+        - passengerType
+      properties:
+        fullName:
+          type: string
+          maxLength: 120
+        passengerType:
+          $ref: '#/components/schemas/PassengerType'
+        dateOfBirth:
+          type: string
+          format: date
+        phone:
+          type: string
+        documentType:
+          type: string
+          enum:
+            - none
+            - national_id
+            - passport
+          default: none
+          description: Kind of ID carried; numbers are never stored.
+    PlaceType:
+      type: string
+      enum:
+        - island
+        - atoll
+        - airport
+        - jetty
+        - taxi_stand
+        - poi
+        - address
+    PlaceId:
+      type: string
+      description: Prefixed ULID of a place (island, atoll, airport, jetty, taxi stand, poi or address).
+      pattern: ^(isl|atl|apt|jty|txs|poi|adr)_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+    LocalisedText:
+      type: object
+      description: Map of locale tag to text. `en` is always present.
+      required:
+        - en
+      properties:
+        en:
+          type: string
+      additionalProperties:
+        type: string
+      examples:
+        - en: Maafushi
+          dv: މާފުށި
+    GeoPoint:
+      type: object
+      required:
+        - lat
+        - lng
+      additionalProperties: false
+      properties:
+        lat:
+          type: number
+          minimum: -90
+          maximum: 90
+          examples:
+            - 3.9417
+        lng:
+          type: number
+          minimum: -180
+          maximum: 180
+          examples:
+            - 73.4896
+    Place:
+      type: object
+      required:
+        - id
+        - type
+        - name
+        - geo
+        - isHub
+      properties:
+        id:
+          $ref: '#/components/schemas/PlaceId'
+        type:
+          $ref: '#/components/schemas/PlaceType'
+        name:
+          $ref: '#/components/schemas/LocalisedText'
+        geo:
+          $ref: '#/components/schemas/GeoPoint'
+        atollId:
+          $ref: '#/components/schemas/PlaceId'
+        parentId:
+          $ref: '#/components/schemas/PlaceId'
+        code:
+          type: string
+          description: IATA code for airports.
+        isHub:
+          type: boolean
+          description: True where modes interchange (for example a jetty on the airport island).
+        approximate:
+          type: boolean
+          description: True when the coordinates are estimated rather than surveyed.
+    PageInfo:
+      type: object
+      required:
+        - limit
+      properties:
+        nextCursor:
+          type:
+            - string
+            - 'null'
+          description: Opaque cursor; null or absent on the last page.
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 200
+          examples:
+            - 50
+    OperatorId:
+      type: string
+      pattern: ^opr_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - opr_01K8Z3M5Q7R9T2V4W6X8Y0C1D2
+    TransportMode:
+      type: string
+      enum:
+        - ferry
+        - speedboat
+        - seaplane
+        - domestic_flight
+        - bus
+        - taxi
+        - walk
+        - resort_transfer
+    ProviderKind:
+      type: string
+      enum:
+        - static
+        - mock
+        - live
+    Operator:
+      type: object
+      required:
+        - id
+        - name
+        - modes
+        - providerKind
+      properties:
+        id:
+          $ref: '#/components/schemas/OperatorId'
+        name:
+          $ref: '#/components/schemas/LocalisedText'
+        modes:
+          type: array
+          items:
+            $ref: '#/components/schemas/TransportMode'
+        providerId:
+          type: string
+          examples:
+            - static-mtcc
+        providerKind:
+          $ref: '#/components/schemas/ProviderKind'
+        website:
+          type: string
+          format: uri
+    ServiceId:
+      type: string
+      pattern: ^svc_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2
+    PlaceRef:
+      type: object
+      description: Lightweight reference embedded in legs.
+      required:
+        - id
+        - type
+        - name
+        - geo
+      properties:
+        id:
+          $ref: '#/components/schemas/PlaceId'
+        type:
+          $ref: '#/components/schemas/PlaceType'
+        name:
+          $ref: '#/components/schemas/LocalisedText'
+        geo:
+          $ref: '#/components/schemas/GeoPoint'
+        code:
+          type: string
+          description: IATA code for airports.
+          examples:
+            - MLE
+    ServiceDeparture:
+      type: object
+      required:
+        - serviceRunId
+        - departAt
+        - arriveAt
+      properties:
+        serviceRunId:
+          type: string
+          examples:
+            - svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2:2026-10-27T02:30Z
+        departAt:
+          $ref: '#/components/schemas/Instant'
+        arriveAt:
+          $ref: '#/components/schemas/Instant'
+        seatsLeft:
+          type: integer
+          minimum: 0
+    Money:
+      type: object
+      description: Integer minor units (MVR laari, 100 laari = 1 MVR). Never a float.
+      required:
+        - amountMinor
+        - currency
+      additionalProperties: false
+      properties:
+        amountMinor:
+          type: integer
+          minimum: 0
+          examples:
+            - 15000
+        currency:
+          type: string
+          enum:
+            - MVR
+          examples:
+            - MVR
+    Pricing:
+      type: string
+      enum:
+        - fixed
+        - estimate
+    Service:
+      type: object
+      description: A scheduled or on-demand run pattern with calendar validity and fare rules.
+      required:
+        - id
+        - operatorId
+        - mode
+        - from
+        - to
+        - kind
+        - validity
+      properties:
+        id:
+          $ref: '#/components/schemas/ServiceId'
+        operatorId:
+          $ref: '#/components/schemas/OperatorId'
+        mode:
+          $ref: '#/components/schemas/TransportMode'
+        kind:
+          type: string
+          enum:
+            - scheduled
+            - on_demand
+        from:
+          $ref: '#/components/schemas/PlaceRef'
+        to:
+          $ref: '#/components/schemas/PlaceRef'
+        departures:
+          type: array
+          description: Departures for the queried date.
+          items:
+            $ref: '#/components/schemas/ServiceDeparture'
+        validity:
+          type: object
+          required:
+            - from
+          properties:
+            from:
+              type: string
+              format: date
+            to:
+              type: string
+              format: date
+            daysOfWeek:
+              type: array
+              items:
+                type: integer
+                minimum: 1
+                maximum: 7
+                description: ISO weekday, 1 = Monday.
+        fare:
+          type: object
+          required:
+            - base
+          properties:
+            base:
+              $ref: '#/components/schemas/Money'
+            pricing:
+              $ref: '#/components/schemas/Pricing'
+            childDiscountPercent:
+              type: integer
+              minimum: 0
+              maximum: 100
+        checkInCutoffMin:
+          type: integer
+          minimum: 0
+          description: Minutes before departure that boarding or check-in closes.
+          examples:
+            - 45
+        synthetic:
+          type: boolean
+          description: True when the schedule is estimated or synthetic, not published by the operator.
+    ServiceState:
+      type: string
+      enum:
+        - on_time
+        - delayed
+        - cancelled
+        - unknown
+    ServiceStatus:
+      type: object
+      required:
+        - serviceId
+        - state
+        - updatedAt
+      properties:
+        serviceId:
+          $ref: '#/components/schemas/ServiceId'
+        serviceRunId:
+          type: string
+        state:
+          $ref: '#/components/schemas/ServiceState'
+        delayMinutes:
+          type: integer
+          minimum: 0
+        updatedAt:
+          $ref: '#/components/schemas/Instant'
+        source:
+          type: string
+          enum:
+            - static
+            - mock
+            - live
+            - simulated
+    Passengers:
+      type: object
+      required:
+        - adults
+      properties:
+        adults:
+          type: integer
+          minimum: 1
+          maximum: 9
+        children:
+          type: integer
+          minimum: 0
+          maximum: 9
+          default: 0
+        infants:
+          type: integer
+          minimum: 0
+          maximum: 9
+          default: 0
+          description: Each infant travels on an adult's lap, so infants cannot outnumber adults; otherwise the search answers 422 with field error `passengers.infants` and code `INFANTS_EXCEED_ADULTS`.
+    TripPreferences:
+      type: object
+      required:
+        - riskTolerance
+      properties:
+        maxTransfers:
+          type: integer
+          minimum: 0
+          maximum: 8
+        budgetMax:
+          $ref: '#/components/schemas/Money'
+        modes:
+          type: array
+          description: Restrict to these modes; omit for all.
+          items:
+            $ref: '#/components/schemas/TransportMode'
+        riskTolerance:
+          type: string
+          enum:
+            - cautious
+            - balanced
+            - relaxed
+    TripSearchRequest:
+      type: object
+      required:
+        - from
+        - to
+        - date
+        - time
+        - timeMode
+        - passengers
+        - preferences
+      properties:
+        from:
+          $ref: '#/components/schemas/PlaceId'
+        to:
+          $ref: '#/components/schemas/PlaceId'
+        date:
+          type: string
+          format: date
+          description: Indian/Maldives local date.
+        time:
+          type: string
+          pattern: ^([01]\d|2[0-3]):[0-5]\d$
+          description: Indian/Maldives local time HH:mm.
+        timeMode:
+          type: string
+          enum:
+            - departAfter
+            - arriveBy
+        passengers:
+          $ref: '#/components/schemas/Passengers'
+        preferences:
+          $ref: '#/components/schemas/TripPreferences'
+    SearchId:
+      type: string
+      pattern: ^srch_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - srch_01K8Z3M5Q7R9T2V4W6X8Y0F1G2
+    TripOptionId:
+      type: string
+      description: Id of a ranked trip option produced by a search.
+      pattern: ^trp_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+    LegId:
+      type: string
+      pattern: ^leg_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+    Leg:
+      type: object
+      required:
+        - id
+        - mode
+        - providerId
+        - from
+        - to
+        - departAt
+        - arriveAt
+        - durationMin
+        - price
+        - bookable
+        - pricing
+        - noteCodes
+      properties:
+        id:
+          $ref: '#/components/schemas/LegId'
+        mode:
+          $ref: '#/components/schemas/TransportMode'
+        providerId:
+          type: string
+          examples:
+            - static-mtcc
+        serviceId:
+          $ref: '#/components/schemas/ServiceId'
+        serviceRunId:
+          type: string
+        from:
+          $ref: '#/components/schemas/PlaceRef'
+        to:
+          $ref: '#/components/schemas/PlaceRef'
+        departAt:
+          $ref: '#/components/schemas/Instant'
+        arriveAt:
+          $ref: '#/components/schemas/Instant'
+        durationMin:
+          type: integer
+          minimum: 0
+        price:
+          $ref: '#/components/schemas/Money'
+        bookable:
+          type: boolean
+        pricing:
+          $ref: '#/components/schemas/Pricing'
+        geometryRef:
+          type: string
+          description: Reference resolvable via GET /geo/legs.
+          examples:
+            - leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+        noteCodes:
+          type: array
+          items:
+            type: string
+    PriceBreakdownItem:
+      type: object
+      required:
+        - code
+        - amount
+      properties:
+        code:
+          type: string
+          examples:
+            - FERRY_FARE
+        amount:
+          $ref: '#/components/schemas/Money'
+        legId:
+          $ref: '#/components/schemas/LegId'
+    TripPrice:
+      type: object
+      required:
+        - total
+        - breakdown
+      properties:
+        total:
+          $ref: '#/components/schemas/Money'
+        breakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceBreakdownItem'
+    Buffer:
+      type: object
+      required:
+        - afterLegIndex
+        - minutes
+        - requiredMinutes
+        - comfortMinutes
+      properties:
+        afterLegIndex:
+          type: integer
+          minimum: 0
+        minutes:
+          type: integer
+          minimum: 0
+          description: Planned slack between arrival and the next departure.
+        requiredMinutes:
+          type: integer
+          minimum: 0
+          description: Hard minimum; options below it are never produced.
+        comfortMinutes:
+          type: integer
+          minimum: 0
+    RiskLevel:
+      type: string
+      enum:
+        - low
+        - medium
+        - high
+    Risk:
+      type: object
+      required:
+        - missProbability
+        - level
+      properties:
+        missProbability:
+          type: number
+          minimum: 0
+          maximum: 1
+        level:
+          $ref: '#/components/schemas/RiskLevel'
+        weakestConnectionIndex:
+          type: integer
+          minimum: 0
+    TripLabel:
+      type: string
+      enum:
+        - fastest
+        - cheapest
+        - safest
+        - best_overall
+    Severity:
+      type: string
+      enum:
+        - info
+        - good
+        - caution
+    Explanation:
+      type: object
+      description: Structured reason. The web owns the English text for each code.
+      required:
+        - code
+        - params
+        - severity
+      properties:
+        code:
+          type: string
+          examples:
+            - BUFFER_COMFORTABLE
+        params:
+          type: object
+          additionalProperties: true
+          examples:
+            - minutes: 45
+        severity:
+          $ref: '#/components/schemas/Severity'
+    Warning:
+      type: object
+      required:
+        - code
+        - params
+      properties:
+        code:
+          type: string
+          examples:
+            - ESTIMATED_TAXI_FARE
+        params:
+          type: object
+          additionalProperties: true
+    TripOption:
+      type: object
+      required:
+        - id
+        - departAt
+        - arriveAt
+        - durationMin
+        - transfers
+        - legs
+        - price
+        - buffers
+        - risk
+        - labels
+        - score
+        - explanations
+        - warnings
+      properties:
+        id:
+          $ref: '#/components/schemas/TripOptionId'
+        departAt:
+          $ref: '#/components/schemas/Instant'
+        arriveAt:
+          $ref: '#/components/schemas/Instant'
+        durationMin:
+          type: integer
+          minimum: 0
+        transfers:
+          type: integer
+          minimum: 0
+        legs:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Leg'
+        price:
+          $ref: '#/components/schemas/TripPrice'
+        buffers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Buffer'
+        risk:
+          $ref: '#/components/schemas/Risk'
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripLabel'
+        score:
+          type: number
+        explanations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Explanation'
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Warning'
+    TripSearchResponse:
+      type: object
+      required:
+        - searchId
+        - options
+      properties:
+        notices:
+          type: array
+          description: Codes explaining gaps (no route, closed taxis, suggestions). Present when useful, especially when options is empty.
+          items:
+            type: object
+            required:
+              - code
+              - params
+              - severity
+            properties:
+              code:
+                type: string
+              params:
+                type: object
+                additionalProperties: true
+              severity:
+                type: string
+                enum:
+                  - info
+                  - good
+                  - caution
+        suggestions:
+          type: array
+          description: Present when options is empty. Each suggestion was checked by the engine; applying it yields at least one option.
+          items:
+            type: object
+            required:
+              - code
+              - params
+            properties:
+              code:
+                type: string
+                enum:
+                  - TRY_LATER
+                  - TRY_EARLIER
+                  - TRY_NEXT_DAY
+                  - ALLOW_MORE_TRANSFERS
+                  - REMOVE_BUDGET
+                  - ALLOW_ALL_MODES
+              params:
+                type: object
+                additionalProperties: true
+        searchId:
+          $ref: '#/components/schemas/SearchId'
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/TripOption'
+    BookingId:
+      type: string
+      pattern: ^bkg_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+    Disruption:
+      type: object
+      required:
+        - legId
+        - kind
+      properties:
+        legId:
+          $ref: '#/components/schemas/LegId'
+        kind:
+          type: string
+          enum:
+            - delayed
+            - cancelled
+        delayMinutes:
+          type: integer
+          minimum: 1
+    ReplanRequest:
+      type: object
+      required:
+        - bookingId
+        - now
+        - disruption
+      properties:
+        bookingId:
+          $ref: '#/components/schemas/BookingId'
+        now:
+          $ref: '#/components/schemas/Instant'
+        disruption:
+          $ref: '#/components/schemas/Disruption'
+    LegFeature:
+      type: object
+      required:
+        - type
+        - properties
+        - geometry
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+        properties:
+          type: object
+          required:
+            - legId
+            - mode
+            - approximate
+          properties:
+            legId:
+              $ref: '#/components/schemas/LegId'
+            mode:
+              $ref: '#/components/schemas/TransportMode'
+            approximate:
+              type: boolean
+        geometry:
+          type: object
+          required:
+            - type
+            - coordinates
+          properties:
+            type:
+              type: string
+              enum:
+                - LineString
+            coordinates:
+              type: array
+              description: '[lng, lat] pairs.'
+              items:
+                type: array
+                minItems: 2
+                maxItems: 2
+                items:
+                  type: number
+    LegFeatureCollection:
+      type: object
+      required:
+        - type
+        - features
+      properties:
+        type:
+          type: string
+          enum:
+            - FeatureCollection
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/LegFeature'
+    BookingStatus:
+      type: string
+      enum:
+        - draft
+        - held
+        - payment_pending
+        - confirmed
+        - failed
+        - expired
+        - partially_cancelled
+        - cancelled
+        - refunded
+    BookingLegId:
+      type: string
+      pattern: ^bkl_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+    BookingLegStatus:
+      type: string
+      enum:
+        - pending
+        - held
+        - confirmed
+        - failed
+        - cancelled
+        - released
+    BookingLegDetail:
+      type: object
+      required:
+        - id
+        - legIndex
+        - leg
+        - status
+        - amount
+      properties:
+        id:
+          $ref: '#/components/schemas/BookingLegId'
+        legIndex:
+          type: integer
+          minimum: 0
+        leg:
+          $ref: '#/components/schemas/Leg'
+        status:
+          $ref: '#/components/schemas/BookingLegStatus'
+        providerReference:
+          type:
+            - string
+            - 'null'
+        failureCode:
+          type:
+            - string
+            - 'null'
+          examples:
+            - LEG_UNAVAILABLE
+        amount:
+          $ref: '#/components/schemas/Money'
+    PassengerId:
+      type: string
+      pattern: ^pax_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2
+    Passenger:
+      type: object
+      description: A person on one booking (snapshot; may originate from a Traveller).
+      required:
+        - id
+        - fullName
+        - passengerType
+      properties:
+        id:
+          $ref: '#/components/schemas/PassengerId'
+        travellerId:
+          $ref: '#/components/schemas/TravellerId'
+        fullName:
+          type: string
+        passengerType:
+          $ref: '#/components/schemas/PassengerType'
+        phone:
+          type: string
+    PaymentId:
+      type: string
+      pattern: ^pay_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - pay_01K8Z3M5Q7R9T2V4W6X8Y0M1N2
+    PaymentStatusDetail:
+      type: string
+      enum:
+        - pending
+        - requires_action
+        - succeeded
+        - failed
+        - refunded
+        - partially_refunded
+    PaymentChallenge:
+      type: object
+      required:
+        - id
+        - kind
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+          enum:
+            - verification_code
+    PaymentDetail:
+      type: object
+      required:
+        - id
+        - bookingId
+        - amount
+        - status
+        - gateway
+        - createdAt
+      properties:
+        id:
+          $ref: '#/components/schemas/PaymentId'
+        bookingId:
+          $ref: '#/components/schemas/BookingId'
+        amount:
+          $ref: '#/components/schemas/Money'
+        status:
+          $ref: '#/components/schemas/PaymentStatusDetail'
+        gateway:
+          type: string
+          examples:
+            - fake
+        failureCode:
+          type:
+            - string
+            - 'null'
+          examples:
+            - CARD_DECLINED
+        createdAt:
+          $ref: '#/components/schemas/Instant'
+        challenge:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentChallenge'
+            - type: 'null'
+        refunded:
+          oneOf:
+            - $ref: '#/components/schemas/Money'
+            - type: 'null'
+    PriceLine:
+      type: object
+      description: One line of the honest price breakdown. Pay-on-board legs are listed but not charged.
+      required:
+        - code
+        - amount
+        - payOnBoard
+      properties:
+        code:
+          type: string
+          examples:
+            - FARE
+            - SERVICE_FEE
+            - PAY_ON_BOARD
+        amount:
+          $ref: '#/components/schemas/Money'
+        legIndex:
+          type:
+            - integer
+            - 'null'
+        payOnBoard:
+          type: boolean
+    BookingDisruption:
+      type: object
+      required:
+        - id
+        - bookingLegId
+        - legIndex
+        - kind
+        - delayMinutes
+        - state
+        - detectedAt
+      properties:
+        id:
+          type: string
+        bookingLegId:
+          $ref: '#/components/schemas/BookingLegId'
+        legIndex:
+          type: integer
+        kind:
+          type: string
+          enum:
+            - delayed
+            - cancelled
+        delayMinutes:
+          type: integer
+          minimum: 0
+        state:
+          type: string
+          enum:
+            - open
+            - acknowledged
+            - resolved
+        detectedAt:
+          $ref: '#/components/schemas/Instant'
+        suggestion:
+          description: A replan suggestion from the trip planner, if one was found. Never applied automatically.
+          oneOf:
+            - type: object
+              additionalProperties: true
+            - type: 'null'
+    BookingDetail:
+      type: object
+      required:
+        - id
+        - status
+        - optionId
+        - legs
+        - passengers
+        - total
+        - createdAt
+        - updatedAt
+        - priceBreakdown
+        - disruptions
+      properties:
+        id:
+          $ref: '#/components/schemas/BookingId'
+        status:
+          $ref: '#/components/schemas/BookingStatus'
+        optionId:
+          $ref: '#/components/schemas/TripOptionId'
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingLegDetail'
+        passengers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Passenger'
+        total:
+          $ref: '#/components/schemas/Money'
+        holdExpiresAt:
+          oneOf:
+            - $ref: '#/components/schemas/Instant'
+            - type: 'null'
+        payment:
+          oneOf:
+            - $ref: '#/components/schemas/PaymentDetail'
+            - type: 'null'
+        createdAt:
+          $ref: '#/components/schemas/Instant'
+        updatedAt:
+          $ref: '#/components/schemas/Instant'
+        failureCode:
+          type:
+            - string
+            - 'null'
+          description: Why a `failed` booking failed, for example LEG_UNAVAILABLE or CARD_DECLINED.
+        priceBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceLine'
+        disruptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/BookingDisruption'
+    BookingPassengerInput:
+      type: object
+      required:
+        - fullName
+        - passengerType
+      properties:
+        travellerId:
+          $ref: '#/components/schemas/TravellerId'
+        fullName:
+          type: string
+          maxLength: 120
+        passengerType:
+          $ref: '#/components/schemas/PassengerType'
+        phone:
+          type: string
+    CreateBookingRequest:
+      type: object
+      required:
+        - optionId
+        - passengers
+      properties:
+        optionId:
+          $ref: '#/components/schemas/TripOptionId'
+        passengers:
+          type: array
+          minItems: 1
+          maxItems: 9
+          items:
+            $ref: '#/components/schemas/BookingPassengerInput'
+    PayRequest:
+      type: object
+      required:
+        - method
+        - paymentToken
+      properties:
+        method:
+          type: string
+          enum:
+            - card
+        paymentToken:
+          type: string
+          description: Opaque token from the payment gateway. Card numbers never reach this API. See docs/payments/GATEWAY-READINESS.md for the fake gateway tokens (`tok_fake_success`, `tok_fake_declined`, `tok_fake_insufficient_funds`, `tok_fake_verification`, `tok_fake_slow`, `tok_fake_timeout`, `tok_fake_timeout_charged`, `tok_fake_leg_failure`).
+    VerifyPaymentRequest:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          maxLength: 12
+    CancellationLegQuote:
+      type: object
+      required:
+        - legIndex
+        - cancellable
+        - policyCode
+        - refundPercent
+        - refund
+      properties:
+        legIndex:
+          type: integer
+        cancellable:
+          type: boolean
+        policyCode:
+          type: string
+        refundPercent:
+          type: integer
+          minimum: 0
+          maximum: 100
+        refund:
+          $ref: '#/components/schemas/Money'
+        reasonCode:
+          type:
+            - string
+            - 'null'
+    CancellationQuote:
+      type: object
+      required:
+        - bookingId
+        - cancellable
+        - legs
+        - totalRefund
+        - nonRefundable
+      properties:
+        bookingId:
+          $ref: '#/components/schemas/BookingId'
+        cancellable:
+          type: boolean
+        legs:
+          type: array
+          items:
+            $ref: '#/components/schemas/CancellationLegQuote'
+        totalRefund:
+          $ref: '#/components/schemas/Money'
+        nonRefundable:
+          $ref: '#/components/schemas/Money'
+        reasonCode:
+          type:
+            - string
+            - 'null'
+    TicketId:
+      type: string
+      pattern: ^tkt_[0-9A-HJKMNP-TV-Z]{26}$
+      examples:
+        - tkt_01K8Z3M5Q7R9T2V4W6X8Y0K1M2
+    TicketStatus:
+      type: string
+      enum:
+        - valid
+        - used
+        - cancelled
+        - expired
+    TicketDetail:
+      type: object
+      required:
+        - id
+        - bookingId
+        - bookingLegId
+        - passengerId
+        - status
+        - issuedAt
+      properties:
+        id:
+          $ref: '#/components/schemas/TicketId'
+        bookingId:
+          $ref: '#/components/schemas/BookingId'
+        bookingLegId:
+          $ref: '#/components/schemas/BookingLegId'
+        passengerId:
+          $ref: '#/components/schemas/PassengerId'
+        status:
+          $ref: '#/components/schemas/TicketStatus'
+        issuedAt:
+          $ref: '#/components/schemas/Instant'
+        usedAt:
+          oneOf:
+            - $ref: '#/components/schemas/Instant'
+            - type: 'null'
+        leg:
+          oneOf:
+            - $ref: '#/components/schemas/Leg'
+            - type: 'null'
+    VerifyTicketRequest:
+      type: object
+      required:
+        - payload
+      properties:
+        payload:
+          type: string
+        consume:
+          type: boolean
+          default: false
+    VerifyTicketResponse:
+      type: object
+      required:
+        - valid
+      properties:
+        valid:
+          type: boolean
+        reasonCode:
+          type: string
+          examples:
+            - TICKET_ALREADY_USED
+        ticket:
+          $ref: '#/components/schemas/TicketDetail'
+    ProviderEventRequest:
+      type: object
+      required:
+        - providerId
+        - serviceRunId
+        - state
+      properties:
+        providerId:
+          type: string
+        serviceRunId:
+          type: string
+        state:
+          type: string
+          enum:
+            - on_time
+            - delayed
+            - cancelled
+        delayMinutes:
+          type: integer
+          minimum: 0
+          default: 0
+  responses:
+    ValidationFailed:
+      description: Request failed validation.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://dhathuru.mv/problems/validation
+            title: Validation failed
+            status: 422
+            code: VALIDATION_FAILED
+            errors:
+              - field: email
+                code: INVALID_EMAIL
+    TooManyRequests:
+      description: Rate limit exceeded.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://dhathuru.mv/problems/rate-limited
+            title: Too many requests
+            status: 429
+            code: RATE_LIMITED
+            params:
+              retryAfterSeconds: 30
+    Unauthorized:
+      description: Missing, invalid or expired credentials.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://dhathuru.mv/problems/unauthorized
+            title: Unauthorized
+            status: 401
+            code: AUTH_REQUIRED
+    NotFound:
+      description: Resource does not exist (or is not visible to the caller).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://dhathuru.mv/problems/not-found
+            title: Not found
+            status: 404
+            code: NOT_FOUND
+    Conflict:
+      description: State conflict (for example an idempotency key reused with a different body).
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: https://dhathuru.mv/problems/conflict
+            title: Conflict
+            status: 409
+            code: IDEMPOTENCY_KEY_REUSED
+  parameters:
+    Cursor:
+      name: cursor
+      in: query
+      description: Opaque cursor from a previous page.
+      schema:
+        type: string
+    Limit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 200
+        default: 50
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Client generated unique key (UUID or ULID). Replays return the original result.
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 128
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BookingId'
+  examples:
+    BookingPage:
+      value:
+        items:
+          - id: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+            status: confirmed
+            optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+            legs: []
+            passengers:
+              - id: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2
+                fullName: Aishath Naseem
+                passengerType: adult
+            total:
+              amountMinor: 9000
+              currency: MVR
+            createdAt: '2026-10-26T20:00:00Z'
+            updatedAt: '2026-10-26T20:03:00Z'
+            priceBreakdown: []
+            disruptions: []
+        page:
+          nextCursor: null
+          limit: 50
+    HeldBooking:
+      value:
+        id: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+        status: held
+        optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+        legs:
+          - id: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+            legIndex: 0
+            status: held
+            amount:
+              amountMinor: 9000
+              currency: MVR
+            leg:
+              id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+              mode: ferry
+              providerId: static-example-ferry
+              from:
+                id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                type: island
+                name:
+                  en: Maafushi
+                geo:
+                  lat: 3.9417
+                  lng: 73.4896
+              to:
+                id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2
+                type: jetty
+                name:
+                  en: Hulhumalé Ferry Terminal
+                geo:
+                  lat: 4.2185
+                  lng: 73.5408
+              departAt: '2026-10-27T02:30:00Z'
+              arriveAt: '2026-10-27T04:00:00Z'
+              durationMin: 90
+              price:
+                amountMinor: 9000
+                currency: MVR
+              bookable: true
+              pricing: fixed
+              noteCodes: []
+        passengers:
+          - id: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2
+            travellerId: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+            fullName: Aishath Naseem
+            passengerType: adult
+        total:
+          amountMinor: 9000
+          currency: MVR
+        holdExpiresAt: '2026-10-26T20:12:00Z'
+        createdAt: '2026-10-26T20:00:00Z'
+        updatedAt: '2026-10-26T20:00:00Z'
+        priceBreakdown:
+          - code: FARE
+            amount:
+              amountMinor: 9000
+              currency: MVR
+            legIndex: 0
+            payOnBoard: false
+        disruptions: []
+    ConfirmedBooking:
+      value:
+        id: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+        status: confirmed
+        optionId: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+        legs:
+          - id: bkl_01K8Z3M5Q7R9T2V4W6X8Y0J1K2
+            legIndex: 0
+            status: confirmed
+            providerReference: SB-482913
+            amount:
+              amountMinor: 9000
+              currency: MVR
+            leg:
+              id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+              mode: ferry
+              providerId: static-example-ferry
+              from:
+                id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+                type: island
+                name:
+                  en: Maafushi
+                geo:
+                  lat: 3.9417
+                  lng: 73.4896
+              to:
+                id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2
+                type: jetty
+                name:
+                  en: Hulhumalé Ferry Terminal
+                geo:
+                  lat: 4.2185
+                  lng: 73.5408
+              departAt: '2026-10-27T02:30:00Z'
+              arriveAt: '2026-10-27T04:00:00Z'
+              durationMin: 90
+              price:
+                amountMinor: 9000
+                currency: MVR
+              bookable: true
+              pricing: fixed
+              noteCodes: []
+        passengers:
+          - id: pax_01K8Z3M5Q7R9T2V4W6X8Y0Q1R2
+            travellerId: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2
+            fullName: Aishath Naseem
+            passengerType: adult
+        total:
+          amountMinor: 9000
+          currency: MVR
+        payment:
+          id: pay_01K8Z3M5Q7R9T2V4W6X8Y0M1N2
+          bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+          amount:
+            amountMinor: 9000
+            currency: MVR
+          status: succeeded
+          gateway: fake
+          createdAt: '2026-10-26T20:03:00Z'
+        createdAt: '2026-10-26T20:00:00Z'
+        updatedAt: '2026-10-26T20:03:00Z'
+        priceBreakdown:
+          - code: FARE
+            amount:
+              amountMinor: 9000
+              currency: MVR
+            legIndex: 0
+            payOnBoard: false
+        disruptions: []

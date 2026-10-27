@@ -1,0 +1,72 @@
+# Owner: ATOLL (service meta). Platform endpoints that belong to no module.
+openapi: 3.1.0
+info: { title: Dhathuru meta, version: 1.0.0 }
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      tags: [Meta]
+      summary: Liveness and readiness
+      security: []
+      responses:
+        "200":
+          description: Service is healthy.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+              example: { status: ok, version: "0.1.0", time: "2026-10-26T20:00:00Z" }
+        "503":
+          description: Service is up but a dependency is down.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Health" }
+              example:
+                {
+                  status: degraded,
+                  version: "0.1.0",
+                  time: "2026-10-26T20:00:00Z",
+                  checks: { database: down },
+                }
+  /health/live:
+    get:
+      operationId: getHealthLive
+      tags: [Meta]
+      summary: Liveness probe (process is running; no dependencies checked)
+      security: []
+      responses:
+        "200":
+          description: Alive.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Probe" }
+              example: { status: ok }
+  /health/ready:
+    get:
+      operationId: getHealthReady
+      tags: [Meta]
+      summary: Readiness probe (dependencies reachable)
+      security: []
+      responses:
+        "200":
+          description: Ready.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Probe" }
+              example: { status: ok }
+components:
+  schemas:
+    Probe:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string, enum: [ok] }
+    Health:
+      type: object
+      required: [status, version, time]
+      properties:
+        status: { type: string, enum: [ok, degraded] }
+        version: { type: string }
+        time: { $ref: "./components/schemas.yaml#/Instant" }
+        checks:
+          type: object
+          additionalProperties: { type: string, enum: [up, down] }

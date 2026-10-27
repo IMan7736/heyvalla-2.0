@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <UserSecretsId>dhathuru-api</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Http" />
+    <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" PrivateAssets="all" />
+    <ProjectReference Include="..\Dhathuru.Domain\Dhathuru.Domain.csproj" />
+    <ProjectReference Include="..\Dhathuru.Identity\Dhathuru.Identity.csproj" />
+    <ProjectReference Include="..\Dhathuru.Catalog\Dhathuru.Catalog.csproj" />
+    <ProjectReference Include="..\Dhathuru.Integrations\Dhathuru.Integrations.csproj" />
+    <ProjectReference Include="..\Dhathuru.TripEngine\Dhathuru.TripEngine.csproj" />
+    <ProjectReference Include="..\Dhathuru.Bookings\Dhathuru.Bookings.csproj" />
+  </ItemGroup>
+</Project>

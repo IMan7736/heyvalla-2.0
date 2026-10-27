@@ -1,0 +1,26 @@
+{
+  "title": "Help and questions",
+  "lead": "Straight answers about planning, booking and what happens when something runs late.",
+  "faq": {
+    "buffers": {
+      "q": "What is a connection buffer?",
+      "a": "The time between one ride arriving and the next one leaving. Every connection has a hard minimum for its mode and place, and a comfortable buffer we aim for. Trips under the minimum are never offered."
+    },
+    "risk": {
+      "q": "What does the risk figure mean?",
+      "a": "It is our estimate of the chance that you miss a connection, based on the buffer and how late that service has run before. We show it as low, medium or high, always with the number."
+    },
+    "estimated": {
+      "q": "Why are some prices marked as estimated?",
+      "a": "Taxis often have no published fare. We estimate from distance and mark the price as estimated until the operator confirms it."
+    },
+    "late": {
+      "q": "What happens if a ferry or flight runs late?",
+      "a": "You get a notification and a suggested new plan that keeps every remaining connection safe. You choose whether to switch."
+    },
+    "time": {
+      "q": "Which time zone do you use?",
+      "a": "Maldives time (UTC+5) everywhere. There is no daylight saving."
+    }
+  }
+}

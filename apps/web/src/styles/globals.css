@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "../../../../packages/ui/src/styles/theme.css";
+
+/* Tailwind must scan the design system package as well as this app. */
+@source "../../../../packages/ui/src";
+
+/*
+ * Fonts come from next/font on the shell wrapper (src/shell/fonts.ts). Custom properties that
+ * reference them are re-resolved here so they work whether the font classes sit on <html> or on
+ * the wrapper element.
+ */
+.shell-fonts {
+  --font-display: var(--font-display-face), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-sans: var(--font-ui-face), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+}

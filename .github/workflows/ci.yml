@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    name: Web (lint, typecheck, test, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  contracts:
+    name: Contract bundle drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Bundle is up to date
+        run: pnpm --filter @dhathuru/contracts run check
+      - name: Generated types are up to date
+        run: |
+          pnpm contracts
+          git diff --exit-code packages/contracts/generated
+
+  api:
+    name: API (build, test)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: apps/api/global.json
+      - uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('apps/api/**/*.csproj', 'apps/api/Directory.Packages.props') }}
+          restore-keys: nuget-${{ runner.os }}-
+      - run: dotnet build apps/api/Dhathuru.sln --configuration Release --artifacts-path apps/api/.artifacts/ci
+      - run: dotnet test --solution apps/api/Dhathuru.sln --configuration Release --artifacts-path apps/api/.artifacts/ci --no-build
+
+  e2e:
+    name: E2E smoke (Playwright, mock API)
+    runs-on: ubuntu-latest
+    needs: [web]
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm contracts
+      - run: pnpm --filter web exec playwright install --with-deps chromium
+      - run: pnpm --filter web e2e
+        env:
+          API_MODE: mock

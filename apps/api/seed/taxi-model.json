@@ -1,0 +1,866 @@
+{
+  "schemaVersion": 1,
+  "notice": "Fares: operator zone matrix (real). Durations: aggregated completed rides, groups of at least 10, zone keys only. Fallback fits are least squares guesses; see r2 and samples. Zone assignment uses nearest centroid within 3 km; the three airport-island zones are only about 1 km apart so their separation is approximate.",
+  "fares": [
+    {
+      "from": "domestic-terminal",
+      "to": "domestic-terminal",
+      "fareMinor": 3000
+    },
+    {
+      "from": "domestic-terminal",
+      "to": "hulhumale-1",
+      "fareMinor": 9000
+    },
+    {
+      "from": "domestic-terminal",
+      "to": "hulhumale-2",
+      "fareMinor": 9500
+    },
+    {
+      "from": "domestic-terminal",
+      "to": "male",
+      "fareMinor": 8000
+    },
+    {
+      "from": "domestic-terminal",
+      "to": "seaplane",
+      "fareMinor": 7000
+    },
+    {
+      "from": "domestic-terminal",
+      "to": "velana",
+      "fareMinor": 3000
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "domestic-terminal",
+      "fareMinor": 9000
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-1",
+      "fareMinor": 3000
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-2",
+      "fareMinor": 4000
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "male",
+      "fareMinor": 8500
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "seaplane",
+      "fareMinor": 11000
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "velana",
+      "fareMinor": 8000
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "domestic-terminal",
+      "fareMinor": 9500
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "hulhumale-1",
+      "fareMinor": 4000
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "hulhumale-2",
+      "fareMinor": 3000
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "male",
+      "fareMinor": 10000
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "seaplane",
+      "fareMinor": 12000
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "velana",
+      "fareMinor": 8500
+    },
+    {
+      "from": "male",
+      "to": "domestic-terminal",
+      "fareMinor": 8000
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-1",
+      "fareMinor": 8500
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-2",
+      "fareMinor": 10000
+    },
+    {
+      "from": "male",
+      "to": "male",
+      "fareMinor": 3000
+    },
+    {
+      "from": "male",
+      "to": "seaplane",
+      "fareMinor": 11000
+    },
+    {
+      "from": "male",
+      "to": "velana",
+      "fareMinor": 7000
+    },
+    {
+      "from": "seaplane",
+      "to": "domestic-terminal",
+      "fareMinor": 7000
+    },
+    {
+      "from": "seaplane",
+      "to": "hulhumale-1",
+      "fareMinor": 11000
+    },
+    {
+      "from": "seaplane",
+      "to": "hulhumale-2",
+      "fareMinor": 12000
+    },
+    {
+      "from": "seaplane",
+      "to": "male",
+      "fareMinor": 11000
+    },
+    {
+      "from": "seaplane",
+      "to": "seaplane",
+      "fareMinor": 3000
+    },
+    {
+      "from": "seaplane",
+      "to": "velana",
+      "fareMinor": 6000
+    },
+    {
+      "from": "velana",
+      "to": "domestic-terminal",
+      "fareMinor": 3000
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-1",
+      "fareMinor": 8000
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-2",
+      "fareMinor": 8500
+    },
+    {
+      "from": "velana",
+      "to": "male",
+      "fareMinor": 7000
+    },
+    {
+      "from": "velana",
+      "to": "seaplane",
+      "fareMinor": 6000
+    },
+    {
+      "from": "velana",
+      "to": "velana",
+      "fareMinor": 3000
+    }
+  ],
+  "durations": [
+    {
+      "from": "hulhumale-1",
+      "to": "domestic-terminal",
+      "band": "evening",
+      "samples": 42,
+      "medianMin": 11.9,
+      "p90Min": 14,
+      "medianKm": 7.1
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "domestic-terminal",
+      "band": "midday",
+      "samples": 58,
+      "medianMin": 11.6,
+      "p90Min": 14.4,
+      "medianKm": 6.9
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "domestic-terminal",
+      "band": "morning",
+      "samples": 121,
+      "medianMin": 12.9,
+      "p90Min": 14.6,
+      "medianKm": 7.6
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "domestic-terminal",
+      "band": "night",
+      "samples": 44,
+      "medianMin": 13.8,
+      "p90Min": 15.2,
+      "medianKm": 8
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-1",
+      "band": "evening",
+      "samples": 2560,
+      "medianMin": 5.4,
+      "p90Min": 6.1,
+      "medianKm": 2.7
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-1",
+      "band": "midday",
+      "samples": 1475,
+      "medianMin": 5.4,
+      "p90Min": 6,
+      "medianKm": 2.7
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-1",
+      "band": "morning",
+      "samples": 875,
+      "medianMin": 5.4,
+      "p90Min": 6.2,
+      "medianKm": 2.7
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-1",
+      "band": "night",
+      "samples": 208,
+      "medianMin": 5.5,
+      "p90Min": 6.1,
+      "medianKm": 2.7
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-2",
+      "band": "evening",
+      "samples": 2665,
+      "medianMin": 5.5,
+      "p90Min": 6.6,
+      "medianKm": 3.2
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-2",
+      "band": "midday",
+      "samples": 1355,
+      "medianMin": 5.7,
+      "p90Min": 6.8,
+      "medianKm": 3.2
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-2",
+      "band": "morning",
+      "samples": 445,
+      "medianMin": 5.6,
+      "p90Min": 6.7,
+      "medianKm": 3.2
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "hulhumale-2",
+      "band": "night",
+      "samples": 260,
+      "medianMin": 5.5,
+      "p90Min": 6,
+      "medianKm": 3.1
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "male",
+      "band": "evening",
+      "samples": 45709,
+      "medianMin": 12.6,
+      "p90Min": 15.4,
+      "medianKm": 8.2
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "male",
+      "band": "midday",
+      "samples": 26348,
+      "medianMin": 12.7,
+      "p90Min": 15.3,
+      "medianKm": 8.3
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "male",
+      "band": "morning",
+      "samples": 26791,
+      "medianMin": 12.8,
+      "p90Min": 15.4,
+      "medianKm": 8.3
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "male",
+      "band": "night",
+      "samples": 6140,
+      "medianMin": 12.6,
+      "p90Min": 15.3,
+      "medianKm": 8.3
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "velana",
+      "band": "evening",
+      "samples": 5116,
+      "medianMin": 11.2,
+      "p90Min": 13.8,
+      "medianKm": 6.8
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "velana",
+      "band": "midday",
+      "samples": 7229,
+      "medianMin": 11.3,
+      "p90Min": 13.9,
+      "medianKm": 7
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "velana",
+      "band": "morning",
+      "samples": 11020,
+      "medianMin": 11.3,
+      "p90Min": 13.9,
+      "medianKm": 6.9
+    },
+    {
+      "from": "hulhumale-1",
+      "to": "velana",
+      "band": "night",
+      "samples": 2963,
+      "medianMin": 11.6,
+      "p90Min": 14.2,
+      "medianKm": 7.1
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "domestic-terminal",
+      "band": "evening",
+      "samples": 16,
+      "medianMin": 14.6,
+      "p90Min": 14.9,
+      "medianKm": 8.9
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "domestic-terminal",
+      "band": "midday",
+      "samples": 17,
+      "medianMin": 14.3,
+      "p90Min": 14.6,
+      "medianKm": 8.6
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "domestic-terminal",
+      "band": "morning",
+      "samples": 46,
+      "medianMin": 14.5,
+      "p90Min": 14.9,
+      "medianKm": 8.8
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "domestic-terminal",
+      "band": "night",
+      "samples": 14,
+      "medianMin": 14.6,
+      "p90Min": 14.8,
+      "medianKm": 8.9
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "hulhumale-1",
+      "band": "evening",
+      "samples": 2426,
+      "medianMin": 5.6,
+      "p90Min": 6.5,
+      "medianKm": 3.1
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "hulhumale-1",
+      "band": "midday",
+      "samples": 1693,
+      "medianMin": 5.6,
+      "p90Min": 6.5,
+      "medianKm": 3.1
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "hulhumale-1",
+      "band": "morning",
+      "samples": 1509,
+      "medianMin": 5.6,
+      "p90Min": 6.8,
+      "medianKm": 3.1
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "hulhumale-1",
+      "band": "night",
+      "samples": 207,
+      "medianMin": 5.6,
+      "p90Min": 6.6,
+      "medianKm": 3.1
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "male",
+      "band": "evening",
+      "samples": 9025,
+      "medianMin": 14.9,
+      "p90Min": 16.6,
+      "medianKm": 9.9
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "male",
+      "band": "midday",
+      "samples": 5135,
+      "medianMin": 15,
+      "p90Min": 16.5,
+      "medianKm": 10
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "male",
+      "band": "morning",
+      "samples": 5864,
+      "medianMin": 15,
+      "p90Min": 16.3,
+      "medianKm": 10
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "male",
+      "band": "night",
+      "samples": 1218,
+      "medianMin": 15.1,
+      "p90Min": 16.6,
+      "medianKm": 10
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "velana",
+      "band": "evening",
+      "samples": 1098,
+      "medianMin": 13.8,
+      "p90Min": 14.6,
+      "medianKm": 8.5
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "velana",
+      "band": "midday",
+      "samples": 1580,
+      "medianMin": 13.8,
+      "p90Min": 14.5,
+      "medianKm": 8.5
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "velana",
+      "band": "morning",
+      "samples": 2312,
+      "medianMin": 13.8,
+      "p90Min": 14.6,
+      "medianKm": 8.6
+    },
+    {
+      "from": "hulhumale-2",
+      "to": "velana",
+      "band": "night",
+      "samples": 898,
+      "medianMin": 13.8,
+      "p90Min": 14.6,
+      "medianKm": 8.6
+    },
+    {
+      "from": "male",
+      "to": "domestic-terminal",
+      "band": "evening",
+      "samples": 97,
+      "medianMin": 8.9,
+      "p90Min": 10.4,
+      "medianKm": 4.8
+    },
+    {
+      "from": "male",
+      "to": "domestic-terminal",
+      "band": "midday",
+      "samples": 117,
+      "medianMin": 9.1,
+      "p90Min": 10.3,
+      "medianKm": 4.7
+    },
+    {
+      "from": "male",
+      "to": "domestic-terminal",
+      "band": "morning",
+      "samples": 170,
+      "medianMin": 9.4,
+      "p90Min": 10.8,
+      "medianKm": 4.8
+    },
+    {
+      "from": "male",
+      "to": "domestic-terminal",
+      "band": "night",
+      "samples": 50,
+      "medianMin": 8.9,
+      "p90Min": 10.7,
+      "medianKm": 4.8
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-1",
+      "band": "evening",
+      "samples": 55179,
+      "medianMin": 13.1,
+      "p90Min": 15.8,
+      "medianKm": 8.5
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-1",
+      "band": "midday",
+      "samples": 28023,
+      "medianMin": 13,
+      "p90Min": 15.8,
+      "medianKm": 8.4
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-1",
+      "band": "morning",
+      "samples": 12975,
+      "medianMin": 12.6,
+      "p90Min": 15.2,
+      "medianKm": 8.3
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-1",
+      "band": "night",
+      "samples": 5022,
+      "medianMin": 13.1,
+      "p90Min": 16,
+      "medianKm": 8.5
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-2",
+      "band": "evening",
+      "samples": 14654,
+      "medianMin": 15.9,
+      "p90Min": 17.5,
+      "medianKm": 10.4
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-2",
+      "band": "midday",
+      "samples": 6767,
+      "medianMin": 16.1,
+      "p90Min": 17.5,
+      "medianKm": 10.4
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-2",
+      "band": "morning",
+      "samples": 1953,
+      "medianMin": 16,
+      "p90Min": 17.5,
+      "medianKm": 10.4
+    },
+    {
+      "from": "male",
+      "to": "hulhumale-2",
+      "band": "night",
+      "samples": 1729,
+      "medianMin": 15.9,
+      "p90Min": 17.5,
+      "medianKm": 10.4
+    },
+    {
+      "from": "male",
+      "to": "male",
+      "band": "evening",
+      "samples": 153,
+      "medianMin": 5.3,
+      "p90Min": 5.8,
+      "medianKm": 2.5
+    },
+    {
+      "from": "male",
+      "to": "male",
+      "band": "midday",
+      "samples": 139,
+      "medianMin": 5.3,
+      "p90Min": 5.8,
+      "medianKm": 2.5
+    },
+    {
+      "from": "male",
+      "to": "male",
+      "band": "morning",
+      "samples": 197,
+      "medianMin": 5.3,
+      "p90Min": 5.7,
+      "medianKm": 2.5
+    },
+    {
+      "from": "male",
+      "to": "male",
+      "band": "night",
+      "samples": 41,
+      "medianMin": 5.2,
+      "p90Min": 5.9,
+      "medianKm": 2.5
+    },
+    {
+      "from": "male",
+      "to": "velana",
+      "band": "evening",
+      "samples": 7484,
+      "medianMin": 8.3,
+      "p90Min": 10,
+      "medianKm": 4.5
+    },
+    {
+      "from": "male",
+      "to": "velana",
+      "band": "midday",
+      "samples": 10219,
+      "medianMin": 8.3,
+      "p90Min": 10,
+      "medianKm": 4.5
+    },
+    {
+      "from": "male",
+      "to": "velana",
+      "band": "morning",
+      "samples": 12440,
+      "medianMin": 8.3,
+      "p90Min": 10,
+      "medianKm": 4.5
+    },
+    {
+      "from": "male",
+      "to": "velana",
+      "band": "night",
+      "samples": 3829,
+      "medianMin": 8.3,
+      "p90Min": 10.1,
+      "medianKm": 4.5
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-1",
+      "band": "evening",
+      "samples": 2010,
+      "medianMin": 10.6,
+      "p90Min": 13,
+      "medianKm": 6.7
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-1",
+      "band": "midday",
+      "samples": 1492,
+      "medianMin": 10.8,
+      "p90Min": 12.8,
+      "medianKm": 6.7
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-1",
+      "band": "morning",
+      "samples": 516,
+      "medianMin": 10.7,
+      "p90Min": 12.9,
+      "medianKm": 6.7
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-1",
+      "band": "night",
+      "samples": 205,
+      "medianMin": 11.4,
+      "p90Min": 13.8,
+      "medianKm": 7
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-2",
+      "band": "evening",
+      "samples": 440,
+      "medianMin": 13.4,
+      "p90Min": 14.9,
+      "medianKm": 8.6
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-2",
+      "band": "midday",
+      "samples": 333,
+      "medianMin": 13.6,
+      "p90Min": 15.1,
+      "medianKm": 8.7
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-2",
+      "band": "morning",
+      "samples": 120,
+      "medianMin": 13.4,
+      "p90Min": 14.7,
+      "medianKm": 8.6
+    },
+    {
+      "from": "velana",
+      "to": "hulhumale-2",
+      "band": "night",
+      "samples": 66,
+      "medianMin": 13.3,
+      "p90Min": 15,
+      "medianKm": 8.5
+    },
+    {
+      "from": "velana",
+      "to": "male",
+      "band": "evening",
+      "samples": 1386,
+      "medianMin": 7.8,
+      "p90Min": 10.7,
+      "medianKm": 4.2
+    },
+    {
+      "from": "velana",
+      "to": "male",
+      "band": "midday",
+      "samples": 1318,
+      "medianMin": 7.7,
+      "p90Min": 10.2,
+      "medianKm": 4.2
+    },
+    {
+      "from": "velana",
+      "to": "male",
+      "band": "morning",
+      "samples": 639,
+      "medianMin": 7.8,
+      "p90Min": 10.2,
+      "medianKm": 4.2
+    },
+    {
+      "from": "velana",
+      "to": "male",
+      "band": "night",
+      "samples": 232,
+      "medianMin": 7.9,
+      "p90Min": 10.3,
+      "medianKm": 4.3
+    },
+    {
+      "from": "velana",
+      "to": "velana",
+      "band": "evening",
+      "samples": 24,
+      "medianMin": 13.1,
+      "p90Min": 13.4,
+      "medianKm": 8.3
+    },
+    {
+      "from": "velana",
+      "to": "velana",
+      "band": "midday",
+      "samples": 11,
+      "medianMin": 6.3,
+      "p90Min": 13.1,
+      "medianKm": 3.5
+    },
+    {
+      "from": "velana",
+      "to": "velana",
+      "band": "morning",
+      "samples": 12,
+      "medianMin": 13,
+      "p90Min": 13.1,
+      "medianKm": 8.3
+    },
+    {
+      "from": "velana",
+      "to": "velana",
+      "band": "night",
+      "samples": 11,
+      "medianMin": 5.8,
+      "p90Min": 10.8,
+      "medianKm": 3.3
+    }
+  ],
+  "durationFallback": {
+    "intercept": 1.16,
+    "perKm": 1.415,
+    "r2": 0.952,
+    "samples": 344281
+  },
+  "fareFallback": {
+    "intercept": 59.11,
+    "perKm": 4.968,
+    "r2": 0.35,
+    "samples": 30
+  },
+  "bands": {
+    "night": {
+      "from": 0,
+      "to": 5
+    },
+    "morning": {
+      "from": 6,
+      "to": 10
+    },
+    "midday": {
+      "from": 11,
+      "to": 15
+    },
+    "evening": {
+      "from": 16,
+      "to": 23
+    }
+  }
+}

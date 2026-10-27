@@ -1,0 +1,2053 @@
+{
+ "schemaVersion": 1,
+ "notice": "Places are hand-curated with approximate coordinates (approximate=true unless checked). Timetables, fares and check-in cutoffs are SYNTHETIC illustrations, not operator data. Reliability priors are synthetic. See docs/data/PROFILE.md.",
+ "places": [
+  {
+   "id": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "slug": "kaafu",
+   "type": "atoll",
+   "name": {
+    "en": "Kaafu Atoll"
+   },
+   "lat": 4.35,
+   "lng": 73.55,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_1EKNTB776E6HTCAK87QGSE80PP",
+   "slug": "alif-alif",
+   "type": "atoll",
+   "name": {
+    "en": "Alif Alif Atoll"
+   },
+   "lat": 4.25,
+   "lng": 72.85,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_3M2X94VGQKNYWM5HMWHA4A006D",
+   "slug": "baa",
+   "type": "atoll",
+   "name": {
+    "en": "Baa Atoll"
+   },
+   "lat": 5.1,
+   "lng": 73.0,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_0ZRBAFE84AYBD298P68SEQZGZV",
+   "slug": "haa-alif",
+   "type": "atoll",
+   "name": {
+    "en": "Haa Alifu Atoll"
+   },
+   "lat": 6.8,
+   "lng": 73.0,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_0ZSMSMBQFDFV336TQJADM8ASWG",
+   "slug": "haa-dhaalu",
+   "type": "atoll",
+   "name": {
+    "en": "Haa Dhaalu Atoll"
+   },
+   "lat": 6.6,
+   "lng": 73.1,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_4HZA8WN7NSP761812HKBZ9PFB4",
+   "slug": "lhaviyani",
+   "type": "atoll",
+   "name": {
+    "en": "Lhaviyani Atoll"
+   },
+   "lat": 5.4,
+   "lng": 73.5,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_5KB4KCQKYM7HPKAAF63D0WP4CJ",
+   "slug": "noonu",
+   "type": "atoll",
+   "name": {
+    "en": "Noonu Atoll"
+   },
+   "lat": 5.8,
+   "lng": 73.4,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_7NQ888B3NJZ1STT3VPF82J6SVS",
+   "slug": "gaafu-alif",
+   "type": "atoll",
+   "name": {
+    "en": "Gaafu Alifu Atoll"
+   },
+   "lat": 0.7,
+   "lng": 73.4,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_6X06PN2J31WZBX3N0QAEX3WAVT",
+   "slug": "gaafu-dhaalu",
+   "type": "atoll",
+   "name": {
+    "en": "Gaafu Dhaalu Atoll"
+   },
+   "lat": 0.4,
+   "lng": 73.2,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_3K3EVCY88XZMTAYVYTH21AX8DS",
+   "slug": "laamu",
+   "type": "atoll",
+   "name": {
+    "en": "Laamu Atoll"
+   },
+   "lat": 1.9,
+   "lng": 73.4,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "atl_0ZW4XYZRHR5DEEVNXR0TREZD8Y",
+   "slug": "addu",
+   "type": "atoll",
+   "name": {
+    "en": "Addu City"
+   },
+   "lat": -0.63,
+   "lng": 73.15,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx"
+  },
+  {
+   "id": "isl_39BH89BXT3VC33XXGEAKPZSAH1",
+   "slug": "male",
+   "type": "island",
+   "name": {
+    "en": "Malé",
+    "dv": "މާލެ"
+   },
+   "lat": 4.1755,
+   "lng": 73.5093,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106"
+  },
+  {
+   "id": "isl_66MABDZYKHEZC3WT3VH1PVWZKG",
+   "slug": "hulhumale",
+   "type": "island",
+   "name": {
+    "en": "Hulhumalé",
+    "dv": "ހުޅުމާލެ"
+   },
+   "lat": 4.22,
+   "lng": 73.54,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106"
+  },
+  {
+   "id": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "slug": "velana",
+   "type": "airport",
+   "name": {
+    "en": "Velana International Airport",
+    "dv": "ވެލާނާ ބައިނަލްއަގްވާމީ ވައިގެ ބަނދަރު"
+   },
+   "lat": 4.1918,
+   "lng": 73.5291,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "code": "MLE"
+  },
+  {
+   "id": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "slug": "jty-male",
+   "type": "jetty",
+   "name": {
+    "en": "Malé Ferry Terminal"
+   },
+   "lat": 4.1796,
+   "lng": 73.5113,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "isl_39BH89BXT3VC33XXGEAKPZSAH1"
+  },
+  {
+   "id": "jty_6VCNMR61T8VPRRXR6ABPS4H7YJ",
+   "slug": "jty-hulhumale",
+   "type": "jetty",
+   "name": {
+    "en": "Hulhumalé Ferry Terminal"
+   },
+   "lat": 4.2171,
+   "lng": 73.5372,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "isl_66MABDZYKHEZC3WT3VH1PVWZKG"
+  },
+  {
+   "id": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "slug": "jty-velana",
+   "type": "jetty",
+   "name": {
+    "en": "Velana Airport Ferry Terminal"
+   },
+   "lat": 4.1895,
+   "lng": 73.5266,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK"
+  },
+  {
+   "id": "txs_1YEH5E9KD9YGP9EBSXHWMD0S11",
+   "slug": "txs-male",
+   "type": "taxi_stand",
+   "name": {
+    "en": "Malé (taxi zone)"
+   },
+   "lat": 4.1755,
+   "lng": 73.5093,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "isl_39BH89BXT3VC33XXGEAKPZSAH1",
+   "zoneKey": "male"
+  },
+  {
+   "id": "txs_017ZFXXAMXQAQRRTH8XPQ5GX6Z",
+   "slug": "txs-hulhumale-1",
+   "type": "taxi_stand",
+   "name": {
+    "en": "Hulhumalé Phase 1 (taxi zone)"
+   },
+   "lat": 4.217,
+   "lng": 73.54,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "isl_66MABDZYKHEZC3WT3VH1PVWZKG",
+   "zoneKey": "hulhumale-1"
+  },
+  {
+   "id": "txs_530BVCZYZ9N0CWSWW3D6MEFCM0",
+   "slug": "txs-hulhumale-2",
+   "type": "taxi_stand",
+   "name": {
+    "en": "Hulhumalé Phase 2 (taxi zone)"
+   },
+   "lat": 4.24,
+   "lng": 73.548,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "isl_66MABDZYKHEZC3WT3VH1PVWZKG",
+   "zoneKey": "hulhumale-2"
+  },
+  {
+   "id": "txs_1ZZX5DYY5782CD2TH62YJW8D99",
+   "slug": "txs-velana",
+   "type": "taxi_stand",
+   "name": {
+    "en": "Velana Airport (taxi zone)"
+   },
+   "lat": 4.1918,
+   "lng": 73.5291,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "zoneKey": "velana"
+  },
+  {
+   "id": "txs_5WCK1CZ525C92SQN7HRGEK73FF",
+   "slug": "txs-domestic",
+   "type": "taxi_stand",
+   "name": {
+    "en": "Domestic Terminal (taxi zone)"
+   },
+   "lat": 4.193,
+   "lng": 73.527,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "zoneKey": "domestic-terminal"
+  },
+  {
+   "id": "txs_5MYKBD3N1ZMP02F9M7E87KDNE0",
+   "slug": "txs-seaplane",
+   "type": "taxi_stand",
+   "name": {
+    "en": "Seaplane Terminal (taxi zone)"
+   },
+   "lat": 4.196,
+   "lng": 73.526,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106",
+   "parentId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "zoneKey": "seaplane"
+  },
+  {
+   "id": "isl_3J4M7RAMSYA0GV00MYVA92KY3S",
+   "slug": "maafushi",
+   "type": "island",
+   "name": {
+    "en": "Maafushi",
+    "dv": "މާފުށި"
+   },
+   "lat": 3.9425,
+   "lng": 73.49,
+   "isHub": false,
+   "approximate": false,
+   "source": "curated-osm-checked",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106"
+  },
+  {
+   "id": "isl_1AAY7DP3V1PEXTRX7HPF88JHXC",
+   "slug": "gulhi",
+   "type": "island",
+   "name": {
+    "en": "Gulhi"
+   },
+   "lat": 3.973,
+   "lng": 73.504,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106"
+  },
+  {
+   "id": "isl_72XH50D4YRRMQR9FXE7PWB8CT4",
+   "slug": "guraidhoo",
+   "type": "island",
+   "name": {
+    "en": "Guraidhoo"
+   },
+   "lat": 3.9002,
+   "lng": 73.4659,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106"
+  },
+  {
+   "id": "isl_7HYH808PGVV1QNK1SW3FPP0DVC",
+   "slug": "thulusdhoo",
+   "type": "island",
+   "name": {
+    "en": "Thulusdhoo"
+   },
+   "lat": 4.375,
+   "lng": 73.65,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0HNPWWJNQ4WXE8HCAMD24TN106"
+  },
+  {
+   "id": "isl_4ZTDV5F4RP7F6C6KC1WGCW41NR",
+   "slug": "rasdhoo",
+   "type": "island",
+   "name": {
+    "en": "Rasdhoo"
+   },
+   "lat": 4.263,
+   "lng": 72.989,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_1EKNTB776E6HTCAK87QGSE80PP"
+  },
+  {
+   "id": "isl_423A6NCD1SE5SXXSTZHKD0X4SB",
+   "slug": "ukulhas",
+   "type": "island",
+   "name": {
+    "en": "Ukulhas"
+   },
+   "lat": 4.2165,
+   "lng": 72.864,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_1EKNTB776E6HTCAK87QGSE80PP"
+  },
+  {
+   "id": "isl_7FDP37RPQ3G3Y3K4SQ5A66PZYS",
+   "slug": "thoddoo",
+   "type": "island",
+   "name": {
+    "en": "Thoddoo"
+   },
+   "lat": 4.4393,
+   "lng": 72.9644,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_1EKNTB776E6HTCAK87QGSE80PP"
+  },
+  {
+   "id": "isl_7GGCDE302S44SSE3ZK9NR0587V",
+   "slug": "mathiveri",
+   "type": "island",
+   "name": {
+    "en": "Mathiveri"
+   },
+   "lat": 4.1934,
+   "lng": 72.7476,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_1EKNTB776E6HTCAK87QGSE80PP"
+  },
+  {
+   "id": "isl_4DTT31R65XS5QFDAYGSJAVG2BH",
+   "slug": "isl-gan",
+   "type": "island",
+   "name": {
+    "en": "Gan"
+   },
+   "lat": -0.693,
+   "lng": 73.156,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0ZW4XYZRHR5DEEVNXR0TREZD8Y"
+  },
+  {
+   "id": "apt_2JGRG50XKXSE1VPHTMH2F6AQZR",
+   "slug": "apt-gan",
+   "type": "airport",
+   "name": {
+    "en": "Gan International Airport"
+   },
+   "lat": -0.6908,
+   "lng": 73.1557,
+   "isHub": true,
+   "approximate": false,
+   "source": "curated-osm-checked",
+   "atollId": "atl_0ZW4XYZRHR5DEEVNXR0TREZD8Y",
+   "parentId": "isl_4DTT31R65XS5QFDAYGSJAVG2BH",
+   "code": "GAN"
+  },
+  {
+   "id": "isl_29ZGJMAP18VEMWVG719AGK6SNJ",
+   "slug": "isl-hanimaadhoo",
+   "type": "island",
+   "name": {
+    "en": "Hanimaadhoo"
+   },
+   "lat": 6.743,
+   "lng": 73.17,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0ZSMSMBQFDFV336TQJADM8ASWG"
+  },
+  {
+   "id": "apt_0RD77MJWCNA69H67JS0PZX4HQ1",
+   "slug": "apt-hanimaadhoo",
+   "type": "airport",
+   "name": {
+    "en": "Hanimaadhoo International Airport"
+   },
+   "lat": 6.7442,
+   "lng": 73.1705,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_0ZSMSMBQFDFV336TQJADM8ASWG",
+   "parentId": "isl_29ZGJMAP18VEMWVG719AGK6SNJ",
+   "code": "HAQ"
+  },
+  {
+   "id": "isl_4CJKG2ZTC9FGSX5JJXRQK0QBC8",
+   "slug": "isl-dharavandhoo",
+   "type": "island",
+   "name": {
+    "en": "Dharavandhoo"
+   },
+   "lat": 5.156,
+   "lng": 73.129,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_3M2X94VGQKNYWM5HMWHA4A006D"
+  },
+  {
+   "id": "apt_4BRWXWE0XGA328M39H0B94G15H",
+   "slug": "apt-dharavandhoo",
+   "type": "airport",
+   "name": {
+    "en": "Dharavandhoo Airport"
+   },
+   "lat": 5.1561,
+   "lng": 73.1301,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_3M2X94VGQKNYWM5HMWHA4A006D",
+   "parentId": "isl_4CJKG2ZTC9FGSX5JJXRQK0QBC8",
+   "code": "DRV"
+  },
+  {
+   "id": "isl_166Z45G0N25RVK0YDXJ6QJ4E71",
+   "slug": "isl-kaadedhdhoo",
+   "type": "island",
+   "name": {
+    "en": "Kaadedhdhoo"
+   },
+   "lat": 0.487,
+   "lng": 73.464,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_6X06PN2J31WZBX3N0QAEX3WAVT"
+  },
+  {
+   "id": "apt_4VY9ZMJVTDCJBJ4R9W6WWPMTS6",
+   "slug": "apt-kaadedhdhoo",
+   "type": "airport",
+   "name": {
+    "en": "Kaadedhdhoo Airport"
+   },
+   "lat": 0.4881,
+   "lng": 73.465,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_6X06PN2J31WZBX3N0QAEX3WAVT",
+   "parentId": "isl_166Z45G0N25RVK0YDXJ6QJ4E71",
+   "code": "KDM"
+  },
+  {
+   "id": "isl_1NBQF0FDKZ3TM9NMN6T38ABW79",
+   "slug": "isl-kooddoo",
+   "type": "island",
+   "name": {
+    "en": "Kooddoo"
+   },
+   "lat": 0.732,
+   "lng": 73.433,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_7NQ888B3NJZ1STT3VPF82J6SVS"
+  },
+  {
+   "id": "apt_4QEKYG7SF5SXEV57R2CCJS1MTH",
+   "slug": "apt-kooddoo",
+   "type": "airport",
+   "name": {
+    "en": "Kooddoo Airport"
+   },
+   "lat": 0.7329,
+   "lng": 73.4344,
+   "isHub": true,
+   "approximate": false,
+   "source": "curated-osm-checked",
+   "atollId": "atl_7NQ888B3NJZ1STT3VPF82J6SVS",
+   "parentId": "isl_1NBQF0FDKZ3TM9NMN6T38ABW79",
+   "code": "GKK"
+  },
+  {
+   "id": "isl_3Q00P105YATCTHA7RS7SYRK8CR",
+   "slug": "isl-kadhdhoo",
+   "type": "island",
+   "name": {
+    "en": "Kadhdhoo"
+   },
+   "lat": 1.858,
+   "lng": 73.521,
+   "isHub": false,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_3K3EVCY88XZMTAYVYTH21AX8DS"
+  },
+  {
+   "id": "apt_511KNMFF92JCVMTVAQVHV5KRZE",
+   "slug": "apt-kadhdhoo",
+   "type": "airport",
+   "name": {
+    "en": "Kadhdhoo Airport"
+   },
+   "lat": 1.8592,
+   "lng": 73.5219,
+   "isHub": true,
+   "approximate": true,
+   "source": "curated-approx",
+   "atollId": "atl_3K3EVCY88XZMTAYVYTH21AX8DS",
+   "parentId": "isl_3Q00P105YATCTHA7RS7SYRK8CR",
+   "code": "KDO"
+  }
+ ],
+ "operators": [
+  {
+   "id": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "slug": "mtcc",
+   "name": {
+    "en": "Maldives Transport and Contracting Company (MTCC)"
+   },
+   "modes": [
+    "ferry"
+   ],
+   "providerId": "mtcc",
+   "providerKind": "mock",
+   "website": "https://www.mtcc.com.mv"
+  },
+  {
+   "id": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "slug": "island-speedboats",
+   "name": {
+    "en": "Public speedboat operators (illustrative)"
+   },
+   "modes": [
+    "speedboat"
+   ],
+   "providerId": "speedboats",
+   "providerKind": "mock"
+  },
+  {
+   "id": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "slug": "manta-air",
+   "name": {
+    "en": "Manta Air"
+   },
+   "modes": [
+    "domestic_flight"
+   ],
+   "providerId": "manta-air",
+   "providerKind": "mock",
+   "website": "https://www.mantaair.com"
+  },
+  {
+   "id": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "slug": "maldivian",
+   "name": {
+    "en": "Maldivian"
+   },
+   "modes": [
+    "domestic_flight"
+   ],
+   "providerId": "maldivian",
+   "providerKind": "mock",
+   "website": "https://www.maldivian.aero"
+  },
+  {
+   "id": "opr_03MT5QQ5TTNBXCRSY0GKPBGSDX",
+   "slug": "avas",
+   "name": {
+    "en": "Avas Ride"
+   },
+   "modes": [
+    "taxi"
+   ],
+   "providerId": "avas",
+   "providerKind": "mock"
+  }
+ ],
+ "services": [
+  {
+   "id": "svc_6NQQY2E2CRVX66AVRNJ1169K8W",
+   "slug": "mtcc-male-hulhumale-out",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "jty_6VCNMR61T8VPRRXR6ABPS4H7YJ",
+   "durationMin": 30,
+   "fareMinor": 1500,
+   "pricing": "fixed",
+   "checkInCutoffMin": 10,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "frequency": {
+    "first": "05:30",
+    "last": "23:30",
+    "headwayMin": 30
+   },
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_1ZRX1NSVEZDGH5DEGAHFGVMP64",
+   "slug": "mtcc-male-hulhumale-back",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "jty_6VCNMR61T8VPRRXR6ABPS4H7YJ",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 30,
+   "fareMinor": 1500,
+   "pricing": "fixed",
+   "checkInCutoffMin": 10,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "frequency": {
+    "first": "05:45",
+    "last": "23:45",
+    "headwayMin": 30
+   },
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_3RB7HDV1DHVKKYRB4EWQK2KXRX",
+   "slug": "mtcc-male-velana-out",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "durationMin": 10,
+   "fareMinor": 1000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 5,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "frequency": {
+    "first": "04:00",
+    "last": "23:50",
+    "headwayMin": 15
+   },
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_06EMBS1ZCK4QPWHZP82NEV22NE",
+   "slug": "mtcc-male-velana-back",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 10,
+   "fareMinor": 1000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 5,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "frequency": {
+    "first": "04:05",
+    "last": "23:55",
+    "headwayMin": 15
+   },
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_3YFTJQ5J6XKB1W1DDR11F5A4BH",
+   "slug": "speedboat-male-maafushi-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_3J4M7RAMSYA0GV00MYVA92KY3S",
+   "durationMin": 55,
+   "fareMinor": 35000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "08:30",
+    "11:00",
+    "14:00",
+    "16:30"
+   ]
+  },
+  {
+   "id": "svc_5C28K27W3D3X7RGEY3QRMCRZHZ",
+   "slug": "speedboat-male-maafushi-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_3J4M7RAMSYA0GV00MYVA92KY3S",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 55,
+   "fareMinor": 35000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:00",
+    "09:30",
+    "12:30",
+    "15:30"
+   ]
+  },
+  {
+   "id": "svc_24Q019CJCY0RKG7ZVD9WVYVQ04",
+   "slug": "speedboat-male-gulhi-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_1AAY7DP3V1PEXTRX7HPF88JHXC",
+   "durationMin": 40,
+   "fareMinor": 25000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:00",
+    "13:00",
+    "16:00"
+   ]
+  },
+  {
+   "id": "svc_232AHHA60424HTCPXGNH99WCGK",
+   "slug": "speedboat-male-gulhi-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_1AAY7DP3V1PEXTRX7HPF88JHXC",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 40,
+   "fareMinor": 25000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:30",
+    "11:00",
+    "14:30"
+   ]
+  },
+  {
+   "id": "svc_4FNGQKN83QSE7TEHWDRAQWNZVZ",
+   "slug": "speedboat-male-guraidhoo-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_72XH50D4YRRMQR9FXE7PWB8CT4",
+   "durationMin": 60,
+   "fareMinor": 30000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:30",
+    "14:30"
+   ]
+  },
+  {
+   "id": "svc_6EZ5PG0T815CENTTB75TN2FEHV",
+   "slug": "speedboat-male-guraidhoo-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_72XH50D4YRRMQR9FXE7PWB8CT4",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 60,
+   "fareMinor": 30000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:30",
+    "12:00"
+   ]
+  },
+  {
+   "id": "svc_5D86AF6ZQ9EBP72RA4VXSA4PAR",
+   "slug": "speedboat-male-thulusdhoo-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_7HYH808PGVV1QNK1SW3FPP0DVC",
+   "durationMin": 45,
+   "fareMinor": 30000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "08:45",
+    "13:30",
+    "16:45"
+   ]
+  },
+  {
+   "id": "svc_2GF9BRBM2X90230F1H2JC4ZPWD",
+   "slug": "speedboat-male-thulusdhoo-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_7HYH808PGVV1QNK1SW3FPP0DVC",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 45,
+   "fareMinor": 30000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:15",
+    "11:15",
+    "15:00"
+   ]
+  },
+  {
+   "id": "svc_7P9RVXFC10WJFKBTVMTGXCNXYV",
+   "slug": "speedboat-male-rasdhoo-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_4ZTDV5F4RP7F6C6KC1WGCW41NR",
+   "durationMin": 100,
+   "fareMinor": 65000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:00",
+    "15:00"
+   ]
+  },
+  {
+   "id": "svc_3N9647M4ZCK5AFMS99BPKAFXZV",
+   "slug": "speedboat-male-rasdhoo-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_4ZTDV5F4RP7F6C6KC1WGCW41NR",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 100,
+   "fareMinor": 65000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:00",
+    "12:30"
+   ]
+  },
+  {
+   "id": "svc_1S5QZ2C964PVNT2S8DXJ22NQ45",
+   "slug": "speedboat-male-ukulhas-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_423A6NCD1SE5SXXSTZHKD0X4SB",
+   "durationMin": 120,
+   "fareMinor": 70000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:00"
+   ]
+  },
+  {
+   "id": "svc_0MS8973MGPE4G39VQK51P8JZRK",
+   "slug": "speedboat-male-ukulhas-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_423A6NCD1SE5SXXSTZHKD0X4SB",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 120,
+   "fareMinor": 70000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:00"
+   ]
+  },
+  {
+   "id": "svc_1MGDG6RERCZMKS3FJFX0ZSKDAE",
+   "slug": "speedboat-male-thoddoo-out",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_7FDP37RPQ3G3Y3K4SQ5A66PZYS",
+   "durationMin": 110,
+   "fareMinor": 65000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:30"
+   ]
+  },
+  {
+   "id": "svc_6HD241X9FN2MZTMF7MJR0VN0AY",
+   "slug": "speedboat-male-thoddoo-back",
+   "operatorId": "opr_295R7GRDGYHCQ7EG95AAK14A02",
+   "mode": "speedboat",
+   "fromId": "isl_7FDP37RPQ3G3Y3K4SQ5A66PZYS",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 110,
+   "fareMinor": 65000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 20,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:30"
+   ]
+  },
+  {
+   "id": "svc_2FP4WXMFQAPA7S8MR0Z7C425RA",
+   "slug": "mtcc-ferry-male-maafushi-out",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_3J4M7RAMSYA0GV00MYVA92KY3S",
+   "durationMin": 180,
+   "fareMinor": 5000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 15,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "15:30"
+   ],
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_43ZT115C5D1ACQNXPD9P1XMQV2",
+   "slug": "mtcc-ferry-male-maafushi-back",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "isl_3J4M7RAMSYA0GV00MYVA92KY3S",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 180,
+   "fareMinor": 5000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 15,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:30"
+   ],
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_6V7ZQG9GE5MZ41SHFEDBH82HGV",
+   "slug": "mtcc-ferry-male-rasdhoo-out",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "isl_4ZTDV5F4RP7F6C6KC1WGCW41NR",
+   "durationMin": 270,
+   "fareMinor": 8000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 15,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "15:00"
+   ],
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_4DBQZDAH906PEF24YBWD5BX8P9",
+   "slug": "mtcc-ferry-male-rasdhoo-back",
+   "operatorId": "opr_5YQWA8R0W9F90KFFNKF4ZWFD93",
+   "mode": "ferry",
+   "fromId": "isl_4ZTDV5F4RP7F6C6KC1WGCW41NR",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "durationMin": 270,
+   "fareMinor": 8000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 15,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "06:30"
+   ],
+   "childDiscountPercent": 50
+  },
+  {
+   "id": "svc_365QD9617Y0GARNBKCMGTNRT30",
+   "slug": "flight-mle-gan-out",
+   "operatorId": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "mode": "domestic_flight",
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "apt_2JGRG50XKXSE1VPHTMH2F6AQZR",
+   "durationMin": 75,
+   "fareMinor": 240000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "07:30",
+    "13:15",
+    "17:00"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_5N21405ZFDVR8AJ7PKXBNF1F39",
+   "slug": "flight-mle-gan-back",
+   "operatorId": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "mode": "domestic_flight",
+   "fromId": "apt_2JGRG50XKXSE1VPHTMH2F6AQZR",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "durationMin": 75,
+   "fareMinor": 240000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:30",
+    "15:20",
+    "19:00"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_04MVAHBFN1H6FHHYXBTXNS0E3Y",
+   "slug": "flight-mle-hanimaadhoo-out",
+   "operatorId": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "mode": "domestic_flight",
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "apt_0RD77MJWCNA69H67JS0PZX4HQ1",
+   "durationMin": 70,
+   "fareMinor": 220000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "08:00",
+    "14:30"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_510J02GNDGYFM2JW45C7X9N0PK",
+   "slug": "flight-mle-hanimaadhoo-back",
+   "operatorId": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "mode": "domestic_flight",
+   "fromId": "apt_0RD77MJWCNA69H67JS0PZX4HQ1",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "durationMin": 70,
+   "fareMinor": 220000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "10:00",
+    "16:30"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_2EQ7H2NNVZ8E5DMX1W6RYGN2NA",
+   "slug": "flight-mle-dharavandhoo-out",
+   "operatorId": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "mode": "domestic_flight",
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "apt_4BRWXWE0XGA328M39H0B94G15H",
+   "durationMin": 40,
+   "fareMinor": 160000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:00",
+    "15:30"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_02DR1YEVKN3X9XRHWH6EJDQ2Z3",
+   "slug": "flight-mle-dharavandhoo-back",
+   "operatorId": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "mode": "domestic_flight",
+   "fromId": "apt_4BRWXWE0XGA328M39H0B94G15H",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "durationMin": 40,
+   "fareMinor": 160000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "10:30",
+    "17:00"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_792Q5PWN804ZWRN3B1EE49C1JF",
+   "slug": "flight-mle-kaadedhdhoo-out",
+   "operatorId": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "mode": "domestic_flight",
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "apt_4VY9ZMJVTDCJBJ4R9W6WWPMTS6",
+   "durationMin": 60,
+   "fareMinor": 200000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "08:30",
+    "14:00"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_19ESERBBA6A2CZT9AN8KNG1QKF",
+   "slug": "flight-mle-kaadedhdhoo-back",
+   "operatorId": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "mode": "domestic_flight",
+   "fromId": "apt_4VY9ZMJVTDCJBJ4R9W6WWPMTS6",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "durationMin": 60,
+   "fareMinor": 200000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "10:15",
+    "15:45"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_615MWEK6VNMFAQ2RH6WDR6HPQC",
+   "slug": "flight-mle-kooddoo-out",
+   "operatorId": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "mode": "domestic_flight",
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "apt_4QEKYG7SF5SXEV57R2CCJS1MTH",
+   "durationMin": 55,
+   "fareMinor": 190000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "09:15",
+    "16:00"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_6K8WS241TG5FE52F3FC3XTMJFC",
+   "slug": "flight-mle-kooddoo-back",
+   "operatorId": "opr_6EPP4KSSN6JFYMEC2V4CG7DTN8",
+   "mode": "domestic_flight",
+   "fromId": "apt_4QEKYG7SF5SXEV57R2CCJS1MTH",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "durationMin": 55,
+   "fareMinor": 190000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "10:45",
+    "17:30"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_63SFJHP69KEMN38T9CKPSG3HRE",
+   "slug": "flight-mle-kadhdhoo-out",
+   "operatorId": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "mode": "domestic_flight",
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "apt_511KNMFF92JCVMTVAQVHV5KRZE",
+   "durationMin": 50,
+   "fareMinor": 180000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "10:00",
+    "16:15"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_2WR0JZZJZAVG4NR82FPA70MQQE",
+   "slug": "flight-mle-kadhdhoo-back",
+   "operatorId": "opr_52F6250W69KBZGG560WTNHQWZ3",
+   "mode": "domestic_flight",
+   "fromId": "apt_511KNMFF92JCVMTVAQVHV5KRZE",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "durationMin": 50,
+   "fareMinor": 180000,
+   "pricing": "fixed",
+   "checkInCutoffMin": 60,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": true,
+   "cutoffVerified": false,
+   "times": [
+    "11:30",
+    "17:45"
+   ],
+   "childDiscountPercent": 75
+  },
+  {
+   "id": "svc_0JFZD52SSM5VCQGYM337QHXEZ7",
+   "slug": "avas-taxi-greater-male",
+   "operatorId": "opr_03MT5QQ5TTNBXCRSY0GKPBGSDX",
+   "mode": "taxi",
+   "fromId": null,
+   "toId": null,
+   "durationMin": 0,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "checkInCutoffMin": 0,
+   "daysOfWeek": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "validFrom": "2026-01-01",
+   "synthetic": false,
+   "cutoffVerified": true,
+   "onDemand": true
+  }
+ ],
+ "minTransfers": [
+  {
+   "placeId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "fromMode": "ferry",
+   "toMode": "speedboat",
+   "minutes": 15,
+   "verified": false
+  },
+  {
+   "placeId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "fromMode": "speedboat",
+   "toMode": "ferry",
+   "minutes": 15,
+   "verified": false
+  },
+  {
+   "placeId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "fromMode": "speedboat",
+   "toMode": "speedboat",
+   "minutes": 10,
+   "verified": false
+  },
+  {
+   "placeId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "fromMode": "ferry",
+   "toMode": "domestic_flight",
+   "minutes": 25,
+   "verified": false
+  },
+  {
+   "placeId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "fromMode": "domestic_flight",
+   "toMode": "ferry",
+   "minutes": 30,
+   "verified": false
+  },
+  {
+   "placeId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "fromMode": "taxi",
+   "toMode": "domestic_flight",
+   "minutes": 15,
+   "verified": false
+  },
+  {
+   "placeId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "fromMode": "domestic_flight",
+   "toMode": "taxi",
+   "minutes": 25,
+   "verified": false
+  },
+  {
+   "placeId": "jty_6VCNMR61T8VPRRXR6ABPS4H7YJ",
+   "fromMode": "ferry",
+   "toMode": "taxi",
+   "minutes": 5,
+   "verified": false
+  }
+ ],
+ "links": [
+  {
+   "fromId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "toId": "txs_1YEH5E9KD9YGP9EBSXHWMD0S11",
+   "mode": "walk",
+   "durationMin": 3,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_1YEH5E9KD9YGP9EBSXHWMD0S11",
+   "toId": "jty_3VFR3FB17YFVWTM6MZZVG8WNNP",
+   "mode": "walk",
+   "durationMin": 3,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "jty_6VCNMR61T8VPRRXR6ABPS4H7YJ",
+   "toId": "txs_017ZFXXAMXQAQRRTH8XPQ5GX6Z",
+   "mode": "walk",
+   "durationMin": 5,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_017ZFXXAMXQAQRRTH8XPQ5GX6Z",
+   "toId": "jty_6VCNMR61T8VPRRXR6ABPS4H7YJ",
+   "mode": "walk",
+   "durationMin": 5,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "mode": "walk",
+   "durationMin": 10,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "mode": "walk",
+   "durationMin": 10,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "toId": "txs_1ZZX5DYY5782CD2TH62YJW8D99",
+   "mode": "walk",
+   "durationMin": 8,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_1ZZX5DYY5782CD2TH62YJW8D99",
+   "toId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "mode": "walk",
+   "durationMin": 8,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "toId": "txs_5WCK1CZ525C92SQN7HRGEK73FF",
+   "mode": "walk",
+   "durationMin": 9,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_5WCK1CZ525C92SQN7HRGEK73FF",
+   "toId": "jty_0TFEJNT7XVVH17VAFVEGW8WB5F",
+   "mode": "walk",
+   "durationMin": 9,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_1ZZX5DYY5782CD2TH62YJW8D99",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "mode": "walk",
+   "durationMin": 5,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "txs_1ZZX5DYY5782CD2TH62YJW8D99",
+   "mode": "walk",
+   "durationMin": 5,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_5WCK1CZ525C92SQN7HRGEK73FF",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "mode": "walk",
+   "durationMin": 4,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "txs_5WCK1CZ525C92SQN7HRGEK73FF",
+   "mode": "walk",
+   "durationMin": 4,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "txs_5MYKBD3N1ZMP02F9M7E87KDNE0",
+   "toId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "mode": "walk",
+   "durationMin": 8,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_3DB5FSPTX9JBM1FVZZWJD2HWAK",
+   "toId": "txs_5MYKBD3N1ZMP02F9M7E87KDNE0",
+   "mode": "walk",
+   "durationMin": 8,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "isl_4DTT31R65XS5QFDAYGSJAVG2BH",
+   "toId": "apt_2JGRG50XKXSE1VPHTMH2F6AQZR",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_2JGRG50XKXSE1VPHTMH2F6AQZR",
+   "toId": "isl_4DTT31R65XS5QFDAYGSJAVG2BH",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "isl_29ZGJMAP18VEMWVG719AGK6SNJ",
+   "toId": "apt_0RD77MJWCNA69H67JS0PZX4HQ1",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_0RD77MJWCNA69H67JS0PZX4HQ1",
+   "toId": "isl_29ZGJMAP18VEMWVG719AGK6SNJ",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "isl_4CJKG2ZTC9FGSX5JJXRQK0QBC8",
+   "toId": "apt_4BRWXWE0XGA328M39H0B94G15H",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_4BRWXWE0XGA328M39H0B94G15H",
+   "toId": "isl_4CJKG2ZTC9FGSX5JJXRQK0QBC8",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "isl_166Z45G0N25RVK0YDXJ6QJ4E71",
+   "toId": "apt_4VY9ZMJVTDCJBJ4R9W6WWPMTS6",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_4VY9ZMJVTDCJBJ4R9W6WWPMTS6",
+   "toId": "isl_166Z45G0N25RVK0YDXJ6QJ4E71",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "isl_1NBQF0FDKZ3TM9NMN6T38ABW79",
+   "toId": "apt_4QEKYG7SF5SXEV57R2CCJS1MTH",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_4QEKYG7SF5SXEV57R2CCJS1MTH",
+   "toId": "isl_1NBQF0FDKZ3TM9NMN6T38ABW79",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "isl_3Q00P105YATCTHA7RS7SYRK8CR",
+   "toId": "apt_511KNMFF92JCVMTVAQVHV5KRZE",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  },
+  {
+   "fromId": "apt_511KNMFF92JCVMTVAQVHV5KRZE",
+   "toId": "isl_3Q00P105YATCTHA7RS7SYRK8CR",
+   "mode": "walk",
+   "durationMin": 15,
+   "fareMinor": 0,
+   "pricing": "fixed",
+   "approximate": true
+  }
+ ],
+ "reliabilityPriors": [
+  {
+   "mode": "ferry",
+   "onTimeRate": 0.88,
+   "p90DelayMin": 15,
+   "samples": 0,
+   "synthetic": true
+  },
+  {
+   "mode": "speedboat",
+   "onTimeRate": 0.92,
+   "p90DelayMin": 10,
+   "samples": 0,
+   "synthetic": true
+  },
+  {
+   "mode": "domestic_flight",
+   "onTimeRate": 0.78,
+   "p90DelayMin": 35,
+   "samples": 0,
+   "synthetic": true
+  },
+  {
+   "mode": "seaplane",
+   "onTimeRate": 0.8,
+   "p90DelayMin": 30,
+   "samples": 0,
+   "synthetic": true
+  },
+  {
+   "mode": "taxi",
+   "onTimeRate": 0.97,
+   "p90DelayMin": 5,
+   "samples": 0,
+   "synthetic": true
+  },
+  {
+   "mode": "bus",
+   "onTimeRate": 0.85,
+   "p90DelayMin": 12,
+   "samples": 0,
+   "synthetic": true
+  }
+ ]
+}

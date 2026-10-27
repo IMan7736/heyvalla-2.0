@@ -1,0 +1,15 @@
+packages:
+  - "apps/web"
+  - "packages/*"
+
+# Dependency install scripts: deny by default, allow only what is needed.
+allowBuilds:
+  "@scarf/scarf": false
+  "@parcel/watcher": false
+  "@swc/core": false
+  unrs-resolver: false
+  esbuild: true
+
+minimumReleaseAgeExclude:
+  - "@maplibre/vt-pbf@4.3.3"
+  - maplibre-gl@6.16.0

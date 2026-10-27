@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\Dhathuru.Domain\Dhathuru.Domain.csproj" />
+    <ProjectReference Include="..\Dhathuru.Catalog\Dhathuru.Catalog.csproj" />
+    <ProjectReference Include="..\Dhathuru.Integrations\Dhathuru.Integrations.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Dhathuru.DataTools.Tests" />
+  </ItemGroup>
+</Project>

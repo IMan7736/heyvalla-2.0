@@ -1,0 +1,15 @@
+Cursor:
+  name: cursor
+  in: query
+  description: Opaque cursor from a previous page.
+  schema: { type: string }
+Limit:
+  name: limit
+  in: query
+  schema: { type: integer, minimum: 1, maximum: 200, default: 50 }
+IdempotencyKey:
+  name: Idempotency-Key
+  in: header
+  required: true
+  description: Client generated unique key (UUID or ULID). Replays return the original result.
+  schema: { type: string, minLength: 8, maxLength: 128 }

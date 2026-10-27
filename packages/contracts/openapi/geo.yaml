@@ -1,0 +1,72 @@
+# Owner: COMPASS + KANDU (geo). Additive edits are free; breaking changes need a handoff to ATOLL.
+openapi: 3.1.0
+info: { title: Dhathuru geo, version: 1.0.0 }
+paths:
+  /geo/legs:
+    get:
+      operationId: getLegGeometries
+      tags: [Geo]
+      summary: Route geometry for legs
+      description: Sea routes are illustrative, never navigational; every feature is flagged `approximate`.
+      security: []
+      parameters:
+        - name: ids
+          in: query
+          required: true
+          description: Comma separated leg ids or geometry refs.
+          schema: { type: string }
+          example: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2,leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+      responses:
+        "200":
+          description: One GeoJSON LineString feature per requested leg.
+          content:
+            application/geo+json:
+              schema: { $ref: "#/components/schemas/LegFeatureCollection" }
+              example:
+                type: FeatureCollection
+                features:
+                  - type: Feature
+                    properties:
+                      { legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2, mode: ferry, approximate: true }
+                    geometry:
+                      {
+                        type: LineString,
+                        coordinates: [[73.4896, 3.9417], [73.5100, 4.0800], [73.5408, 4.2185]],
+                      }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+components:
+  schemas:
+    LegFeatureCollection:
+      type: object
+      required: [type, features]
+      properties:
+        type: { type: string, enum: [FeatureCollection] }
+        features:
+          type: array
+          items: { $ref: "#/components/schemas/LegFeature" }
+    LegFeature:
+      type: object
+      required: [type, properties, geometry]
+      properties:
+        type: { type: string, enum: [Feature] }
+        properties:
+          type: object
+          required: [legId, mode, approximate]
+          properties:
+            legId: { $ref: "./components/schemas.yaml#/LegId" }
+            mode: { $ref: "./components/schemas.yaml#/TransportMode" }
+            approximate: { type: boolean }
+        geometry:
+          type: object
+          required: [type, coordinates]
+          properties:
+            type: { type: string, enum: [LineString] }
+            coordinates:
+              type: array
+              description: "[lng, lat] pairs."
+              items:
+                type: array
+                minItems: 2
+                maxItems: 2
+                items: { type: number }

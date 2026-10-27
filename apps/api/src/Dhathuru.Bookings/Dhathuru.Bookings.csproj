@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <ProjectReference Include="..\Dhathuru.Domain\Dhathuru.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Policies\cancellation-policies.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Dhathuru.Bookings.Tests" />
+  </ItemGroup>
+</Project>

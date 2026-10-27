@@ -1,0 +1,86 @@
+BadRequest:
+  description: Malformed request.
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        {
+          type: "https://dhathuru.mv/problems/bad-request",
+          title: Bad request,
+          status: 400,
+          code: BAD_REQUEST,
+        }
+Unauthorized:
+  description: Missing, invalid or expired credentials.
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        {
+          type: "https://dhathuru.mv/problems/unauthorized",
+          title: Unauthorized,
+          status: 401,
+          code: AUTH_REQUIRED,
+        }
+Forbidden:
+  description: Authenticated but not allowed.
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        {
+          type: "https://dhathuru.mv/problems/forbidden",
+          title: Forbidden,
+          status: 403,
+          code: FORBIDDEN,
+        }
+NotFound:
+  description: Resource does not exist (or is not visible to the caller).
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        {
+          type: "https://dhathuru.mv/problems/not-found",
+          title: Not found,
+          status: 404,
+          code: NOT_FOUND,
+        }
+Conflict:
+  description: State conflict (for example an idempotency key reused with a different body).
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        {
+          type: "https://dhathuru.mv/problems/conflict",
+          title: Conflict,
+          status: 409,
+          code: IDEMPOTENCY_KEY_REUSED,
+        }
+ValidationFailed:
+  description: Request failed validation.
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        type: "https://dhathuru.mv/problems/validation"
+        title: Validation failed
+        status: 422
+        code: VALIDATION_FAILED
+        errors: [{ field: email, code: INVALID_EMAIL }]
+TooManyRequests:
+  description: Rate limit exceeded.
+  headers:
+    Retry-After: { schema: { type: integer }, description: Seconds to wait. }
+  content:
+    application/problem+json:
+      schema: { $ref: "./schemas.yaml#/Problem" }
+      example:
+        {
+          type: "https://dhathuru.mv/problems/rate-limited",
+          title: Too many requests,
+          status: 429,
+          code: RATE_LIMITED,
+          params: { retryAfterSeconds: 30 },
+        }

@@ -1,0 +1,19 @@
+{
+  "notFound": {
+    "title": "This island isn't on our chart",
+    "description": "The page you're looking for has moved or never existed. Let's get you back on course.",
+    "home": "Back to the start",
+    "plan": "Plan a trip"
+  },
+  "error": {
+    "title": "We hit a reef",
+    "description": "Something went wrong on our side. Your trip details are safe. Try again, or head back to the start.",
+    "retry": "Try again",
+    "home": "Back to the start"
+  },
+  "offline": {
+    "title": "You're offline",
+    "description": "We can't reach Dhathuru right now. Tickets you've already saved stay available. We'll reconnect when you do.",
+    "retry": "Check connection"
+  }
+}

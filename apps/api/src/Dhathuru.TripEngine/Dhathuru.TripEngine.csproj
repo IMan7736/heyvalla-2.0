@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Dhathuru.Domain\Dhathuru.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Dhathuru.TripEngine.Tests" />
+    <InternalsVisibleTo Include="Dhathuru.TripEngine.Benchmarks" />
+    <InternalsVisibleTo Include="Dhathuru.TripEngine.Cli" />
+  </ItemGroup>
+</Project>

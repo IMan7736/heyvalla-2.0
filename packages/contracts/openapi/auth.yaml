@@ -1,0 +1,544 @@
+# Owner: DHONI (Identity). Additive edits are free; breaking changes need a handoff to ATOLL.
+openapi: 3.1.0
+info: { title: Dhathuru auth and account, version: 1.0.0 }
+paths:
+  /auth/register:
+    post:
+      operationId: register
+      tags: [Auth]
+      summary: Create an account
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RegisterRequest" }
+            example:
+              {
+                email: aishath@example.com,
+                password: "correct horse battery staple",
+                displayName: Aishath,
+                locale: en,
+              }
+      responses:
+        "202":
+          description: Always returned, whether or not the address is already registered (no account enumeration). A verification email, or an "already registered" email, is sent.
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+        "429": { $ref: "./components/responses.yaml#/TooManyRequests" }
+  /auth/login:
+    post:
+      operationId: login
+      tags: [Auth]
+      summary: Exchange credentials for tokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/LoginRequest" }
+            example: { email: aishath@example.com, password: "correct horse battery staple" }
+      responses:
+        "200":
+          description: Authenticated.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TokenPair" }
+              example:
+                {
+                  accessToken: "eyJhbGciOiJFUzI1NiJ9.example.signature",
+                  refreshToken: "rt_example_not_a_real_token",
+                  tokenType: Bearer,
+                  expiresIn: 900,
+                }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "429": { $ref: "./components/responses.yaml#/TooManyRequests" }
+  /auth/refresh:
+    post:
+      operationId: refreshTokens
+      tags: [Auth]
+      summary: Rotate the refresh token and get a new access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RefreshRequest" }
+            example: { refreshToken: "rt_example_not_a_real_token" }
+      responses:
+        "200":
+          description: New token pair; the old refresh token is now invalid.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TokenPair" }
+              example:
+                {
+                  accessToken: "eyJhbGciOiJFUzI1NiJ9.example2.signature",
+                  refreshToken: "rt_example_rotated",
+                  tokenType: Bearer,
+                  expiresIn: 900,
+                }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [Auth]
+      summary: Revoke the refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/RefreshRequest" }
+            example: { refreshToken: "rt_example_rotated" }
+      responses:
+        "204": { description: Logged out. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+  /auth/verify-email:
+    post:
+      operationId: verifyEmail
+      tags: [Auth]
+      summary: Confirm an email address with the emailed token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TokenRequest" }
+            example: { token: "verify_example_token" }
+      responses:
+        "204": { description: Email verified. }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /auth/resend-verification:
+    post:
+      operationId: resendVerification
+      tags: [Auth]
+      summary: Send the verification email again
+      description: Always answers 202 so account existence is not revealed.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ForgotPasswordRequest" }
+            example: { email: aishath@example.com }
+      responses:
+        "202": { description: If the account exists and is unverified an email was sent. }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+        "429": { $ref: "./components/responses.yaml#/TooManyRequests" }
+  /auth/forgot-password:
+    post:
+      operationId: forgotPassword
+      tags: [Auth]
+      summary: Request a password reset email
+      description: Always answers 202 so account existence is not revealed.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ForgotPasswordRequest" }
+            example: { email: aishath@example.com }
+      responses:
+        "202": { description: If the account exists an email was sent. }
+        "429": { $ref: "./components/responses.yaml#/TooManyRequests" }
+  /auth/reset-password:
+    post:
+      operationId: resetPassword
+      tags: [Auth]
+      summary: Set a new password with a reset token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ResetPasswordRequest" }
+            example: { token: "reset_example_token", newPassword: "a brand new long passphrase" }
+      responses:
+        "204": { description: Password changed; all refresh tokens revoked. }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /me:
+    get:
+      operationId: getMe
+      tags: [Account]
+      summary: Current user
+      responses:
+        "200":
+          description: The signed-in user.
+          content:
+            application/json:
+              schema: { $ref: "./components/schemas.yaml#/User" }
+              example:
+                {
+                  id: usr_01K8Z3M5Q7R9T2V4W6X8Y0N1P2,
+                  email: aishath@example.com,
+                  emailVerified: true,
+                  displayName: Aishath,
+                  locale: en,
+                  createdAt: "2026-10-26T20:00:00Z",
+                }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+    patch:
+      operationId: updateMe
+      tags: [Account]
+      summary: Update profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpdateMeRequest" }
+            example: { displayName: Aishath N., locale: en }
+      responses:
+        "200":
+          description: Updated user.
+          content:
+            application/json:
+              schema: { $ref: "./components/schemas.yaml#/User" }
+              example:
+                {
+                  id: usr_01K8Z3M5Q7R9T2V4W6X8Y0N1P2,
+                  email: aishath@example.com,
+                  emailVerified: true,
+                  displayName: Aishath N.,
+                  locale: en,
+                  createdAt: "2026-10-26T20:00:00Z",
+                }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+    delete:
+      operationId: deleteMe
+      tags: [Account]
+      summary: Delete the account and personal data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DeleteAccountRequest" }
+            example: { password: "correct horse battery staple" }
+      responses:
+        "204": { description: Account and personal data deleted. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "403": { description: Wrong password (code PASSWORD_INCORRECT). }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /me/password:
+    post:
+      operationId: changePassword
+      tags: [Account]
+      summary: Change password
+      description: Revokes all other sessions. Wrong current password answers 403 PASSWORD_INCORRECT (not 401).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ChangePasswordRequest" }
+            example:
+              {
+                currentPassword: "correct horse battery staple",
+                newPassword: "a brand new long passphrase",
+              }
+      responses:
+        "204": { description: Password changed. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "403": { description: Wrong current password. }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /me/email:
+    post:
+      operationId: changeEmail
+      tags: [Account]
+      summary: Start an email change
+      description: A confirmation link goes to the NEW address; confirm it with POST /auth/verify-email. Always 202.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ChangeEmailRequest" }
+            example: { newEmail: new@example.com, password: "correct horse battery staple" }
+      responses:
+        "202": { description: Accepted. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "403": { description: Wrong password. }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /me/preferences:
+    get:
+      operationId: getPreferences
+      tags: [Account]
+      summary: Preferences
+      responses:
+        "200":
+          description: Preferences.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Preferences" }
+              example: { language: en, riskTolerance: balanced, preferredModes: [ferry, seaplane] }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+    patch:
+      operationId: updatePreferences
+      tags: [Account]
+      summary: Update preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpdatePreferencesRequest" }
+            example: { riskTolerance: cautious }
+      responses:
+        "200":
+          description: Updated.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Preferences" }
+              example: { language: en, riskTolerance: cautious, preferredModes: [ferry, seaplane] }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /me/sessions:
+    get:
+      operationId: listSessions
+      tags: [Account]
+      summary: Signed-in devices
+      responses:
+        "200":
+          description: Active sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: { type: array, items: { $ref: "#/components/schemas/Session" } }
+              example:
+                items:
+                  - {
+                      id: ses_01K8Z3M5Q7R9T2V4W6X8Y0N1P2,
+                      createdAt: "2026-10-26T20:00:00Z",
+                      lastUsedAt: "2026-10-26T20:05:00Z",
+                      userAgent: Firefox,
+                      networkHint: "203.0.113.0/24",
+                      current: true,
+                    }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+  /me/sessions/revoke-others:
+    post:
+      operationId: revokeOtherSessions
+      tags: [Account]
+      summary: Sign out everywhere else
+      responses:
+        "204": { description: Other sessions revoked. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+  /me/sessions/{sessionId}:
+    parameters:
+      - name: sessionId
+        in: path
+        required: true
+        schema: { type: string }
+    delete:
+      operationId: revokeSession
+      tags: [Account]
+      summary: Sign out one device
+      responses:
+        "204": { description: Revoked. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /me/travellers:
+    get:
+      operationId: listTravellers
+      tags: [Account]
+      summary: Saved travellers
+      responses:
+        "200":
+          description: Saved travellers.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: { type: array, items: { $ref: "#/components/schemas/SavedTraveller" } }
+              example:
+                items:
+                  - {
+                      id: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2,
+                      fullName: Aishath Naseem,
+                      passengerType: adult,
+                      phone: "+9607771234",
+                      documentType: none,
+                    }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+    post:
+      operationId: createTraveller
+      tags: [Account]
+      summary: Save a traveller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TravellerInput" }
+            example: { fullName: Aishath Naseem, passengerType: adult, phone: "+9607771234" }
+      responses:
+        "201":
+          description: Created.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SavedTraveller" }
+              example:
+                {
+                  id: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2,
+                  fullName: Aishath Naseem,
+                  passengerType: adult,
+                  phone: "+9607771234",
+                  documentType: none,
+                }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+  /me/travellers/{travellerId}:
+    parameters:
+      - name: travellerId
+        in: path
+        required: true
+        schema: { $ref: "./components/schemas.yaml#/TravellerId" }
+    patch:
+      operationId: updateTraveller
+      tags: [Account]
+      summary: Update a saved traveller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TravellerInput" }
+            example: { fullName: Aishath Naseem, passengerType: adult }
+      responses:
+        "200":
+          description: Updated.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SavedTraveller" }
+              example:
+                {
+                  id: trv_01K8Z3M5Q7R9T2V4W6X8Y0P1Q2,
+                  fullName: Aishath Naseem,
+                  passengerType: adult,
+                  documentType: none,
+                }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+    delete:
+      operationId: deleteTraveller
+      tags: [Account]
+      summary: Remove a saved traveller
+      responses:
+        "204": { description: Removed. }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string, minLength: 10, maxLength: 128 }
+        displayName: { type: string, maxLength: 80 }
+        locale: { type: string }
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string, format: email }
+        password: { type: string }
+    RefreshRequest:
+      type: object
+      required: [refreshToken]
+      properties:
+        refreshToken: { type: string }
+    TokenPair:
+      type: object
+      required: [accessToken, refreshToken, tokenType, expiresIn]
+      properties:
+        accessToken: { type: string }
+        refreshToken: { type: string }
+        tokenType: { type: string, enum: [Bearer] }
+        expiresIn: { type: integer, description: Access token lifetime in seconds. }
+    TokenRequest:
+      type: object
+      required: [token]
+      properties:
+        token: { type: string }
+    ForgotPasswordRequest:
+      type: object
+      required: [email]
+      properties:
+        email: { type: string, format: email }
+    ResetPasswordRequest:
+      type: object
+      required: [token, newPassword]
+      properties:
+        token: { type: string }
+        newPassword: { type: string, minLength: 10, maxLength: 128 }
+    UpdateMeRequest:
+      type: object
+      properties:
+        displayName: { type: string, maxLength: 80 }
+        locale: { type: string }
+    TravellerInput:
+      type: object
+      required: [fullName, passengerType]
+      properties:
+        fullName: { type: string, maxLength: 120 }
+        passengerType: { $ref: "./components/schemas.yaml#/PassengerType" }
+        dateOfBirth: { type: string, format: date }
+        phone: { type: string }
+        documentType:
+          {
+            type: string,
+            enum: [none, national_id, passport],
+            default: none,
+            description: Kind of ID carried; numbers are never stored.,
+          }
+    SavedTraveller:
+      type: object
+      required: [id, fullName, passengerType, documentType]
+      properties:
+        id: { $ref: "./components/schemas.yaml#/TravellerId" }
+        fullName: { type: string }
+        passengerType: { $ref: "./components/schemas.yaml#/PassengerType" }
+        dateOfBirth: { type: string, format: date }
+        phone: { type: string }
+        documentType: { type: string, enum: [none, national_id, passport] }
+    ChangePasswordRequest:
+      type: object
+      required: [currentPassword, newPassword]
+      properties:
+        currentPassword: { type: string }
+        newPassword: { type: string, minLength: 10, maxLength: 128 }
+    ChangeEmailRequest:
+      type: object
+      required: [newEmail, password]
+      properties:
+        newEmail: { type: string, format: email }
+        password: { type: string }
+    DeleteAccountRequest:
+      type: object
+      required: [password]
+      properties:
+        password: { type: string }
+    Preferences:
+      type: object
+      required: [language, riskTolerance, preferredModes]
+      properties:
+        language: { type: string }
+        riskTolerance: { type: string, enum: [cautious, balanced, relaxed] }
+        preferredModes: { type: array, items: { type: string } }
+    UpdatePreferencesRequest:
+      type: object
+      properties:
+        language: { type: string }
+        riskTolerance: { type: string, enum: [cautious, balanced, relaxed] }
+        preferredModes: { type: array, maxItems: 8, items: { type: string } }
+    Session:
+      type: object
+      required: [id, createdAt, lastUsedAt, current]
+      properties:
+        id: { type: string }
+        createdAt: { $ref: "./components/schemas.yaml#/Instant" }
+        lastUsedAt: { $ref: "./components/schemas.yaml#/Instant" }
+        userAgent: { type: string }
+        networkHint: { type: string }
+        current: { type: boolean }

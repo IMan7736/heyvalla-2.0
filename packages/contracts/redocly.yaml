@@ -1,0 +1,15 @@
+extends:
+  - recommended
+rules:
+  no-server-example.com: off
+  no-empty-servers: off
+  info-license: off
+  info-contact: off
+  operation-4xx-response: off
+  operation-4xx-problem-details-rfc7807: off
+  security-defined: off
+  no-invalid-schema-examples: error
+  no-invalid-media-type-examples: error
+  operation-summary: error
+  operation-operationId: error
+  tag-description: off

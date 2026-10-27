@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <!-- BenchmarkDotNet is pinned here, not in the shared Directory.Packages.props, so this project needs no change to ATOLL's files. -->
+    <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.15.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Dhathuru.TripEngine\Dhathuru.TripEngine.csproj" />
+    <ProjectReference Include="..\Dhathuru.TripEngine.Fixtures\Dhathuru.TripEngine.Fixtures.csproj" />
+  </ItemGroup>
+</Project>

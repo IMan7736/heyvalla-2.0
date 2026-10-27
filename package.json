@@ -1,0 +1,33 @@
+{
+  "name": "dhathuru",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Dhathuru: door-to-door trip planner and booking for the Maldives",
+  "packageManager": "pnpm@12.15.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:mock": "node scripts/dev.mjs --mock",
+    "dev:web": "turbo run dev --filter=web",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "contracts": "pnpm --filter @dhathuru/contracts run build",
+    "mock": "pnpm --filter @dhathuru/contracts run mock",
+    "api": "bash scripts/api.sh watch",
+    "api:build": "bash scripts/api.sh build",
+    "api:test": "bash scripts/api.sh test",
+    "infra:up": "docker compose -f infra/docker-compose.yml up -d --wait",
+    "infra:down": "docker compose -f infra/docker-compose.yml down",
+    "contracts:drift": "node packages/contracts/scripts/api-drift.mjs"
+  },
+  "devDependencies": {
+    "prettier": "3.9.10",
+    "turbo": "2.11.10"
+  }
+}

@@ -1,0 +1,6 @@
+**/bin
+**/obj
+.artifacts
+tests
+**/*.user
+**/appsettings.Local.json

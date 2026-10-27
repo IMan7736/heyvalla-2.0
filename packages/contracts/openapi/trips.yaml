@@ -1,0 +1,357 @@
+# Owner: FARU (TripEngine), hosted by the Api. Additive edits are free; breaking changes need a handoff to ATOLL.
+openapi: 3.1.0
+info: { title: Dhathuru trips, version: 1.0.0 }
+paths:
+  /trips/search:
+    post:
+      operationId: searchTrips
+      tags: [Trips]
+      summary: Plan door-to-door trips
+      description: |
+        Returns ranked options. Every connection respects a hard minimum buffer; options that cannot be made safely are never returned.
+        `date` and `time` are Indian/Maldives local time.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/TripSearchRequest" }
+            example:
+              from: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2
+              to: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1F2
+              date: "2026-10-27"
+              time: "17:00"
+              timeMode: arriveBy
+              passengers: { adults: 2, children: 0, infants: 0 }
+              preferences: { riskTolerance: balanced }
+      responses:
+        "200":
+          description: Ranked options (possibly empty).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TripSearchResponse" }
+              example:
+                searchId: srch_01K8Z3M5Q7R9T2V4W6X8Y0F1G2
+                options:
+                  - id: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+                    departAt: "2026-10-27T02:30:00Z"
+                    arriveAt: "2026-10-27T11:35:00Z"
+                    durationMin: 545
+                    transfers: 3
+                    legs:
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                        mode: ferry
+                        providerId: static-example-ferry
+                        serviceId: svc_01K8Z3M5Q7R9T2V4W6X8Y0D1E2
+                        from:
+                          {
+                            id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2,
+                            type: island,
+                            name: { en: Maafushi },
+                            geo: { lat: 3.9417, lng: 73.4896 },
+                          }
+                        to:
+                          {
+                            id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2,
+                            type: jetty,
+                            name: { en: Hulhumalé Ferry Terminal },
+                            geo: { lat: 4.2185, lng: 73.5408 },
+                          }
+                        departAt: "2026-10-27T02:30:00Z"
+                        arriveAt: "2026-10-27T04:00:00Z"
+                        durationMin: 90
+                        price: { amountMinor: 9000, currency: MVR }
+                        bookable: true
+                        pricing: fixed
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                        noteCodes: []
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+                        mode: taxi
+                        providerId: mock-taxi
+                        from:
+                          {
+                            id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2,
+                            type: jetty,
+                            name: { en: Hulhumalé Ferry Terminal },
+                            geo: { lat: 4.2185, lng: 73.5408 },
+                          }
+                        to:
+                          {
+                            id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1D2,
+                            type: airport,
+                            name: { en: Velana International Airport },
+                            geo: { lat: 4.1918, lng: 73.5291 },
+                            code: MLE,
+                          }
+                        departAt: "2026-10-27T04:30:00Z"
+                        arriveAt: "2026-10-27T04:45:00Z"
+                        durationMin: 15
+                        price: { amountMinor: 8000, currency: MVR }
+                        bookable: true
+                        pricing: estimate
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3
+                        noteCodes: [ESTIMATED_TAXI_FARE]
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H4
+                        mode: domestic_flight
+                        providerId: static-example-air
+                        from:
+                          {
+                            id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1D2,
+                            type: airport,
+                            name: { en: Velana International Airport },
+                            geo: { lat: 4.1918, lng: 73.5291 },
+                            code: MLE,
+                          }
+                        to:
+                          {
+                            id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1G2,
+                            type: airport,
+                            name: { en: Kooddoo Airport },
+                            geo: { lat: 0.7324, lng: 73.4336 },
+                            code: GKK,
+                          }
+                        departAt: "2026-10-27T06:30:00Z"
+                        arriveAt: "2026-10-27T07:35:00Z"
+                        durationMin: 65
+                        price: { amountMinor: 185000, currency: MVR }
+                        bookable: true
+                        pricing: fixed
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H4
+                        noteCodes: []
+                      - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H5
+                        mode: taxi
+                        providerId: mock-taxi
+                        from:
+                          {
+                            id: apt_01K8Z3M5Q7R9T2V4W6X8Y0A1G2,
+                            type: airport,
+                            name: { en: Kooddoo Airport },
+                            geo: { lat: 0.7324, lng: 73.4336 },
+                            code: GKK,
+                          }
+                        to:
+                          {
+                            id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1F2,
+                            type: island,
+                            name: { en: Kooddoo },
+                            geo: { lat: 0.7324, lng: 73.4336 },
+                          }
+                        departAt: "2026-10-27T07:50:00Z"
+                        arriveAt: "2026-10-27T08:00:00Z"
+                        durationMin: 10
+                        price: { amountMinor: 5000, currency: MVR }
+                        bookable: false
+                        pricing: estimate
+                        geometryRef: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H5
+                        noteCodes: [ESTIMATED_TAXI_FARE]
+                    price:
+                      total: { amountMinor: 207000, currency: MVR }
+                      breakdown:
+                        - {
+                            code: FERRY_FARE,
+                            amount: { amountMinor: 9000, currency: MVR },
+                            legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2,
+                          }
+                        - {
+                            code: TAXI_FARE,
+                            amount: { amountMinor: 8000, currency: MVR },
+                            legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H3,
+                          }
+                        - {
+                            code: FLIGHT_FARE,
+                            amount: { amountMinor: 185000, currency: MVR },
+                            legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H4,
+                          }
+                        - {
+                            code: TAXI_FARE,
+                            amount: { amountMinor: 5000, currency: MVR },
+                            legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H5,
+                          }
+                    buffers:
+                      - { afterLegIndex: 0, minutes: 30, requiredMinutes: 20, comfortMinutes: 30 }
+                      - { afterLegIndex: 1, minutes: 105, requiredMinutes: 90, comfortMinutes: 120 }
+                      - { afterLegIndex: 2, minutes: 15, requiredMinutes: 10, comfortMinutes: 20 }
+                    risk: { missProbability: 0.03, level: low, weakestConnectionIndex: 2 }
+                    labels: [safest, best_overall]
+                    score: 87.4
+                    explanations:
+                      - { code: SAFEST_BUFFER, params: {}, severity: good }
+                      - { code: BUFFER_COMFORTABLE, params: { minutes: 105 }, severity: good }
+                      - { code: ESTIMATED_TAXI_FARE, params: {}, severity: info }
+                    warnings:
+                      - { code: ESTIMATED_TAXI_FARE, params: { legIndex: 3 } }
+        "422":
+          description: Validation failed. Field error codes include `INFANTS_EXCEED_ADULTS`, `PARTY_TOO_LARGE`, `DATE_IN_PAST`, `INVALID_PLACE_ID`.
+          content:
+            application/problem+json:
+              schema: { $ref: "./components/schemas.yaml#/Problem" }
+        "429": { $ref: "./components/responses.yaml#/TooManyRequests" }
+  /trips/options/{optionId}:
+    get:
+      operationId: getTripOption
+      tags: [Trips]
+      summary: Re-read a previously returned option
+      security: []
+      parameters:
+        - name: optionId
+          in: path
+          required: true
+          schema: { $ref: "./components/schemas.yaml#/TripOptionId" }
+      responses:
+        "200":
+          description: The option as it was returned by search.
+          content:
+            application/json:
+              schema: { $ref: "./components/schemas.yaml#/TripOption" }
+              example:
+                id: trp_01K8Z3M5Q7R9T2V4W6X8Y0E1F2
+                departAt: "2026-10-27T02:30:00Z"
+                arriveAt: "2026-10-27T04:00:00Z"
+                durationMin: 90
+                transfers: 0
+                legs:
+                  - id: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2
+                    mode: ferry
+                    providerId: static-example-ferry
+                    from:
+                      {
+                        id: isl_01K8Z3M5Q7R9T2V4W6X8Y0A1B2,
+                        type: island,
+                        name: { en: Maafushi },
+                        geo: { lat: 3.9417, lng: 73.4896 },
+                      }
+                    to:
+                      {
+                        id: jty_01K8Z3M5Q7R9T2V4W6X8Y0A1E2,
+                        type: jetty,
+                        name: { en: Hulhumalé Ferry Terminal },
+                        geo: { lat: 4.2185, lng: 73.5408 },
+                      }
+                    departAt: "2026-10-27T02:30:00Z"
+                    arriveAt: "2026-10-27T04:00:00Z"
+                    durationMin: 90
+                    price: { amountMinor: 9000, currency: MVR }
+                    bookable: true
+                    pricing: fixed
+                    noteCodes: []
+                price:
+                  {
+                    total: { amountMinor: 9000, currency: MVR },
+                    breakdown: [{ code: FERRY_FARE, amount: { amountMinor: 9000, currency: MVR } }],
+                  }
+                buffers: []
+                risk: { missProbability: 0.01, level: low }
+                labels: [fastest, cheapest]
+                score: 91.2
+                explanations: [{ code: FASTEST_OVERALL, params: {}, severity: good }]
+                warnings: []
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+  /trips/replan:
+    post:
+      operationId: replanTrip
+      tags: [Trips]
+      summary: Suggest a safe re-plan after a disruption
+      description: Preserves every connection that is still safe and only changes what the disruption forces.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ReplanRequest" }
+            example:
+              bookingId: bkg_01K8Z3M5Q7R9T2V4W6X8Y0H1J2
+              now: "2026-10-27T03:00:00Z"
+              disruption: { legId: leg_01K8Z3M5Q7R9T2V4W6X8Y0G1H2, kind: delayed, delayMinutes: 40 }
+      responses:
+        "200":
+          description: Alternative options, ranked.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/TripSearchResponse" }
+              example: { searchId: srch_01K8Z3M5Q7R9T2V4W6X8Y0F1G3, options: [] }
+        "401": { $ref: "./components/responses.yaml#/Unauthorized" }
+        "404": { $ref: "./components/responses.yaml#/NotFound" }
+        "422": { $ref: "./components/responses.yaml#/ValidationFailed" }
+components:
+  schemas:
+    Passengers:
+      type: object
+      required: [adults]
+      properties:
+        adults: { type: integer, minimum: 1, maximum: 9 }
+        children: { type: integer, minimum: 0, maximum: 9, default: 0 }
+        infants:
+          type: integer
+          minimum: 0
+          maximum: 9
+          default: 0
+          description: Each infant travels on an adult's lap, so infants cannot outnumber adults; otherwise the search answers 422 with field error `passengers.infants` and code `INFANTS_EXCEED_ADULTS`.
+    TripPreferences:
+      type: object
+      required: [riskTolerance]
+      properties:
+        maxTransfers: { type: integer, minimum: 0, maximum: 8 }
+        budgetMax: { $ref: "./components/schemas.yaml#/Money" }
+        modes:
+          type: array
+          description: Restrict to these modes; omit for all.
+          items: { $ref: "./components/schemas.yaml#/TransportMode" }
+        riskTolerance: { type: string, enum: [cautious, balanced, relaxed] }
+    TripSearchRequest:
+      type: object
+      required: [from, to, date, time, timeMode, passengers, preferences]
+      properties:
+        from: { $ref: "./components/schemas.yaml#/PlaceId" }
+        to: { $ref: "./components/schemas.yaml#/PlaceId" }
+        date: { type: string, format: date, description: Indian/Maldives local date. }
+        time:
+          {
+            type: string,
+            pattern: "^([01]\\d|2[0-3]):[0-5]\\d$",
+            description: Indian/Maldives local time HH:mm.,
+          }
+        timeMode: { type: string, enum: [departAfter, arriveBy] }
+        passengers: { $ref: "#/components/schemas/Passengers" }
+        preferences: { $ref: "#/components/schemas/TripPreferences" }
+    TripSearchResponse:
+      type: object
+      required: [searchId, options]
+      properties:
+        notices:
+          type: array
+          description: Codes explaining gaps (no route, closed taxis, suggestions). Present when useful, especially when options is empty.
+          items:
+            type: object
+            required: [code, params, severity]
+            properties:
+              code: { type: string }
+              params: { type: object, additionalProperties: true }
+              severity: { type: string, enum: [info, good, caution] }
+        suggestions:
+          type: array
+          description: Present when options is empty. Each suggestion was checked by the engine; applying it yields at least one option.
+          items:
+            type: object
+            required: [code, params]
+            properties:
+              code:
+                type: string
+                enum: [TRY_LATER, TRY_EARLIER, TRY_NEXT_DAY, ALLOW_MORE_TRANSFERS, REMOVE_BUDGET, ALLOW_ALL_MODES]
+              params: { type: object, additionalProperties: true }
+        searchId: { $ref: "./components/schemas.yaml#/SearchId" }
+        options:
+          type: array
+          items: { $ref: "./components/schemas.yaml#/TripOption" }
+    Disruption:
+      type: object
+      required: [legId, kind]
+      properties:
+        legId: { $ref: "./components/schemas.yaml#/LegId" }
+        kind: { type: string, enum: [delayed, cancelled] }
+        delayMinutes: { type: integer, minimum: 1 }
+    ReplanRequest:
+      type: object
+      required: [bookingId, now, disruption]
+      properties:
+        bookingId: { $ref: "./components/schemas.yaml#/BookingId" }
+        now: { $ref: "./components/schemas.yaml#/Instant" }
+        disruption: { $ref: "#/components/schemas/Disruption" }

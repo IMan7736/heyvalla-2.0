@@ -1,0 +1,12 @@
+{
+  "appName": "Dhathuru",
+  "tagline": "Every island, one journey.",
+  "skipToContent": "Skip to main content",
+  "status": {
+    "loading": "Loading",
+    "error": "Something went wrong. Please try again.",
+    "retry": "Try again",
+    "empty": "Nothing to show yet."
+  },
+  "logoAlt": "Dhathuru"
+}

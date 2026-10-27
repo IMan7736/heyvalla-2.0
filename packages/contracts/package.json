@@ -1,0 +1,36 @@
+{
+  "name": "@dhathuru/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Split OpenAPI contract, bundle and generated TypeScript types",
+  "types": "./generated/api.d.ts",
+  "exports": {
+    ".": {
+      "types": "./generated/api.d.ts"
+    },
+    "./openapi.json": "./generated/openapi.bundled.json"
+  },
+  "files": [
+    "generated",
+    "openapi"
+  ],
+  "scripts": {
+    "lint": "pnpm run bundle && redocly lint generated/openapi.bundled.yaml --config redocly.yaml",
+    "bundle": "node scripts/bundle.mjs",
+    "generate": "openapi-typescript generated/openapi.bundled.yaml -o generated/api.d.ts --default-non-nullable false",
+    "build": "pnpm run bundle && pnpm run generate",
+    "check": "node scripts/bundle.mjs --check",
+    "mock": "pnpm run bundle && prism mock generated/openapi.bundled.yaml --host 127.0.0.1 --port 4010 --dynamic=false",
+    "test": "pnpm run bundle && node --test scripts/contract.test.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "drift": "node scripts/api-drift.mjs"
+  },
+  "devDependencies": {
+    "@redocly/cli": "2.71.0",
+    "@stoplight/prism-cli": "5.16.0",
+    "openapi-typescript": "7.13.0",
+    "typescript": "5.9.3",
+    "yaml": "2.9.1"
+  }
+}

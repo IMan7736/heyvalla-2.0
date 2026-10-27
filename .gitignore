@@ -1,0 +1,85 @@
+# =====================================================================
+# Dhathuru .gitignore
+# Anything below must NEVER reach GitHub. Aiman commits by hand; this is
+# the safety net. After editing, verify with:
+#   git check-ignore -v datasets/MACL/Metadata.csv AGENTS.md .env
+# =====================================================================
+
+# -- Secrets & environment --------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.keystore
+secrets/
+**/appsettings.Local.json
+**/appsettings.Secrets.json
+**/secrets.json
+service-account*.json
+*credentials*.json
+.fly/
+
+# -- AI agent files & working notes (never commit) --------------------
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.claude/
+.cursor/
+.agent-runs/
+docs/agents/
+docs/status/
+docs/handoffs/
+
+# -- Datasets & derived data (large and/or personal) ------------------
+datasets/
+/data/
+*.pmtiles
+*.mbtiles
+*.osm.pbf
+*.parquet
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.bak
+pgdata/
+.pgdata/
+# Small anonymised seed files are allowed ONLY under apps/api/seed/ (< 5 MB each)
+
+# -- Dependencies & build output ---------------------------------------
+node_modules/
+.pnpm-store/
+.next/
+.next-*/
+.turbo/
+.vercel/
+out/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+storybook-static/
+*.tsbuildinfo
+next-env.d.ts
+bin/
+obj/
+.artifacts/
+TestResults/
+publish/
+*.user
+*.suo
+.vs/
+
+# -- Editor / OS / logs -------------------------------------------------
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+pnpm-debug.log*
