@@ -61,7 +61,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: apps/api/global.json
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: nuget-${{ runner.os }}-${{ hashFiles('apps/api/**/*.csproj', 'apps/api/Directory.Packages.props') }}
